@@ -3,50 +3,38 @@
 
 #include "crypto.h"
 
-std::string string_to_hex(const std::string &input)
-{
-    static const char *const lut = "0123456789ABCDEF";
-    size_t                   len = input.length();
-
-    std::string output;
-    auto        first = true;
-
-    output.reserve(2 * len);
-    for ( size_t i = 0; i < len; ++i ) {
-        if ( !first ) {
-            output.push_back(':');
-        }
-        first = false;
-        const unsigned char c = input[i];
-        output.push_back(lut[c >> 4]);
-        output.push_back(lut[c & 15]);
-    }
-    return output;
-}
-
 int main(int argc, char *argv[])
 {
     std::string pass = "pass";
-    std::string salt = Crypto::generateSalt(16);
-    std::string iv   = Crypto::generateSalt(16);
+    std::string salt = Crypto::generateRandom(16);
+    std::string iv   = Crypto::generateRandom(16);
 
     Crypto c(pass, salt, iv);
 
-    std::cout << "salt:\t" << string_to_hex(salt) << std::endl;
-    std::cout << "IV:\t" << string_to_hex(iv) << std::endl;
-    std::cout << "key:\t" << string_to_hex( c.key() ) << std::endl;
+    std::cout << "salt:\t" << Crypto::stringToHex(salt) << std::endl;
+    std::cout << "IV:\t" << Crypto::stringToHex( c.iv() ) << std::endl;
+    std::cout << "key:\t" << Crypto::stringToHex( c.key() ) << std::endl;
 
     std::string message = "Hello World!";
 
+    std::string base64 = Crypto::toBase64(message);
+
     std::cout << "msg:\t" << message << std::endl;
+
+    std::cout << "b64:\t" << base64 << std::endl;
+    std::cout << "bck:\t" << Crypto::fromBase64(base64) << std::endl;
 
     message = c.encrypt(message);
 
-    std::cout << "enc:\t" << string_to_hex(message) << std::endl;
+    std::cout << "enc:\t" << Crypto::stringToHex(message) << std::endl;
 
     message = c.decrypt(message);
 
     std::cout << "dec:\t" << message << std::endl;
+
+    message = Crypto::digest(message);
+
+    std::cout << "SHA:\t" << Crypto::stringToHex(message) << std::endl;
 
     return 0;
 }
