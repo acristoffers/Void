@@ -36,6 +36,15 @@ struct CryptoParams
 
 struct Crypto
 {
+    enum CryptoError {
+        Success,
+        CantGetAlgID,
+        CantGetSlot,
+        CantGenerateKey,
+        CantEncrypt,
+        CantDecrypt
+    };
+
     static std::string generateRandom(uint8_t size);
     static std::string digest( std::string &data, CryptoParams params = CryptoParams() );
     static std::string stringToHex(const std::string &input, std::string separator = ":");
@@ -52,6 +61,7 @@ struct Crypto
     std::string key();
     std::string iv();
 
+    CryptoError error;
 private:
     std::unique_ptr<CryptoPrivate> _p;
 };

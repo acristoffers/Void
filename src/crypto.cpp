@@ -1,4 +1,4 @@
-#include "crypto.h"
+#include "Crypto.h"
 
 #include <iostream>
 #include <math.h>
@@ -136,12 +136,30 @@ Crypto::Crypto(std::string &password, std::string &salt, std::string &iv, Crypto
 
     SECAlgorithmID *algID = PK11_CreatePBEV2AlgorithmID( _p->keyDeriveFunction, _p->keyDeriveMethod, _p->keyDerivationHash, _p->keySize, _p->keyDerivationCost, SaltSec.get() );
     PK11SlotInfo   *slot  = PK11_GetBestSlot(_p->keyDeriveFunction, nullptr);
-    auto           symKey = PK11_PBEKeyGen(slot, algID, PswdSec.get(), PR_FALSE, nullptr);
+
+    if ( algID == nullptr ) {
+        error = CantGetAlgID;
+        return;
+    }
+
+    if ( slot == nullptr ) {
+        error = CantGetSlot;
+        return;
+    }
+
+    auto symKey = PK11_PBEKeyGen(slot, algID, PswdSec.get(), PR_FALSE, nullptr);
     PK11_FreeSlot(slot);
     SECOID_DestroyAlgorithmID(algID, PR_TRUE);
 
+    if ( symKey == nullptr ) {
+        error = CantGenerateKey;
+        return;
+    }
+
     _p->IV = _p->stringToSECItemPtr(iv);
     _p->SymKey.reset(symKey);
+
+    error = Success;
 }
 
 Crypto::Crypto(std::string &key, std::string &iv, CryptoParams params)
@@ -177,7 +195,14 @@ std::string Crypto::encrypt(std::string data)
 
     auto clear_text = reinterpret_cast<const unsigned char *> ( data.data() );
 
-    PK11_Encrypt( _p->SymKey.get(), _p->cypherMechanism, &param, buffer, &len, len, clear_text, data.size() );
+    SECStatus s = PK11_Encrypt( _p->SymKey.get(), _p->cypherMechanism, &param, buffer, &len, len, clear_text, data.size() );
+
+    if ( s != SECSuccess ) {
+        error = CantEncrypt;
+        return "";
+    }
+
+    error = Success;
 
     return std::string(reinterpret_cast<const char *> (buffer), len);
 }
@@ -201,7 +226,14 @@ std::string Crypto::decrypt(std::string data)
 
     auto cipher = reinterpret_cast<const unsigned char *> ( data.data() );
 
-    PK11_Decrypt( _p->SymKey.get(), _p->cypherMechanism, &param, buffer, &len, len, cipher, data.size() );
+    SECStatus s = PK11_Decrypt( _p->SymKey.get(), _p->cypherMechanism, &param, buffer, &len, len, cipher, data.size() );
+
+    if ( s != SECSuccess ) {
+        error = CantDecrypt;
+        return "";
+    }
+
+    error = Success;
 
     return std::string(reinterpret_cast<const char *> (buffer), len);
 }
