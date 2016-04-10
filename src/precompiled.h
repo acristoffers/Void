@@ -27,6 +27,7 @@
  #include <QDataStream>
  #include <QDir>
  #include <QFile>
+ #include <QList>
  #include <QMap>
  #include <QObject>
  #include <QString>
@@ -40,10 +41,9 @@
  #include <prrng.h>
  #include <secoid.h>
  #include <string>
- #include <string.h>
  #include "Crypto.h"
  #include "Store.h"
+ #include "StoreFS.h"
  #include "StoreFile.h"
- #include "Utils.h"
 #endif
 #endif // PRECOMPILED_H

@@ -30,39 +30,34 @@ struct CryptoPrivate
     SECOidTag         keyDeriveFunction;
     SECOidTag         keyDeriveMethod;
     SECOidTag         keyDerivationHash;
-    unsigned int      keyDerivationCost;
+    uint32_t          keyDerivationCost;
     SECOidTag         digestType;
     unsigned int      digestSize;
-    void              parseParams(CryptoParams params);
+    void              parseParams(const CryptoParams params);
 
     static bool initialized;
-    void        initNSS();
+    static void initNSS();
 
-    static SECItemPtr stringToSECItemPtr(std::string);
+    static SECItemPtr stringToSECItemPtr(const std::string);
 };
 
 bool CryptoPrivate::initialized = false;
 
-std::string Crypto::generateRandom(uint8_t size)
+std::string Crypto::generateRandom(const uint8_t size)
 {
-    if ( !CryptoPrivate::initialized ) {
-        NSS_NoDB_Init(".");
-        CryptoPrivate::initialized = true;
-    }
+    CryptoPrivate::initNSS();
 
     uint8_t random[size];
 
-    auto s    = PR_GetRandomNoise(random, SEED_BLOCK_SIZE);
     auto slot = PK11_GetBestSlot(CKM_FAKE_RANDOM, nullptr);
 
-    PK11_SeedRandom(slot, random, s);
     PK11_GenerateRandom(random, size);
     PK11_FreeSlot(slot);
 
     return std::string(reinterpret_cast<const char *> (random), size);
 }
 
-std::string Crypto::digest(std::string &data, CryptoParams params)
+std::string Crypto::digest(const std::string &data, const CryptoParams params)
 {
     CryptoPrivate _p;
 
@@ -82,7 +77,7 @@ std::string Crypto::digest(std::string &data, CryptoParams params)
     return std::string(reinterpret_cast<const char *> (digest), digest_size);
 }
 
-std::string Crypto::stringToHex(const std::string &input, std::string separator)
+std::string Crypto::stringToHex(const std::string &input, const std::string separator)
 {
     static const char *const lut = "0123456789ABCDEF";
 
@@ -98,7 +93,7 @@ std::string Crypto::stringToHex(const std::string &input, std::string separator)
 
         const unsigned char c = input[i];
         output.push_back(lut[c >> 4]);
-        output.push_back(lut[c & 15]);
+        output.push_back(lut[c & 0xF]);
 
         first = false;
     }
@@ -125,11 +120,12 @@ std::string Crypto::fromBase64(const std::string &data)
     return std::string(reinterpret_cast<const char *> (secItem->data), secItem->len);
 }
 
-Crypto::Crypto(std::string &password, std::string &salt, std::string &iv, CryptoParams params)
+Crypto::Crypto(const std::string password, const std::string salt, const std::string iv, const CryptoParams params)
 {
     _p.reset(new CryptoPrivate);
     _p->parseParams(params);
     _p->initNSS();
+    _p->slot.reset( PK11_GetBestSlot(_p->cypherMechanism, nullptr) );
 
     auto PswdSec = _p->stringToSECItemPtr(password);
     auto SaltSec = _p->stringToSECItemPtr(salt);
@@ -162,21 +158,24 @@ Crypto::Crypto(std::string &password, std::string &salt, std::string &iv, Crypto
     error = Success;
 }
 
-Crypto::Crypto(std::string &key, std::string &iv, CryptoParams params)
+Crypto::Crypto(const std::string key, const std::string iv, const CryptoParams params)
 {
     _p.reset(new CryptoPrivate);
     _p->parseParams(params);
     _p->initNSS();
+    _p->slot.reset( PK11_GetBestSlot(_p->cypherMechanism, nullptr) );
 
     _p->IV = _p->stringToSECItemPtr(iv);
     auto secKey = _p->stringToSECItemPtr(key);
     auto symKey = PK11_ImportSymKey(_p->slot.get(), _p->cypherMechanism, PK11_OriginUnwrap, CKA_ENCRYPT, secKey.get(), nullptr);
     _p->SymKey.reset(symKey);
+
+    error = Success;
 }
 
 Crypto::~Crypto() = default;
 
-std::string Crypto::encrypt(std::string data)
+std::string Crypto::encrypt(const std::string &data)
 {
     CK_GCM_PARAMS gcmParams;
     SECItem       param;
@@ -190,12 +189,12 @@ std::string Crypto::encrypt(std::string data)
     gcmParams.ulAADLen  = 0;
     gcmParams.ulTagBits = AES_BLOCK_SIZE * 8;
 
-    unsigned int  len = data.size() + 2 * _p->IV->len;
-    unsigned char buffer[len];
+    unsigned int                   len = data.size() + 2 * _p->IV->len;
+    std::unique_ptr<unsigned char> buffer(new unsigned char[len]);
 
     auto clear_text = reinterpret_cast<const unsigned char *> ( data.data() );
 
-    SECStatus s = PK11_Encrypt( _p->SymKey.get(), _p->cypherMechanism, &param, buffer, &len, len, clear_text, data.size() );
+    SECStatus s = PK11_Encrypt( _p->SymKey.get(), _p->cypherMechanism, &param, buffer.get(), &len, len, clear_text, data.size() );
 
     if ( s != SECSuccess ) {
         error = CantEncrypt;
@@ -204,10 +203,10 @@ std::string Crypto::encrypt(std::string data)
 
     error = Success;
 
-    return std::string(reinterpret_cast<const char *> (buffer), len);
+    return std::string(reinterpret_cast<const char *> ( buffer.get() ), len);
 }
 
-std::string Crypto::decrypt(std::string data)
+std::string Crypto::decrypt(const std::string &data)
 {
     CK_GCM_PARAMS gcmParams;
     SECItem       param;
@@ -221,12 +220,12 @@ std::string Crypto::decrypt(std::string data)
     gcmParams.ulAADLen  = 0;
     gcmParams.ulTagBits = AES_BLOCK_SIZE * 8;
 
-    unsigned int  len = data.size() + 2 * _p->IV->len;
-    unsigned char buffer[len];
+    unsigned int                   len = data.size() + 2 * _p->IV->len;
+    std::unique_ptr<unsigned char> buffer(new unsigned char[len]);
 
     auto cipher = reinterpret_cast<const unsigned char *> ( data.data() );
 
-    SECStatus s = PK11_Decrypt( _p->SymKey.get(), _p->cypherMechanism, &param, buffer, &len, len, cipher, data.size() );
+    SECStatus s = PK11_Decrypt( _p->SymKey.get(), _p->cypherMechanism, &param, buffer.get(), &len, len, cipher, data.size() );
 
     if ( s != SECSuccess ) {
         error = CantDecrypt;
@@ -235,22 +234,22 @@ std::string Crypto::decrypt(std::string data)
 
     error = Success;
 
-    return std::string(reinterpret_cast<const char *> (buffer), len);
+    return std::string(reinterpret_cast<const char *> ( buffer.get() ), len);
 }
 
-std::string Crypto::key()
+std::string Crypto::key() const
 {
     PK11_ExtractKeyValue( _p->SymKey.get() );
     SECItem *key = PK11_GetKeyData( _p->SymKey.get() );
     return std::string(reinterpret_cast<const char *> (key->data), key->len);
 }
 
-std::string Crypto::iv()
+std::string Crypto::iv() const
 {
     return std::string(reinterpret_cast<const char *> (_p->IV->data), _p->IV->len);
 }
 
-void CryptoPrivate::parseParams(CryptoParams params)
+void CryptoPrivate::parseParams(const CryptoParams params)
 {
     switch ( params.encryption ) {
         case AES_GCM_128:
@@ -297,9 +296,12 @@ void CryptoPrivate::initNSS()
     if ( !initialized ) {
         NSS_NoDB_Init(".");
         initialized = true;
-    }
 
-    slot.reset( PK11_GetBestSlot(cypherMechanism, nullptr) );
+        uint8_t random[SEED_BLOCK_SIZE];
+        auto    s    = PR_GetRandomNoise(random, SEED_BLOCK_SIZE);
+        auto    slot = PK11_GetBestSlot(CKM_FAKE_RANDOM, nullptr);
+        PK11_SeedRandom(slot, random, s);
+    }
 }
 
 SECItemPtr CryptoPrivate::stringToSECItemPtr(std::string str)

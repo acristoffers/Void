@@ -20,13 +20,15 @@ LIBS        += -L/usr/local/opt/nss/lib -L/usr/local/opt/nspr/lib -L/usr/local/l
 HEADERS += \
     src/Crypto.h \
     src/Store.h \
-    src/StoreFile.h
+    src/StoreFile.h \
+    src/StoreFS.h
 
 SOURCES += \
     src/main.cpp \
     src/Crypto.cpp \
     src/Store.cpp \
-    src/StoreFile.cpp
+    src/StoreFile.cpp \
+    src/StoreFS.cpp
 
 PRECOMPILED_HEADER = src/precompiled.h
 

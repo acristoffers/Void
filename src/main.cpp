@@ -4,8 +4,8 @@
 
 int main(int, char **)
 {
-    QString password = "haha";
-    Store   store("/Users/Alan/void", password, true);
+    QString pswd = "haha";
+    Store   store("/Users/Alan/void", pswd, true);
 
     return 0;
 }

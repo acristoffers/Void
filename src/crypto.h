@@ -6,21 +6,21 @@
 
 struct CryptoPrivate;
 
-enum EncType {
+enum EncType : uint8_t {
     AES_GCM_128,
     AES_GCM_256
 };
 
-enum DigestType {
+enum DigestType : uint8_t {
     SHA256,
     SHA512
 };
 
-enum KeyDerivationFunction {
+enum KeyDerivationFunction : uint8_t {
     PKCS5_PBKDF2
 };
 
-enum KeyDerivationHash {
+enum KeyDerivationHash : uint8_t {
     HMAC_SHA256,
     HMAC_SHA512
 };
@@ -31,7 +31,7 @@ struct CryptoParams
     DigestType            digest                = SHA512;
     KeyDerivationFunction keyDerivationFunction = PKCS5_PBKDF2;
     KeyDerivationHash     keyDerivationHash     = HMAC_SHA512;
-    unsigned int          keyDerivationCost     = 1000000;
+    uint32_t              keyDerivationCost     = 1000000;
 };
 
 struct Crypto
@@ -43,25 +43,26 @@ struct Crypto
         CantGenerateKey,
         CantEncrypt,
         CantDecrypt
-    };
+    }
 
-    static std::string generateRandom(uint8_t size);
-    static std::string digest( std::string &data, CryptoParams params = CryptoParams() );
-    static std::string stringToHex(const std::string &input, std::string separator = ":");
+    error;
+
+    static std::string generateRandom(const uint8_t size);
+    static std::string digest( const std::string &data, CryptoParams params = CryptoParams() );
+    static std::string stringToHex(const std::string &input, const std::string separator = ":");
     static std::string toBase64(const std::string &data);
     static std::string fromBase64(const std::string &data);
 
-    Crypto( std::string &password, std::string &salt, std::string &iv, CryptoParams params = CryptoParams() );
-    Crypto( std::string &key, std::string &iv, CryptoParams params = CryptoParams() );
+    Crypto( const std::string password, const std::string salt, const std::string iv, const CryptoParams params = CryptoParams() );
+    Crypto( const std::string key, const std::string iv, const CryptoParams params = CryptoParams() );
     ~Crypto();
 
-    std::string encrypt(std::string data);
-    std::string decrypt(std::string data);
+    std::string encrypt(const std::string &data);
+    std::string decrypt(const std::string &data);
 
-    std::string key();
-    std::string iv();
+    std::string key() const;
+    std::string iv() const;
 
-    CryptoError error;
 private:
     std::unique_ptr<CryptoPrivate> _p;
 };

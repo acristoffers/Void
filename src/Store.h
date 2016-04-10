@@ -1,10 +1,10 @@
 #ifndef STORE_H
 #define STORE_H
 
-#include <memory>
-
 #include <QObject>
 #include <QString>
+
+#include "Crypto.h"
 
 struct StorePrivate;
 
@@ -20,14 +20,18 @@ public:
         DoesntExistAndCreationIsNotPermitted,
 
         // An error inside Crypto occured, lookup cryptoError
-        CantCreateCryptoObject
-    };
+        CantCreateCryptoObject,
 
-    Store(QString path, QString password, bool create = false);
+        // The file could not be opened
+        CantOpenStoreFile
+    }
+
+    error;
+
+    Crypto::CryptoError cryptoError;
+
+    Store(const QString path, const QString password, const bool create = false);
     ~Store();
-
-    StoreError   error;
-    unsigned int cryptoError;
 private:
     std::unique_ptr<StorePrivate> _p;
 };
