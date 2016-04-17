@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2015 Álan Crístoffer
  *
@@ -19,31 +20,35 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-
+ 
 #ifndef PRECOMPILED_H
 #define PRECOMPILED_H
 #ifndef __OBJC__
- #include <QByteArray>
- #include <QDataStream>
- #include <QDir>
- #include <QFile>
- #include <QList>
- #include <QMap>
- #include <QObject>
- #include <QString>
- #include <blapit.h>
- #include <iostream>
- #include <math.h>
- #include <memory>
- #include <nss.h>
- #include <nssb64.h>
- #include <pk11pub.h>
- #include <prrng.h>
- #include <secoid.h>
- #include <string>
- #include "Crypto.h"
- #include "Store.h"
- #include "StoreFS.h"
- #include "StoreFile.h"
+#include <blapit.h>
+#include <nss.h>
+#include <nssb64.h>
+#include <pk11pub.h>
+#include <prrng.h>
+#include <secoid.h>
+
+#include <QByteArray>
+#include <QDataStream>
+#include <QDir>
+#include <QFile>
+#include <QList>
+#include <QMap>
+#include <QObject>
+#include <QString>
+#include <QtTest/QtTest>
+
+#include <iostream>
+#include <math.h>
+#include <memory>
+#include <string>
+
+#include "Crypto.h"
+#include "Store.h"
+#include "StoreFS.h"
+#include "StoreFile.h"
 #endif
 #endif // PRECOMPILED_H

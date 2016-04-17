@@ -4,47 +4,73 @@
 #include <memory>
 #include <string>
 
+/*! \file */
+
 struct CryptoPrivate;
 
+/**
+ *  \brief Type of encryption.
+ */
 enum EncType : uint8_t {
-    AES_GCM_128,
-    AES_GCM_256
+    AES_GCM_128, /*!< AES-GCM 128 bits. */
+    AES_GCM_256  /*!< AES-GCM 256 bits. */
 };
 
+/**
+ *  \brief Type of digest.
+ */
 enum DigestType : uint8_t {
-    SHA256,
-    SHA512
+    SHA256, /*!< SHA256. */
+    SHA512  /*!< SHA512. */
 };
 
+/**
+ *  \brief Key derivation function.
+ */
 enum KeyDerivationFunction : uint8_t {
-    PKCS5_PBKDF2
+    PKCS5_PBKDF2 /*!< PKCS#5 PBKDF#2 */
 };
 
+/**
+ *  \brief Digest used on key derivation.
+ */
 enum KeyDerivationHash : uint8_t {
-    HMAC_SHA256,
-    HMAC_SHA512
+    HMAC_SHA256, /*!< HMAC + SHA256 */
+    HMAC_SHA512  /*!< HMAC + SHA512 */
 };
 
+/**
+ *  \brief Parameters for Crypto operation.
+ *
+ *  It's highly recommended to use the defaults when
+ *  creating new objects.
+ */
 struct CryptoParams
 {
-    EncType               encryption            = AES_GCM_256;
-    DigestType            digest                = SHA512;
-    KeyDerivationFunction keyDerivationFunction = PKCS5_PBKDF2;
-    KeyDerivationHash     keyDerivationHash     = HMAC_SHA512;
-    uint32_t              keyDerivationCost     = 1000000;
+    EncType               encryption            = AES_GCM_256;  /*!< \see EncType */
+    DigestType            digest                = SHA512;       /*!< \see DigestType */
+    KeyDerivationFunction keyDerivationFunction = PKCS5_PBKDF2; /*!< \see KeyDerivationFunction */
+    KeyDerivationHash     keyDerivationHash     = HMAC_SHA512;  /*!< \see KeyDerivationHash */
+    uint32_t              keyDerivationCost     = 250000;       /*!< How many iterations the derivation function will use. */
 };
 
 struct Crypto
 {
-    enum CryptoError {
-        Success,
-        CantGetAlgID,
-        CantGetSlot,
-        CantGenerateKey,
-        CantEncrypt,
-        CantDecrypt
+    /**
+     *  \brief Errors returned by Crypto
+     */
+    enum CryptoError : uint8_t {
+        Success,         /*!< Success. */
+        CantGetAlgID,    /*!< NSS error. Could not generate an AlgID object. */
+        CantGetSlot,     /*!< NSS error. Could not get a slot. */
+        CantGenerateKey, /*!< NSS error. Could not generate a key. */
+        CantEncrypt,     /*!< NSS error. Could not encrypt. */
+        CantDecrypt      /*!< NSS error. Could not decrypt. */
     }
 
+    /**
+     *  \brief Errors returned by Crypto
+     */
     error;
 
     static std::string generateRandom(const uint8_t size);

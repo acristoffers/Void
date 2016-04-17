@@ -14,11 +14,17 @@ class StoreFile : public QObject
 {
     Q_OBJECT
 public:
-    enum StoreFileError {
-        Success,
-        CantOpenFile
+    /**
+     *  \brief Errors returned by StoreFile
+     */
+    enum StoreFileError : uint8_t {
+        Success,     /*!< Success */
+        CantOpenFile /*!< The Store.void file could not be opened. */
     }
 
+    /**
+     *  \brief Errors returned by StoreFile
+     */
     error;
 
     StoreFile(QString path);

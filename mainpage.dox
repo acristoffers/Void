@@ -1,0 +1,61 @@
+/*!
+ * \mainpage Void
+ *
+ * \section intro_sec Introduction
+ *
+ *  Void is an application that uses GNU's GPG to encrypt files.
+ *  Because it uses GPG, a Store can be encrypted to multiple recipients,
+ *  allowing them to easily share files. It's possible to add and remove
+ *  recipients after the store is created, but it requires the reencryption
+ *  of the whole Store.
+ *
+ *  Void's Store is a folder containing a Store.void file and lots of 128 digits
+ *  encrypted files. This design favors the addition and removal of lots and/or
+ *  large files at any time.
+ *
+ *  It allows to edit text files in-place. It considers text any file which
+ *  mime-type starts with "text/" or has one of these words:
+ *
+ *   - ruby
+ *   - python
+ *   - bash
+ *   - perl
+ *   - script
+ *   - go
+ *   - cpp
+ *   - java
+ *
+ *  Void is also capable of previewing images and playing audio/video. The
+ *  images are decrypted to memory and displayed. Audio and video, due to a
+ *  limitation in Qt's playback api, needs to be decrypted into a temporary
+ *  file, in the hard-disk. The file is automatically removed when the playback
+ *  windows is closed. Images can also be openend, allowing you to visualise
+ *  them fully without hitting the disk. You can zoom in/out with CTRL++ and
+ *  CTRL+-, view in real size with CTRL+0 and make them fit the window with
+ *  CTRL+=. On Macs, CTRL converts into ⌘. On Linux the video playback is...
+ *  limited, to put it mildly. The reason is that Qt uses an old version of
+ *  GStreamer for audio/video playback. Void will start to play videos
+ *  correctly when Qt fixes this.
+ *
+ * \section license_sec LICENSE
+ *
+ * Copyright (c) 2015 Álan Crístoffer
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ *  DEALINGS IN THE SOFTWARE.
+ */
