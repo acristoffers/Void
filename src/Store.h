@@ -56,6 +56,17 @@ public:
     QStringList listAllDirectories() const;
     QStringList listAllEntries() const;
     QStringList listAllFiles() const;
+    QStringList listSubdirectories(QString path) const;
+    QStringList listFiles(QString path) const;
+    QStringList listEntries(QString path) const;
+    QStringList searchStartsWith(QString filter, quint8 type) const;
+    QStringList searchEndsWith(QString filter, quint8 type) const;
+    QStringList searchContains(QString filter, quint8 type) const;
+    QStringList searchRegex(QString filter, quint8 type) const;
+
+    QByteArray fileMetadata(const QString path, const QString key);
+    void setFileMetadata(const QString path, const QString key, const QByteArray data);
+    quint64 fileSize(const QString path);
 
 private:
     std::unique_ptr<StorePrivate> _p;

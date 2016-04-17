@@ -210,6 +210,10 @@ StoreFSDirPtr StoreFS::dir(QString path) const
         return _p->root;
     }
 
+    if ( path.endsWith("/") ) {
+        path.remove( QRegularExpression("[/]+$") );
+    }
+
     if ( _p->pathIdMap.contains(path) && _p->idDirMap.contains(_p->pathIdMap[path]) ) {
         return _p->idDirMap[_p->pathIdMap[path]];
     }
@@ -265,6 +269,18 @@ StoreFSFilePtr StoreFS::file(const quint64 id) const
     }
 
     return _p->idFileMap[id];
+}
+
+QString StoreFS::path(quint64 id)
+{
+    error = Success;
+
+    if ( _p->idPathMap.contains(id) ) {
+        return _p->idPathMap[id];
+    }
+
+    error = NoSuchFile;
+    return "";
 }
 
 /**
@@ -326,18 +342,17 @@ QStringList StoreFS::allFiles() const
  *
  *  \returns A list of StoreFSDirPtr of the subdirs.
  */
-QList<StoreFSDirPtr> StoreFS::subdirs(QString path) const
+QList<StoreFSDirPtr> StoreFS::subdirs(QString path)
 {
-    QList<StoreFSDirPtr> list;
-    auto                 keys = _p->pathIdMap.keys();
+    error = Success;
+    auto d = dir(path);
 
-    for ( QString key : keys ) {
-        if ( key.startsWith(path) && (_p->idDirMap[_p->pathIdMap[key]]->id >= _p->root->id) ) {
-            list << _p->idDirMap[_p->pathIdMap[key]];
-        }
+    if ( d == nullptr ) {
+        error = NoSuchFile;
+        return QList<StoreFSDirPtr> ();
     }
 
-    return list;
+    return d->subdirs;
 }
 
 /**
@@ -347,18 +362,17 @@ QList<StoreFSDirPtr> StoreFS::subdirs(QString path) const
  *
  *  \returns A list of StoreFSFilePtr of the files.
  */
-QList<StoreFSFilePtr> StoreFS::subfiles(QString path) const
+QList<StoreFSFilePtr> StoreFS::subfiles(QString path)
 {
-    QList<StoreFSFilePtr> list;
-    auto                  keys = _p->pathIdMap.keys();
+    error = Success;
+    auto d = dir(path);
 
-    for ( QString key : keys ) {
-        if ( key.startsWith(path) && (_p->idDirMap[_p->pathIdMap[key]]->id < _p->root->id) ) {
-            list << _p->idFileMap[_p->pathIdMap[key]];
-        }
+    if ( d == nullptr ) {
+        error = NoSuchFile;
+        return QList<StoreFSFilePtr> ();
     }
 
-    return list;
+    return d->files;
 }
 
 /**
@@ -485,7 +499,7 @@ StoreFSDirPtr StoreFS::addSubdir(QString name, StoreFSDirPtr parent)
 }
 
 /**
- *  \brief Makes a path if it doesnt exist, like `mkdir -p \c path`.
+ *  \brief Makes a path if it doesnt exist, like `mkdir -p path`.
  *
  *  \arg \c path Path to be made. If it already exists, a pointer to the existing one is returned instead.
  *
@@ -570,11 +584,12 @@ void StoreFS::moveDir(const QString oldPath, const QString newPath)
 {
     error = Success;
 
-    if ( dir(oldPath) == nullptr ) {
+    StoreFSDirPtr d = dir(oldPath);
+    if ( d == nullptr ) {
         return;
     }
 
-    QList<quint64> ids = entryBeginsWith(oldPath + "/");
+    QList<quint64> ids = entryBeginsWith(d->path + "/");
     for ( quint64 id : ids ) {
         if ( id < ( ( static_cast<quint64> (1) ) << 63 ) ) {
             QString oldFilePath = _p->idPathMap[id];

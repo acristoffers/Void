@@ -32,5 +32,8 @@ private slots:
     void storeAddFileFromDisk();
     void storeRenameFile();
     void storeFetchAll();
+    void storeCheckMetadata();
+    void storeListEntries();
+    void storeSearch();
 };
 #endif // CRYPTOTEST_H

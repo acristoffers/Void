@@ -148,8 +148,7 @@ void VoidTest::storeFileCreateAndLoadStore()
 void VoidTest::storeFSMakePath()
 {
     QDir::current().mkdir("void_store");
-    StoreFile sf("void_store/Store.void");
-    StoreFS   sfs("void_store");
+    StoreFS sfs("void_store");
 
     sfs.makePath("/Users/Alan");
     sfs.makePath("/Users/Alan/Documents");
@@ -176,8 +175,7 @@ void VoidTest::storeFSMakePath()
 void VoidTest::storeFSAddFile()
 {
     QDir::current().mkdir("void_store");
-    StoreFile sf("void_store/Store.void");
-    StoreFS   sfs("void_store");
+    StoreFS sfs("void_store");
 
     QByteArray data = "Hello World";
 
@@ -199,8 +197,7 @@ void VoidTest::storeFSAddFile()
 void VoidTest::storeFSAddFileFromDisk()
 {
     QDir::current().mkdir("void_store");
-    StoreFile sf("void_store/Store.void");
-    StoreFS   sfs("void_store");
+    StoreFS sfs("void_store");
 
     QByteArray data = "Hello World";
 
@@ -241,8 +238,7 @@ void VoidTest::storeFSAddFileFromDisk()
 void VoidTest::storeFSRemoveFile()
 {
     QDir::current().mkdir("void_store");
-    StoreFile sf("void_store/Store.void");
-    StoreFS   sfs("void_store");
+    StoreFS sfs("void_store");
 
     QByteArray data = "Hello World";
 
@@ -271,8 +267,7 @@ void VoidTest::storeFSRemoveFile()
 void VoidTest::storeFSRemoveDir()
 {
     QDir::current().mkdir("void_store");
-    StoreFile sf("void_store/Store.void");
-    StoreFS   sfs("void_store");
+    StoreFS sfs("void_store");
 
     QByteArray data = "Hello World";
 
@@ -312,8 +307,7 @@ void VoidTest::storeFSRemoveDir()
 void VoidTest::storeFSRenameFile()
 {
     QDir::current().mkdir("void_store");
-    StoreFile sf("void_store/Store.void");
-    StoreFS   sfs("void_store");
+    StoreFS sfs("void_store");
 
     QByteArray data = "Hello World";
 
@@ -345,8 +339,7 @@ void VoidTest::storeFSRenameFile()
 void VoidTest::storeFSRenameDir()
 {
     QDir::current().mkdir("void_store");
-    StoreFile sf("void_store/Store.void");
-    StoreFS   sfs("void_store");
+    StoreFS sfs("void_store");
 
     QByteArray data = "Hello World";
 
@@ -378,8 +371,7 @@ void VoidTest::storeFSRenameDir()
 void VoidTest::storeFSFilters()
 {
     QDir::current().mkdir("void_store");
-    StoreFile sf("void_store/Store.void");
-    StoreFS   sfs("void_store");
+    StoreFS sfs("void_store");
 
     QByteArray data = "Hello World";
 
@@ -466,8 +458,7 @@ void VoidTest::storeFSFilters()
 void VoidTest::storeFSFetchAll()
 {
     QDir::current().mkdir("void_store");
-    StoreFile sf("void_store/Store.void");
-    StoreFS   sfs("void_store");
+    StoreFS sfs("void_store");
 
     QByteArray data = "Hello World";
 
@@ -679,6 +670,201 @@ void VoidTest::storeFetchAll()
     QCOMPARE(paths.contains("/dir/hello"),                true);
     QCOMPARE(paths.contains("/dir/subdir/hello.txt"),     true);
     QCOMPARE(paths.contains("/folder/subdir/hello2.txt"), true);
+
+    store.remove("/");
+    QFile::remove("void_store/Store.void");
+    QDir::current().rmdir("void_store");
+}
+
+/**
+ *  \brief Tests Store#fileMetadata and Store#setFileMetadata and see if [mimetype] is correctly assigned.
+ */
+void VoidTest::storeCheckMetadata()
+{
+    QString path     = QDir::current().filePath("void_store");
+    QString password = "pswd";
+    Store   store(path, password, true);
+
+    QByteArray data = "#!/usr/bin/env ruby\n\nputs 'Hello World'\n";
+
+    store.addFile("/hello.rb", data);
+    QCOMPARE(store.error, Store::Success);
+
+    QString       mimetypeString = store.fileMetadata("/hello.rb", "mimetype");
+    QMimeDatabase mimedb;
+    QMimeType     mimetype = mimedb.mimeTypeForName(mimetypeString);
+    QCOMPARE(mimetype.inherits("application/x-ruby"), true);
+
+    QString importantInformation = "k";
+    store.setFileMetadata( "/hello.rb", "important", importantInformation.toUtf8() );
+    QCOMPARE( store.fileMetadata("/hello.rb", "important"), QByteArray("k") );
+
+    store.setFileMetadata( "/hello.rb", "important", QByteArray() );
+    QCOMPARE( store.fileMetadata("/hello.rb", "important"), QByteArray() );
+
+    store.fileMetadata("/hello2.rb", "important");
+    QCOMPARE(store.error, Store::NoSuchFile);
+
+    store.remove("/");
+    QFile::remove("void_store/Store.void");
+    QDir::current().rmdir("void_store");
+}
+
+/**
+ *  \brief Tests Store#listFiles, Store#listSubdirectories and Store#listEntries
+ */
+void VoidTest::storeListEntries()
+{
+    QString path     = QDir::current().filePath("void_store");
+    QString password = "pswd";
+    Store   store(path, password, true);
+
+    QByteArray data = "Hello World";
+
+    store.addFile("/dir/hello", data);
+    QCOMPARE(store.error, Store::Success);
+    store.addFile("/dir/subdir/hello.txt", data);
+    QCOMPARE(store.error, Store::Success);
+    store.addFile("/dir/hello2.txt", data);
+    QCOMPARE(store.error,                       Store::Success);
+
+    QStringList paths = store.listSubdirectories("/dir");
+    QCOMPARE(paths.size(),                      1);
+    QCOMPARE(paths.contains("/dir/subdir"),     true);
+
+    paths = store.listFiles("/dir");
+    QCOMPARE(paths.size(),                      2);
+    QCOMPARE(paths.contains("/dir/hello"),      true);
+    QCOMPARE(paths.contains("/dir/hello2.txt"), true);
+
+    paths = store.listEntries("/dir");
+    QCOMPARE(paths.size(),                      3);
+    QCOMPARE(paths.contains("/dir/subdir"),     true);
+    QCOMPARE(paths.contains("/dir/hello"),      true);
+    QCOMPARE(paths.contains("/dir/hello2.txt"), true);
+
+    store.remove("/");
+    QFile::remove("void_store/Store.void");
+    QDir::current().rmdir("void_store");
+}
+
+/**
+ *  \brief Tests Store#searchStartsWith, Store#searchEndsWith, Store#searchContains and Store#searchRegex
+ */
+void VoidTest::storeSearch()
+{
+    QString path     = QDir::current().filePath("void_store");
+    QString password = "pswd";
+    Store   store(path, password, true);
+
+    QByteArray data = "Hello World";
+
+    store.addFile("/dir/hello", data);
+    QCOMPARE(store.error, Store::Success);
+    store.addFile("/dir/subdir/hello.txt", data);
+    QCOMPARE(store.error, Store::Success);
+    store.addFile("/folder/subdir/hello2.txt", data);
+    QCOMPARE(store.error, Store::Success);
+
+    // searchStartsWith
+
+    QStringList paths = store.searchStartsWith("/dir", 0);
+    QCOMPARE(store.error,                             Store::Success);
+    QCOMPARE(paths.size(),                            4);
+    QCOMPARE(paths.contains("/dir"),                  true);
+    QCOMPARE(paths.contains("/dir/subdir"),           true);
+    QCOMPARE(paths.contains("/dir/subdir/hello.txt"), true);
+    QCOMPARE(paths.contains("/dir/hello"),            true);
+
+    paths = store.searchStartsWith("/dir", 1);
+    QCOMPARE(store.error,                             Store::Success);
+    QCOMPARE(paths.size(),                            2);
+    QCOMPARE(paths.contains("/dir/subdir/hello.txt"), true);
+    QCOMPARE(paths.contains("/dir/hello"),            true);
+
+    paths = store.searchStartsWith("/dir", 2);
+    QCOMPARE(store.error,                             Store::Success);
+    QCOMPARE(paths.size(),                            2);
+    QCOMPARE(paths.contains("/dir"),                  true);
+    QCOMPARE(paths.contains("/dir/subdir"),           true);
+
+    // searchEndsWith
+
+    paths = store.searchEndsWith("dir", 0);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                3);
+    QCOMPARE(paths.contains("/dir"),                      true);
+    QCOMPARE(paths.contains("/dir/subdir"),               true);
+    QCOMPARE(paths.contains("/folder/subdir"),            true);
+
+    paths = store.searchEndsWith("dir", 1);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                0);
+
+    paths = store.searchEndsWith("dir", 2);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                3);
+    QCOMPARE(paths.contains("/dir"),                      true);
+    QCOMPARE(paths.contains("/dir/subdir"),               true);
+    QCOMPARE(paths.contains("/folder/subdir"),            true);
+
+    paths = store.searchEndsWith(".txt", 0);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                2);
+    QCOMPARE(paths.contains("/dir/subdir/hello.txt"),     true);
+    QCOMPARE(paths.contains("/folder/subdir/hello2.txt"), true);
+
+    paths = store.searchEndsWith(".txt", 1);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                2);
+    QCOMPARE(paths.contains("/dir/subdir/hello.txt"),     true);
+    QCOMPARE(paths.contains("/folder/subdir/hello2.txt"), true);
+
+    paths = store.searchEndsWith(".txt", 2);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                0);
+
+    // searchContains
+
+    paths = store.searchContains("subdir", 0);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                4);
+    QCOMPARE(paths.contains("/dir/subdir"),               true);
+    QCOMPARE(paths.contains("/folder/subdir"),            true);
+    QCOMPARE(paths.contains("/dir/subdir/hello.txt"),     true);
+    QCOMPARE(paths.contains("/folder/subdir/hello2.txt"), true);
+
+    paths = store.searchContains("subdir", 1);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                2);
+    QCOMPARE(paths.contains("/dir/subdir/hello.txt"),     true);
+    QCOMPARE(paths.contains("/folder/subdir/hello2.txt"), true);
+
+    paths = store.searchContains("subdir", 2);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                2);
+    QCOMPARE(paths.contains("/dir/subdir"),               true);
+    QCOMPARE(paths.contains("/folder/subdir"),            true);
+
+    // searchRegex
+
+    paths = store.searchRegex(".*hello.*", 0);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                3);
+    QCOMPARE(paths.contains("/dir/hello"),                true);
+    QCOMPARE(paths.contains("/dir/subdir/hello.txt"),     true);
+    QCOMPARE(paths.contains("/folder/subdir/hello2.txt"), true);
+
+    paths = store.searchRegex(".*hello.*", 1);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                3);
+    QCOMPARE(paths.contains("/dir/hello"),                true);
+    QCOMPARE(paths.contains("/dir/subdir/hello.txt"),     true);
+    QCOMPARE(paths.contains("/folder/subdir/hello2.txt"), true);
+
+    paths = store.searchRegex(".*hello.*", 2);
+    QCOMPARE(store.error,                                 Store::Success);
+    QCOMPARE(paths.size(),                                0);
 
     store.remove("/");
     QFile::remove("void_store/Store.void");

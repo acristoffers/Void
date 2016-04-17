@@ -2,8 +2,10 @@
 
 #include <iostream>
 
+#include <QDataStream>
 #include <QDir>
 #include <QFile>
+#include <QMimeDatabase>
 
 #include "StoreFile.h"
 #include "StoreFS.h"
@@ -132,6 +134,10 @@ void Store::addFile(const QString storePath, const QByteArray data)
     _p->storeFS->addFile(storePath, data);
 
     if ( _p->storeFS->error == StoreFS::Success ) {
+        QMimeDatabase mimedb;
+        QMimeType     mimetype = mimedb.mimeTypeForData(data);
+        _p->storeFS->file(storePath)->metadata["mimetype"] = mimetype.name().toUtf8();
+
         _p->save();
     }
 
@@ -158,6 +164,10 @@ void Store::addFile(const QString filePath, const QString storePath)
     _p->storeFS->addFile(filePath, storePath);
 
     if ( _p->storeFS->error == StoreFS::Success ) {
+        QMimeDatabase mimedb;
+        QMimeType     mimetype = mimedb.mimeTypeForFile(filePath);
+        _p->storeFS->file(storePath)->metadata["mimetype"] = mimetype.name().toUtf8();
+
         _p->save();
     }
 
@@ -280,7 +290,7 @@ void Store::remove(const QString path)
 }
 
 /**
- *  \brief Makes a directory at path \c path, like `mkdir -p \c path`.
+ *  \brief Makes a directory at path \c path, like `mkdir -p path`.
  *
  *  Directories are not saved in Store.void. Only files. Therefore,
  *  empty directories are lost when you reload the store.
@@ -323,6 +333,347 @@ QStringList Store::listAllEntries() const
 QStringList Store::listAllFiles() const
 {
     return _p->storeFS->allFiles();
+}
+
+/**
+ *  \brief List subdirectories of path.
+ *
+ *  \arg \c path Path of direcotory to list subdirs.
+ *
+ *  \return List of directories in path.
+ *
+ *  \see Store#listFiles
+ *  \see Store#listEntries
+ */
+QStringList Store::listSubdirectories(QString path) const
+{
+    QStringList list;
+
+    QList<StoreFSDirPtr> ds = _p->storeFS->subdirs(path);
+    for ( StoreFSDirPtr d : ds ) {
+        list << d->path;
+    }
+
+    return list;
+}
+
+/**
+ *  \brief List files in directory.
+ *
+ *  \arg \c path Path of direcotory to list files.
+ *
+ *  \return List of files in path.
+ *
+ *  \see Store#listSubdirectories
+ *  \see Store#listEntries
+ */
+QStringList Store::listFiles(QString path) const
+{
+    QStringList list;
+
+    QList<StoreFSFilePtr> fs = _p->storeFS->subfiles(path);
+    for ( StoreFSFilePtr f : fs ) {
+        list << f->path;
+    }
+
+    return list;
+}
+
+/**
+ *  \brief List files and directories in directory.
+ *
+ *  \arg \c path Path of direcotory to list entries.
+ *
+ *  \return List of entries in path.
+ *
+ *  \see Store#listSubdirectories
+ *  \see Store#listEntries
+ */
+QStringList Store::listEntries(QString path) const
+{
+    return listFiles(path) + listSubdirectories(path);
+}
+
+/**
+ *  \brief List files and directories whose path starts with \c filter. "/" is never included.
+ *
+ *  \arg \c filter String to be matched.
+ *  \arg \c type 0 for all, 1 for files only, 2 for directories only.
+ *
+ *  \return List of paths that match the \c filter.
+ *
+ *  \see Store#searchEndsWith
+ *  \see Store#searchContains
+ *  \see Store#searchRegex
+ */
+QStringList Store::searchStartsWith(QString filter, quint8 type) const
+{
+    QStringList entries;
+
+    QList<quint64> ids = _p->storeFS->entryBeginsWith(filter);
+    for ( quint64 id : ids ) {
+        switch ( type ) {
+            case 0:
+                entries << _p->storeFS->path(id);
+                break;
+
+            case 1:
+            {
+                StoreFSFilePtr f = _p->storeFS->file(id);
+                if ( f != nullptr ) {
+                    entries << f->path;
+                }
+                break;
+            }
+
+            case 2:
+            {
+                StoreFSDirPtr d = _p->storeFS->dir(id);
+                if ( d != nullptr ) {
+                    entries << d->path;
+                }
+                break;
+            }
+        }
+    }
+
+    entries.removeAll("");
+
+    return entries;
+}
+
+/**
+ *  \brief List files and directories whose path ends with \c filter. "/" is never included.
+ *
+ *  \arg \c filter String to be matched.
+ *  \arg \c type 0 for all, 1 for files only, 2 for directories only.
+ *
+ *  \return List of paths that match the \c filter.
+ *
+ *  \see Store#searchStartsWith
+ *  \see Store#searchContains
+ *  \see Store#searchRegex
+ */
+QStringList Store::searchEndsWith(QString filter, quint8 type) const
+{
+    QStringList entries;
+
+    QList<quint64> ids = _p->storeFS->entryEndsWith(filter);
+    for ( quint64 id : ids ) {
+        switch ( type ) {
+            case 0:
+                entries << _p->storeFS->path(id);
+                break;
+
+            case 1:
+            {
+                StoreFSFilePtr f = _p->storeFS->file(id);
+                if ( f != nullptr ) {
+                    entries << f->path;
+                }
+                break;
+            }
+
+            case 2:
+            {
+                StoreFSDirPtr d = _p->storeFS->dir(id);
+                if ( d != nullptr ) {
+                    entries << d->path;
+                }
+                break;
+            }
+        }
+    }
+
+    entries.removeAll("");
+
+    return entries;
+}
+
+/**
+ *  \brief List files and directories whose path contains with \c filter. "/" is never included.
+ *
+ *  \arg \c filter String to be matched.
+ *  \arg \c type 0 for all, 1 for files only, 2 for directories only.
+ *
+ *  \return List of paths that match the \c filter.
+ *
+ *  \see Store#searchStartsWith
+ *  \see Store#searchContains
+ *  \see Store#searchRegex
+ */
+QStringList Store::searchContains(QString filter, quint8 type) const
+{
+    QStringList entries;
+
+    QList<quint64> ids = _p->storeFS->entryContains(filter);
+    for ( quint64 id : ids ) {
+        switch ( type ) {
+            case 0:
+                entries << _p->storeFS->path(id);
+                break;
+
+            case 1:
+            {
+                StoreFSFilePtr f = _p->storeFS->file(id);
+                if ( f != nullptr ) {
+                    entries << f->path;
+                }
+                break;
+            }
+
+            case 2:
+            {
+                StoreFSDirPtr d = _p->storeFS->dir(id);
+                if ( d != nullptr ) {
+                    entries << d->path;
+                }
+                break;
+            }
+        }
+    }
+
+    entries.removeAll("");
+
+    return entries;
+}
+
+/**
+ *  \brief List files and directories whose path matches the regex \c filter. "/" is never included.
+ *
+ *  \arg \c filter String to be matched.
+ *  \arg \c type 0 for all, 1 for files only, 2 for directories only.
+ *
+ *  \return List of paths that match the \c filter.
+ *
+ *  \see Store#searchStartsWith
+ *  \see Store#searchContains
+ *  \see Store#searchRegex
+ */
+QStringList Store::searchRegex(QString filter, quint8 type) const
+{
+    QStringList entries;
+
+    QList<quint64> ids = _p->storeFS->entryMatchRegExp(filter);
+    for ( quint64 id : ids ) {
+        switch ( type ) {
+            case 0:
+                entries << _p->storeFS->path(id);
+                break;
+
+            case 1:
+            {
+                StoreFSFilePtr f = _p->storeFS->file(id);
+                if ( f != nullptr ) {
+                    entries << f->path;
+                }
+                break;
+            }
+
+            case 2:
+            {
+                StoreFSDirPtr d = _p->storeFS->dir(id);
+                if ( d != nullptr ) {
+                    entries << d->path;
+                }
+                break;
+            }
+        }
+    }
+
+    entries.removeAll("");
+
+    return entries;
+}
+
+/**
+ *  \brief Returns metadata associated with this file.
+ *
+ *  The metadata system is meant to be used to save extra information about the file.
+ *  By default the following fields are defined:
+ *
+ *  mimetype: mimetype of the file as returned by QMimeType#name.
+ *
+ *  \arg \c path File path.
+ *  \arg \c key Metadata key.
+ *
+ *  \return The value associated with key \c key in the file metadata map.
+ *
+ *  \see Store#error
+ *  \see Store#setFileMetadata
+ *  \see QMimeDatabase#mimeTypeForName
+ */
+QByteArray Store::fileMetadata(const QString path, const QString key)
+{
+    error = Success;
+
+    StoreFSFilePtr file = _p->storeFS->file(path);
+
+    if ( file != nullptr ) {
+        if ( file->metadata.contains(key) ) {
+            return file->metadata[key];
+        }
+    } else {
+        error = NoSuchFile;
+    }
+
+    return QByteArray();
+}
+
+/**
+ *  \brief Sets metadata associated with this file.
+ *
+ *  The metadata system is meant to be used to save extra information about the file.
+ *  Setting to an empty data will remove the key from the list.
+ *  By default the following fields are defined:
+ *
+ *  mimetype: mimetype of the file as returned by QMimeType#name.
+ *
+ *  \arg \c path File path.
+ *  \arg \c key Metadata key.
+ *  \arg \c data The data to associate with the key.
+ *
+ *  \see Store#error
+ *  \see Store#fileMetadata
+ *  \see QMimeDatabase#mimeTypeForName
+ */
+void Store::setFileMetadata(const QString path, const QString key, const QByteArray data)
+{
+    error = Success;
+
+    StoreFSFilePtr file = _p->storeFS->file(path);
+
+    if ( file != nullptr ) {
+        if ( data.isEmpty() ) {
+            file->metadata.remove(key);
+        } else {
+            file->metadata[key] = data;
+        }
+    } else {
+        error = NoSuchFile;
+    }
+}
+
+/**
+ *  \brief Returns the size of file in \c path.
+ *
+ *  \arg \c path Path of the file to lookup the size.
+ *
+ *  \return Size of file in \c path.
+ *
+ *  \see Store#error
+ */
+quint64 Store::fileSize(const QString path)
+{
+    error = Success;
+    StoreFSFilePtr file = _p->storeFS->file(path);
+
+    if ( file != nullptr ) {
+        return file->size;
+    }
+
+    error = NoSuchFile;
+    return 0;
 }
 
 /**

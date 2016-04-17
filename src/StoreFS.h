@@ -61,13 +61,15 @@ struct StoreFS
     StoreFSFilePtr file(const QString path) const;
     StoreFSFilePtr file(const quint64 id) const;
 
+    QString path(quint64 id);
+
     QStringList allDirs() const;
     QStringList allEntries() const;
     QStringList allFiles() const;
 
-    QList<StoreFSDirPtr> subdirs(const QString path) const;
+    QList<StoreFSDirPtr> subdirs(const QString path);
 
-    QList<StoreFSFilePtr> subfiles(const QString path) const;
+    QList<StoreFSFilePtr> subfiles(const QString path);
 
     QList<quint64> entryBeginsWith(const QString) const;
 
