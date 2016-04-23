@@ -91,7 +91,20 @@
       return $('#info').css('display', 'none');
     });
     return new QWebChannel(qt.webChannelTransport, function(channel) {
-      return wb = channel.objects.welcome_bridge;
+      wb = channel.objects.welcome_bridge;
+      $(window.trs).each(function() {
+        var locale;
+        locale = this;
+        return $('#' + locale).click(function() {
+          window.locale = locale;
+          window.update_translation();
+          return wb.setLang(locale);
+        });
+      });
+      return wb.lang(function(r) {
+        window.locale = r;
+        return window.update_translation();
+      });
     });
   });
 

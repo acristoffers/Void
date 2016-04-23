@@ -25,6 +25,8 @@
 (function() {
   var tr;
 
+  window.trs = ['en', 'fr', 'de', 'pt'];
+
   tr = {
     en: {
       'Language': 'Language',
@@ -134,17 +136,5 @@
       });
     });
   };
-
-  $(function() {
-    $(Object.keys(tr)).each(function() {
-      var locale;
-      locale = this;
-      return $('#' + locale).click(function() {
-        window.locale = locale;
-        return window.update_translation();
-      });
-    });
-    return window.update_translation();
-  });
 
 }).call(this);

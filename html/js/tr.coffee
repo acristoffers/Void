@@ -20,6 +20,8 @@
  * THE SOFTWARE.
 ###
 
+window.trs = ['en', 'fr', 'de', 'pt']
+
 tr =
     en:
         'Language': 'Language'
@@ -115,11 +117,3 @@ window.update_translation = ->
         $.each this.attributes, ->
             if this.name.match attr_pattern
                 node.attr( this.name.match(attr_pattern)[1] , window.tr node.attr(this.name) )
-
-$ ->
-    $( Object.keys(tr) ).each ->
-        locale = this
-        $('#' + locale).click ->
-            window.locale = locale
-            window.update_translation()
-    window.update_translation()

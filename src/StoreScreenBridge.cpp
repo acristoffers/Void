@@ -22,6 +22,8 @@
 
 #include "StoreScreenBridge.h"
 
+#include <QSettings>
+
 struct StoreScreenBridgePrivate
 {
     std::unique_ptr<Store> store;
@@ -35,3 +37,21 @@ StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &passwor
 }
 
 StoreScreenBridge::~StoreScreenBridge() = default;
+
+void StoreScreenBridge::setLang(QString lang)
+{
+    QSettings settings;
+
+    settings.setValue("lang", lang);
+}
+
+QString StoreScreenBridge::lang()
+{
+    QSettings settings;
+
+    if ( !settings.contains("lang") ) {
+        settings.setValue("lang", "en");
+    }
+
+    return settings.value("lang").toString();
+}

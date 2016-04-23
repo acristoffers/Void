@@ -27,7 +27,20 @@
     var sb;
     sb = null;
     return new QWebChannel(qt.webChannelTransport, function(channel) {
-      return sb = channel.objects.store_bridge;
+      sb = channel.objects.store_bridge;
+      $(window.trs).each(function() {
+        var locale;
+        locale = this;
+        return $('#' + locale).click(function() {
+          window.locale = locale;
+          window.update_translation();
+          return sb.setLang(locale);
+        });
+      });
+      return sb.lang(function(r) {
+        window.locale = r;
+        return window.update_translation();
+      });
     });
   });
 

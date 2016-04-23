@@ -36,6 +36,9 @@ public:
     StoreScreenBridge(const QString &path, const QString &password, const bool create);
     ~StoreScreenBridge();
 
+    Q_INVOKABLE void setLang(QString lang);
+    Q_INVOKABLE QString lang();
+
     Store::StoreError error;
 private:
     std::unique_ptr<StoreScreenBridgePrivate> _p;

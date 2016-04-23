@@ -1,6 +1,7 @@
 #include "WelcomeScreenBridge.h"
 
 #include <QFileDialog>
+#include <QSettings>
 
 #include "StoreScreen.h"
 
@@ -51,6 +52,24 @@ QString WelcomeScreenBridge::create(const QString password)
 void WelcomeScreenBridge::close()
 {
     _p->parent->close();
+}
+
+void WelcomeScreenBridge::setLang(QString lang)
+{
+    QSettings settings;
+
+    settings.setValue("lang", lang);
+}
+
+QString WelcomeScreenBridge::lang()
+{
+    QSettings settings;
+
+    if ( !settings.contains("lang") ) {
+        settings.setValue("lang", "en");
+    }
+
+    return settings.value("lang").toString();
 }
 
 QString WelcomeScreenBridge::StoreError2QString(Store::StoreError error)

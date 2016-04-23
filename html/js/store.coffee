@@ -25,3 +25,14 @@ $ ->
 
     new QWebChannel qt.webChannelTransport, (channel) ->
         sb = channel.objects.store_bridge;
+
+        $(window.trs).each ->
+            locale = this
+            $('#' + locale).click ->
+                window.locale = locale
+                window.update_translation()
+                sb.setLang locale
+
+        sb.lang (r) ->
+            window.locale = r
+            window.update_translation()

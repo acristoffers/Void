@@ -22,6 +22,8 @@ public:
     Q_INVOKABLE QString open(const QString password);
     Q_INVOKABLE QString create(const QString password);
     Q_INVOKABLE void close();
+    Q_INVOKABLE void setLang(QString lang);
+    Q_INVOKABLE QString lang();
 
     static QString StoreError2QString(Store::StoreError);
 

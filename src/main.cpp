@@ -21,12 +21,20 @@
  */
 
 #include <QApplication>
+#include <QIcon>
 
 #include "WelcomeScreen.h"
 
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
+
+    app.setWindowIcon( QIcon( QStringLiteral("qrc:/icon.png") ) );
+    app.setApplicationDisplayName( QStringLiteral("Void") );
+    app.setApplicationName( QStringLiteral("Void") );
+    app.setApplicationVersion("1.0");
+    app.setOrganizationDomain( QStringLiteral("acristoffers.me") );
+    app.setOrganizationName( QStringLiteral("Alan Cristoffer") );
 
     // Deletes itself on close
     new WelcomeScreen;

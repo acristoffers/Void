@@ -24,6 +24,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QSettings>
 #include <QStyle>
 #include <QWebChannel>
 
@@ -47,8 +48,15 @@ StoreScreen::StoreScreen(const QString &path, const QString &password, const boo
     }
 
     page()->setBackgroundColor("#222222");
-    setGeometry( QStyle::alignedRect( Qt::LeftToRight, Qt::AlignCenter, QSize(1024, 768), qApp->desktop()->availableGeometry() ) );
     setAttribute(Qt::WA_DeleteOnClose);
+
+    QSettings settings;
+    if ( settings.contains("storeWindowGeometry") ) {
+        restoreGeometry( settings.value("storeWindowGeometry").toByteArray() );
+    } else {
+        setGeometry( QStyle::alignedRect( Qt::LeftToRight, Qt::AlignCenter, QSize(1024, 768), qApp->desktop()->availableGeometry() ) );
+        settings.setValue( "storeWindowGeometry", saveGeometry() );
+    }
 
     load( QUrl("qrc:/html/store.htm") );
 
@@ -59,3 +67,10 @@ StoreScreen::StoreScreen(const QString &path, const QString &password, const boo
 }
 
 StoreScreen::~StoreScreen() = default;
+
+void StoreScreen::closeEvent(QCloseEvent *)
+{
+    QSettings settings;
+
+    settings.setValue( "storeWindowGeometry", saveGeometry() );
+}

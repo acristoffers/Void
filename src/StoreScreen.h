@@ -41,6 +41,10 @@ public:
     Store::StoreError error;
 private:
     std::unique_ptr<StoreScreenPrivate> _p;
+
+    // QWidget interface
+protected:
+    void closeEvent(QCloseEvent *) override;
 };
 
 #endif // STORESCREEN_H
