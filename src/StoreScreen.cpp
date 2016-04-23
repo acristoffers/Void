@@ -20,36 +20,42 @@
  *  THE SOFTWARE.
  */
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
-#ifndef __OBJC__
- #include <blapit.h>
- #include <nss.h>
- #include <nssb64.h>
- #include <pk11pub.h>
- #include <prrng.h>
- #include <secoid.h>
+#include "StoreScreen.h"
 
- #include <QByteArray>
- #include <QDataStream>
- #include <QDir>
- #include <QFile>
- #include <QList>
- #include <QMap>
- #include <QMimeDatabase>
- #include <QObject>
- #include <QRegularExpression>
- #include <QString>
- #include <QtTest/QtTest>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QStyle>
+#include <QWebChannel>
 
- #include <iostream>
- #include <math.h>
- #include <memory>
- #include <string>
+#include "StoreScreenBridge.h"
 
- #include "Crypto.h"
- #include "Store.h"
- #include "StoreFS.h"
- #include "StoreFile.h"
-#endif
-#endif // PRECOMPILED_H
+struct StoreScreenPrivate
+{
+    std::unique_ptr<StoreScreenBridge> bridge;
+    std::unique_ptr<QWebChannel>       channel;
+};
+
+StoreScreen::StoreScreen(const QString &path, const QString &password, const bool create) : QWebEngineView()
+{
+    _p.reset(new StoreScreenPrivate);
+    _p->channel.reset(new QWebChannel);
+    _p->bridge.reset( new StoreScreenBridge(path, password, create) );
+
+    error = _p->bridge->error;
+    if ( error != Store::Success ) {
+        return;
+    }
+
+    page()->setBackgroundColor("#222222");
+    setGeometry( QStyle::alignedRect( Qt::LeftToRight, Qt::AlignCenter, QSize(1024, 768), qApp->desktop()->availableGeometry() ) );
+    setAttribute(Qt::WA_DeleteOnClose);
+
+    load( QUrl("qrc:/html/store.htm") );
+
+    page()->setWebChannel( _p->channel.get() );
+    _p->channel->registerObject( QStringLiteral("store_bridge"), _p->bridge.get() );
+
+    show();
+}
+
+StoreScreen::~StoreScreen() = default;

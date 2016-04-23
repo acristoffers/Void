@@ -20,36 +20,18 @@
  *  THE SOFTWARE.
  */
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
-#ifndef __OBJC__
- #include <blapit.h>
- #include <nss.h>
- #include <nssb64.h>
- #include <pk11pub.h>
- #include <prrng.h>
- #include <secoid.h>
+#include "StoreScreenBridge.h"
 
- #include <QByteArray>
- #include <QDataStream>
- #include <QDir>
- #include <QFile>
- #include <QList>
- #include <QMap>
- #include <QMimeDatabase>
- #include <QObject>
- #include <QRegularExpression>
- #include <QString>
- #include <QtTest/QtTest>
+struct StoreScreenBridgePrivate
+{
+    std::unique_ptr<Store> store;
+};
 
- #include <iostream>
- #include <math.h>
- #include <memory>
- #include <string>
+StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &password, const bool create) : QObject()
+{
+    _p.reset(new StoreScreenBridgePrivate);
+    _p->store.reset( new Store(path, password, create) );
+    error = _p->store->error;
+}
 
- #include "Crypto.h"
- #include "Store.h"
- #include "StoreFS.h"
- #include "StoreFile.h"
-#endif
-#endif // PRECOMPILED_H
+StoreScreenBridge::~StoreScreenBridge() = default;

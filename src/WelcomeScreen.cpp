@@ -20,36 +20,45 @@
  *  THE SOFTWARE.
  */
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
-#ifndef __OBJC__
- #include <blapit.h>
- #include <nss.h>
- #include <nssb64.h>
- #include <pk11pub.h>
- #include <prrng.h>
- #include <secoid.h>
+#include "WelcomeScreen.h"
 
- #include <QByteArray>
- #include <QDataStream>
- #include <QDir>
- #include <QFile>
- #include <QList>
- #include <QMap>
- #include <QMimeDatabase>
- #include <QObject>
- #include <QRegularExpression>
- #include <QString>
- #include <QtTest/QtTest>
+#include <QApplication>
+#include <QContextMenuEvent>
+#include <QDesktopWidget>
+#include <QStyle>
+#include <QWebChannel>
 
- #include <iostream>
- #include <math.h>
- #include <memory>
- #include <string>
+#include <WelcomeScreenBridge.h>
 
- #include "Crypto.h"
- #include "Store.h"
- #include "StoreFS.h"
- #include "StoreFile.h"
-#endif
-#endif // PRECOMPILED_H
+struct WelcomeScreenPrivate
+{
+    std::unique_ptr<WelcomeScreenBridge> bridge;
+    std::unique_ptr<QWebChannel>         channel;
+};
+
+WelcomeScreen::WelcomeScreen() : QWebEngineView()
+{
+    _p.reset(new WelcomeScreenPrivate);
+    _p->channel.reset(new QWebChannel);
+    _p->bridge.reset( new WelcomeScreenBridge(this) );
+
+    page()->setBackgroundColor("#222222");
+    setGeometry( QStyle::alignedRect( Qt::LeftToRight, Qt::AlignCenter, QSize(400, 600), qApp->desktop()->availableGeometry() ) );
+    setAttribute(Qt::WA_DeleteOnClose);
+    setMaximumSize(400, 600);
+    setMinimumSize(400, 600);
+
+    load( QUrl("qrc:/html/ws.htm") );
+
+    page()->setWebChannel( _p->channel.get() );
+    _p->channel->registerObject( QStringLiteral("welcome_bridge"), _p->bridge.get() );
+
+    show();
+}
+
+WelcomeScreen::~WelcomeScreen() = default;
+
+void WelcomeScreen::contextMenuEvent(QContextMenuEvent *event)
+{
+    event->accept();
+}

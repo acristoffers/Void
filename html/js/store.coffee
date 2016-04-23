@@ -1,4 +1,4 @@
-/*
+###
  * Copyright (c) 2015 Álan Crístoffer
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,45 +18,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
+###
 
-#ifndef CRYPTOTEST_H
-#define CRYPTOTEST_H
+$ ->
+    sb = null
 
-#include <QtTest/QtTest>
-
-class VoidTest : public QObject
-{
-    Q_OBJECT
-private slots:
-    void cryptoCreateObjectWithPassword();
-    void cryptoCreateObjectWithKey();
-    void cryptoToHex();
-    void cryptoToB64();
-    void cryptoFromB64();
-    void cryptoEncrypt();
-    void cryptoDecrypt();
-
-    void storeFileCreateAndLoadStore();
-
-    void storeFSMakePath();
-    void storeFSAddFile();
-    void storeFSAddFileFromDisk();
-    void storeFSRemoveFile();
-    void storeFSRemoveDir();
-    void storeFSRenameFile();
-    void storeFSRenameDir();
-    void storeFSFilters();
-    void storeFSFetchAll();
-
-    void storeCreate();
-    void storeAddFile();
-    void storeAddFileFromDisk();
-    void storeRenameFile();
-    void storeFetchAll();
-    void storeCheckMetadata();
-    void storeListEntries();
-    void storeSearch();
-};
-
-#endif // CRYPTOTEST_H
+    new QWebChannel qt.webChannelTransport, (channel) ->
+        sb = channel.objects.store_bridge;

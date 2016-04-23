@@ -12,8 +12,8 @@ QMAKE_CXXFLAGS_RELEASE += -O3
 QMAKE_LFLAGS_RELEASE   -= -O1
 QMAKE_LFLAGS_RELEASE   += -O3
 
-RC_ICONS = ../resources/icon.ico
-ICON     = ../resources/icon.icns
+RC_ICONS = ../res/icon.ico
+ICON     = ../res/icon.icns
 
 OBJECTS_DIR = ../object
 MOC_DIR     = ../moc
@@ -26,8 +26,7 @@ unix {
             $$OBJECTS_DIR/StoreFS.o \
             $$OBJECTS_DIR/moc_Store.o \
             $$OBJECTS_DIR/Store.o \
-            $$OBJECTS_DIR/StoreFile.o \
-            $$OBJECTS_DIR/moc_StoreFile.o
+            $$OBJECTS_DIR/StoreFile.o
 }
 
 win32 {
@@ -35,8 +34,7 @@ win32 {
             $$OBJECTS_DIR/StoreFS.obj \
             $$OBJECTS_DIR/moc_Store.obj \
             $$OBJECTS_DIR/Store.obj \
-            $$OBJECTS_DIR/StoreFile.obj \
-            $$OBJECTS_DIR/moc_StoreFile.obj
+            $$OBJECTS_DIR/StoreFile.obj
 }
 
 HEADERS = VoidTest.h

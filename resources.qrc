@@ -1,6 +1,31 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="icon.png">resources/icon.png</file>
-        <file alias="icon.svg">resources/icon.svg</file>
+        <file alias="icon.png">res/icon.png</file>
+        <file alias="icon.svg">res/icon.svg</file>
+        <file>html/ws.htm</file>
+        <file>html/css/bootstrap-material-design.min.css</file>
+        <file>html/css/bootstrap-theme.min.css</file>
+        <file>html/css/bootstrap.min.css</file>
+        <file>html/css/ripples.min.css</file>
+        <file>html/fonts/glyphicons-halflings-regular.eot</file>
+        <file>html/fonts/glyphicons-halflings-regular.svg</file>
+        <file>html/fonts/glyphicons-halflings-regular.ttf</file>
+        <file>html/fonts/glyphicons-halflings-regular.woff</file>
+        <file>html/fonts/glyphicons-halflings-regular.woff2</file>
+        <file>html/js/bootstrap.min.js</file>
+        <file>html/js/jquery.min.js</file>
+        <file>html/js/material.min.js</file>
+        <file>html/js/ripples.min.js</file>
+        <file>html/imgs/icon.svg</file>
+        <file>html/css/store.css</file>
+        <file>html/css/ws.css</file>
+        <file>html/js/store.js</file>
+        <file>html/js/tr.js</file>
+        <file>html/js/ws.js</file>
+        <file>html/imgs/de.svg</file>
+        <file>html/imgs/en.svg</file>
+        <file>html/imgs/fr.svg</file>
+        <file>html/imgs/pt.svg</file>
+        <file>html/store.htm</file>
     </qresource>
 </RCC>
