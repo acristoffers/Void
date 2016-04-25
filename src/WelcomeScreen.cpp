@@ -45,6 +45,7 @@ WelcomeScreen::WelcomeScreen() : QWebEngineView()
     page()->setBackgroundColor("#222222");
     setGeometry( QStyle::alignedRect( Qt::LeftToRight, Qt::AlignCenter, QSize(400, 600), qApp->desktop()->availableGeometry() ) );
     setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(windowFlags() & ~Qt::WindowFullscreenButtonHint & ~Qt::WindowMaximizeButtonHint);
     setMaximumSize(400, 600);
     setMinimumSize(400, 600);
 
@@ -57,6 +58,20 @@ WelcomeScreen::WelcomeScreen() : QWebEngineView()
 }
 
 WelcomeScreen::~WelcomeScreen() = default;
+
+void WelcomeScreen::changeEvent(QEvent *e)
+{
+    // There is a bug that makes the screen go blank (gray actually)
+    // when restoring from minimize. This works around that.
+    if ( e->type() == QEvent::WindowStateChange ) {
+        QWindowStateChangeEvent *event = static_cast<QWindowStateChangeEvent *> (e);
+
+        if ( event->oldState() & Qt::WindowMinimized ) {
+            hide();
+            show();
+        }
+    }
+}
 
 void WelcomeScreen::contextMenuEvent(QContextMenuEvent *event)
 {

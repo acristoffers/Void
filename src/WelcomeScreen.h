@@ -36,6 +36,7 @@ public:
     WelcomeScreen();
     ~WelcomeScreen();
 protected:
+    void changeEvent(QEvent *) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:

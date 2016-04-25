@@ -41,10 +41,10 @@ public:
     Store::StoreError error;
 private:
     std::unique_ptr<StoreScreenPrivate> _p;
-
-    // QWidget interface
 protected:
+    void changeEvent(QEvent *) override;
     void closeEvent(QCloseEvent *) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 };
 
 #endif // STORESCREEN_H

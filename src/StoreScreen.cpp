@@ -23,6 +23,7 @@
 #include "StoreScreen.h"
 
 #include <QApplication>
+#include <QContextMenuEvent>
 #include <QDesktopWidget>
 #include <QSettings>
 #include <QStyle>
@@ -49,6 +50,7 @@ StoreScreen::StoreScreen(const QString &path, const QString &password, const boo
 
     page()->setBackgroundColor("#222222");
     setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(windowFlags() & ~Qt::WindowFullscreenButtonHint);
 
     QSettings settings;
     if ( settings.contains("storeWindowGeometry") ) {
@@ -68,9 +70,28 @@ StoreScreen::StoreScreen(const QString &path, const QString &password, const boo
 
 StoreScreen::~StoreScreen() = default;
 
+void StoreScreen::changeEvent(QEvent *e)
+{
+    // There is a bug that makes the screen go blank (gray actually)
+    // when restoring from minimize. This works around that.
+    if ( e->type() == QEvent::WindowStateChange ) {
+        QWindowStateChangeEvent *event = static_cast<QWindowStateChangeEvent *> (e);
+
+        if ( event->oldState() & Qt::WindowMinimized ) {
+            hide();
+            show();
+        }
+    }
+}
+
 void StoreScreen::closeEvent(QCloseEvent *)
 {
     QSettings settings;
 
     settings.setValue( "storeWindowGeometry", saveGeometry() );
+}
+
+void StoreScreen::contextMenuEvent(QContextMenuEvent *event)
+{
+    event->accept();
 }

@@ -22,6 +22,7 @@
 
 #include <QApplication>
 #include <QIcon>
+#include <QWebEngineSettings>
 
 #include "WelcomeScreen.h"
 
@@ -35,6 +36,8 @@ int main(int argc, char **argv)
     app.setApplicationVersion("1.0");
     app.setOrganizationDomain( QStringLiteral("acristoffers.me") );
     app.setOrganizationName( QStringLiteral("Alan Cristoffer") );
+
+    QWebEngineSettings::globalSettings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, false);
 
     // Deletes itself on close
     new WelcomeScreen;
