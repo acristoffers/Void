@@ -43,6 +43,7 @@ tr =
         'PartCorrupted': 'File part appears to be corrupted.'
         'WrongCheckSum': 'Wrong file checksum (i.e.: not the expected content).'
         'FileAlreadyExists': 'File already exists.'
+        'Error': 'Error'
     fr:
         'Language': 'Langue'
         'English': 'Anglais'
@@ -63,6 +64,7 @@ tr =
         'PartCorrupted': 'Une partie du fichier semble être endommagé.'
         'WrongCheckSum': 'checksum de fichier incorrect (pas le contenu attendu).'
         'FileAlreadyExists': 'Le fichier existe déjà.'
+        'Error': 'Erreur'
     pt:
         'Language': 'Idioma'
         'English': 'Inglês'
@@ -83,6 +85,7 @@ tr =
         'PartCorrupted': 'Uma parte do arquivo se corrompeu.'
         'WrongCheckSum': 'Soma de verificação errada (conteúdo não é o esperado).'
         'FileAlreadyExists': 'Arquivo já existe.'
+        'Error': 'Erro'
     de:
         'Language': 'Sprache'
         'English': 'Englicsh'
@@ -103,6 +106,7 @@ tr =
         'PartCorrupted': 'Dateipart scheint korrupt zu sein.'
         'WrongCheckSum': 'Falsches Checksum (Inhalt ist nicht was erwartet war).'
         'FileAlreadyExists': 'Die Datei existiert bereits.'
+        'Error': 'Fehler'
 
 window.locale = 'en'
 window.tr = (str) ->

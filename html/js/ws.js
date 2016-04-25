@@ -24,7 +24,7 @@
 
 (function() {
   $(function() {
-    var action, process_error, wb;
+    var action, modal_alert, process_error, wb;
     wb = null;
     action = '';
     $('#load').click(function() {
@@ -32,6 +32,7 @@
         if (res) {
           $('#actions').css('display', 'none');
           $('#info').css('display', 'block');
+          $('#password').focus();
           return action = 'load';
         }
       });
@@ -41,6 +42,7 @@
         if (res) {
           $('#actions').css('display', 'none');
           $('#info').css('display', 'block');
+          $('#password').focus();
           return action = 'create';
         }
       });
@@ -50,43 +52,50 @@
         e.preventDefault();
         if (action === 'load') {
           wb.open($('#password').val(), function(r) {
+            $('#password').val('');
             return process_error(r);
           });
         } else if (action === 'create') {
           wb.create($('#password').val(), function(r) {
+            $('#password').val('');
             return process_error(r);
           });
         }
         return $(this).val('');
       }
     });
+    modal_alert = function(msg) {
+      $('#modal-text').html(msg);
+      return $('#alert-modal').modal('show');
+    };
     process_error = function(error) {
       switch (error) {
         case 'Success':
           return wb.close();
         case 'DoesntExistAndCreationIsNotPermitted':
-          return alert(window.tr("DoesntExistAndCreationIsNotPermitted"));
+          return modal_alert(window.tr("DoesntExistAndCreationIsNotPermitted"));
         case 'CantCreateCryptoObject':
-          return alert(window.tr("CantCreateCryptoObject"));
+          return modal_alert(window.tr("CantCreateCryptoObject"));
         case 'CantOpenStoreFile':
-          return alert(window.tr("CantOpenStoreFile"));
+          return modal_alert(window.tr("CantOpenStoreFile"));
         case 'CantOpenFile':
-          return alert(window.tr("CantOpenFile"));
+          return modal_alert(window.tr("CantOpenFile"));
         case 'CantWriteToFile':
-          return alert(window.tr("CantWriteToFile"));
+          return modal_alert(window.tr("CantWriteToFile"));
         case 'FileTooLarge':
-          return alert(window.tr("FileTooLarge"));
+          return modal_alert(window.tr("FileTooLarge"));
         case 'NoSuchFile':
-          return alert(window.tr("NoSuchFile"));
+          return modal_alert(window.tr("NoSuchFile"));
         case 'PartCorrupted':
-          return alert(window.tr("PartCorrupted"));
+          return modal_alert(window.tr("PartCorrupted"));
         case 'WrongCheckSum':
-          return alert(window.tr("WrongCheckSum"));
+          return modal_alert(window.tr("WrongCheckSum"));
         case 'FileAlreadyExists':
-          return alert(window.tr("FileAlreadyExists"));
+          return modal_alert(window.tr("FileAlreadyExists"));
       }
     };
     $('#cancel').click(function() {
+      $('#password').val('');
       $('#actions').css('display', 'block');
       return $('#info').css('display', 'none');
     });

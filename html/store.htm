@@ -27,6 +27,9 @@
 
     <title>Void</title>
 
+    <link rel="stylesheet" href="material_icons.css" charset="utf-8">
+    <link rel="stylesheet" href="roboto.css" charset="utf-8">
+
     <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="css/bootstrap-material-design.min.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="css/ripples.min.css" media="screen" title="no title" charset="utf-8">
@@ -37,12 +40,11 @@
     <script src="js/bootstrap.min.js" charset="utf-8"></script>
     <script src="js/material.min.js" charset="utf-8"></script>
     <script src="js/ripples.min.js" charset="utf-8"></script>
-    <script src="js/sass.link.min.js" charset="utf-8"></script>
     <script src="js/store.js" charset="utf-8"></script>
     <script src="js/tr.js" charset="utf-8"></script>
   </head>
   <body>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">
@@ -53,7 +55,7 @@
         <div class="collapse navbar-collapse">
           <ul id="languages" class="nav navbar-nav navbar-right">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-tr="Language"></span><span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-tr="Language"></span> <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a id="en" href="#"><img src="imgs/en.svg"> <span data-tr="English"></span></a></li>
                 <li><a id="de" href="#"><img src="imgs/de.svg"> <span data-tr="German"></span></a></li>
@@ -65,5 +67,15 @@
         </div>
       </div>
     </nav>
+
+    <div id="panel">
+    </div>
+
+    <div id="content">
+      <ol class="breadcrumb">
+        <li><a href="#">Home</a></li>
+      </ol>
+    </div>
+
   </body>
 </html>

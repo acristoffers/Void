@@ -1,2 +1,2 @@
-body{background:#222}nav.navbar .navbar-brand img{display:inline-block;width:2em;height:auto}nav.navbar #languages img{width:2em;height:auto}
+body{background:#222;color:white;overflow:hidden}nav.navbar .navbar-brand img{display:inline-block;width:2em;height:auto}nav.navbar #languages img{width:2em;height:auto}#panel{position:fixed;top:0;bottom:0;left:0;width:20em;background-color:white;color:black;padding:70px 1em 1em;overflow-y:auto}#content{position:fixed;top:0;bottom:0;right:0;left:20em;padding:70px 1em 1em;overflow-y:auto}
 /*# sourceMappingURL=store.css.map */

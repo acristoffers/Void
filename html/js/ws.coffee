@@ -29,6 +29,7 @@ $ ->
             if res
                 $('#actions').css('display', 'none')
                 $('#info').css('display', 'block')
+                $('#password').focus()
                 action = 'load'
 
     $('#create').click ->
@@ -36,6 +37,7 @@ $ ->
             if res
                 $('#actions').css('display', 'none')
                 $('#info').css('display', 'block')
+                $('#password').focus()
                 action = 'create'
 
     $('#password').on 'keydown', (e) ->
@@ -43,27 +45,34 @@ $ ->
             e.preventDefault();
             if action == 'load'
                 wb.open $('#password').val(), (r) ->
+                    $('#password').val('')
                     process_error r
             else if action == 'create'
                 wb.create $('#password').val(), (r) ->
+                    $('#password').val('')
                     process_error r
             $(this).val('')
+
+    modal_alert = (msg) ->
+        $('#modal-text').html msg
+        $('#alert-modal').modal 'show'
 
     process_error = (error) ->
         switch error
             when 'Success' then wb.close()
-            when 'DoesntExistAndCreationIsNotPermitted' then alert window.tr "DoesntExistAndCreationIsNotPermitted";
-            when 'CantCreateCryptoObject' then alert window.tr "CantCreateCryptoObject";
-            when 'CantOpenStoreFile' then alert window.tr "CantOpenStoreFile";
-            when 'CantOpenFile' then alert window.tr "CantOpenFile";
-            when 'CantWriteToFile' then alert window.tr "CantWriteToFile";
-            when 'FileTooLarge' then alert window.tr "FileTooLarge";
-            when 'NoSuchFile' then alert window.tr "NoSuchFile";
-            when 'PartCorrupted' then alert window.tr "PartCorrupted";
-            when 'WrongCheckSum' then alert window.tr "WrongCheckSum";
-            when 'FileAlreadyExists' then alert window.tr "FileAlreadyExists";
+            when 'DoesntExistAndCreationIsNotPermitted' then modal_alert window.tr "DoesntExistAndCreationIsNotPermitted";
+            when 'CantCreateCryptoObject' then modal_alert window.tr "CantCreateCryptoObject";
+            when 'CantOpenStoreFile' then modal_alert window.tr "CantOpenStoreFile";
+            when 'CantOpenFile' then modal_alert window.tr "CantOpenFile";
+            when 'CantWriteToFile' then modal_alert window.tr "CantWriteToFile";
+            when 'FileTooLarge' then modal_alert window.tr "FileTooLarge";
+            when 'NoSuchFile' then modal_alert window.tr "NoSuchFile";
+            when 'PartCorrupted' then modal_alert window.tr "PartCorrupted";
+            when 'WrongCheckSum' then modal_alert window.tr "WrongCheckSum";
+            when 'FileAlreadyExists' then modal_alert window.tr "FileAlreadyExists";
 
     $('#cancel').click ->
+        $('#password').val('')
         $('#actions').css('display', 'block')
         $('#info').css('display', 'none')
 

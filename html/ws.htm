@@ -27,6 +27,9 @@
 
     <title>Void</title>
 
+    <link rel="stylesheet" href="material_icons.css" charset="utf-8">
+    <link rel="stylesheet" href="roboto.css" charset="utf-8">
+
     <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="css/bootstrap-material-design.min.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="css/ripples.min.css" media="screen" title="no title" charset="utf-8">
@@ -35,8 +38,8 @@
     <script src="qrc:///qtwebchannel/qwebchannel.js" charset="utf-8"></script>
     <script src="js/jquery.min.js" charset="utf-8"></script>
     <script src="js/bootstrap.min.js" charset="utf-8"></script>
-    <script src="js/material.min.js" charset="utf-8"></script>
     <script src="js/ripples.min.js" charset="utf-8"></script>
+    <script src="js/material.min.js" charset="utf-8"></script>
     <script src="js/ws.js" charset="utf-8"></script>
     <script src="js/tr.js" charset="utf-8"></script>
   </head>
@@ -64,6 +67,20 @@
       <img id="de" src="imgs/de.svg">
       <img id="fr" src="imgs/fr.svg">
       <img id="pt" src="imgs/pt.svg">
+    </div>
+
+    <div id="alert-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" data-tr="Error"></h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal-text"></p>
+            </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

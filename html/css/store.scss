@@ -19,8 +19,11 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
+$panel_size: 20em;
 body {
     background: #222;
+    color: white;
+    overflow: hidden;
 }
 nav.navbar {
     .navbar-brand {
@@ -36,4 +39,24 @@ nav.navbar {
             height: auto;
         }
     }
+}
+#panel {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: $panel_size;
+    background-color: white;
+    color: black;
+    padding: 70px 1em 1em;
+    overflow-y: auto;
+}
+#content {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: $panel_size;
+    padding: 70px 1em 1em;
+    overflow-y: auto;
 }
