@@ -20,6 +20,16 @@
  *  THE SOFTWARE.
  */
 $panel_size: 20em;
+@mixin user-select($opt) {
+    -webkit-user-select: $opt;
+    user-select: $opt;
+}
+* {
+    @include user-select(none);
+}
+*[normal-cursor] {
+    cursor: default;
+}
 body {
     background: #222;
     color: white;
@@ -40,14 +50,13 @@ nav.navbar {
         }
     }
 }
-#panel {
+#left-panel {
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     width: $panel_size;
-    background-color: white;
-    color: black;
+    border-right: 1px solid gray;
     padding: 70px 1em 1em;
     overflow-y: auto;
 }
@@ -55,8 +64,19 @@ nav.navbar {
     position: fixed;
     top: 0;
     bottom: 0;
-    right: 0;
+    right: $panel_size;
     left: $panel_size;
+    padding: 70px 1em 1em;
+    overflow-y: auto;
+}
+#right-panel {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: $panel_size;
+    background-color: #333;
+    border-left: 1px solid gray;
     padding: 70px 1em 1em;
     overflow-y: auto;
 }

@@ -24,8 +24,20 @@
 
 (function() {
   $(function() {
-    var sb;
+    var right_panel_shown, sb;
     sb = null;
+    right_panel_shown = true;
+    $('#info-toggle').click(function() {
+      if (right_panel_shown) {
+        $('#right-panel').hide();
+        $('#content').css('right', 0);
+        return right_panel_shown = false;
+      } else {
+        $('#right-panel').show();
+        $('#content').css('right', $('#right-panel').css('width'));
+        return right_panel_shown = true;
+      }
+    });
     return new QWebChannel(qt.webChannelTransport, function(channel) {
       sb = channel.objects.store_bridge;
       $(window.trs).each(function() {
@@ -39,7 +51,8 @@
       });
       return sb.lang(function(r) {
         window.locale = r;
-        return window.update_translation();
+        window.update_translation();
+        return $('[data-toggle="tooltip"]').tooltip();
       });
     });
   });

@@ -23,6 +23,17 @@
 $ ->
     sb = null
 
+    right_panel_shown = true
+    $('#info-toggle').click ->
+        if right_panel_shown
+            $('#right-panel').hide()
+            $('#content').css 'right', 0
+            right_panel_shown = false
+        else
+            $('#right-panel').show()
+            $('#content').css 'right', $('#right-panel').css 'width'
+            right_panel_shown = true
+
     new QWebChannel qt.webChannelTransport, (channel) ->
         sb = channel.objects.store_bridge;
 
@@ -36,3 +47,4 @@ $ ->
         sb.lang (r) ->
             window.locale = r
             window.update_translation()
+            $('[data-toggle="tooltip"]').tooltip()

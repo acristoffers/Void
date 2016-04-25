@@ -34,5 +34,6 @@
         <file>html/fonts/roboto-medium.ttf</file>
         <file>html/fonts/roboto-regular.ttf</file>
         <file>html/fonts/roboto.css</file>
+        <file>html/js/jquery.hotkeys.js</file>
     </qresource>
 </RCC>

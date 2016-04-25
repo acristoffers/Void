@@ -24,6 +24,18 @@ $ ->
     wb = null
     action = ''
 
+    $(document).bind 'keydown', 'meta+o', ->
+        $('#load').click()
+
+    $(document).bind 'keydown', 'ctrl+o', ->
+        $('#load').click()
+
+    $(document).bind 'keydown', 'meta+n', ->
+        $('#create').click()
+
+    $(document).bind 'keydown', 'ctrl+n', ->
+        $('#create').click()
+
     $('#load').click ->
         wb.getExisting (res) ->
             if res

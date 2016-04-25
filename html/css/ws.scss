@@ -19,6 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+@mixin user-select($opt) {
+    -webkit-user-select: $opt;
+    user-select: $opt;
+}
+* {
+    @include user-select(none);
+}
 body {
     background: #222;
 }

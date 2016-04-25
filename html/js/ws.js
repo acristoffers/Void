@@ -27,6 +27,18 @@
     var action, modal_alert, process_error, wb;
     wb = null;
     action = '';
+    $(document).bind('keydown', 'meta+o', function() {
+      return $('#load').click();
+    });
+    $(document).bind('keydown', 'ctrl+o', function() {
+      return $('#load').click();
+    });
+    $(document).bind('keydown', 'meta+n', function() {
+      return $('#create').click();
+    });
+    $(document).bind('keydown', 'ctrl+n', function() {
+      return $('#create').click();
+    });
     $('#load').click(function() {
       return wb.getExisting(function(res) {
         if (res) {
