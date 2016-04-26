@@ -16,4 +16,6 @@
     white-space: nowrap;
     word-wrap: normal;
     direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
