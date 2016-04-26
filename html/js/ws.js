@@ -23,10 +23,31 @@
  */
 
 (function() {
+  var action, wb;
+
+  wb = null;
+
+  action = '';
+
+  new QWebChannel(qt.webChannelTransport, function(channel) {
+    wb = channel.objects.welcome_bridge;
+    $(window.trs).each(function() {
+      var locale;
+      locale = this;
+      return $('#' + locale).click(function() {
+        window.locale = locale;
+        window.update_translation();
+        return wb.setLang(locale);
+      });
+    });
+    return wb.lang(function(r) {
+      window.locale = r;
+      return window.update_translation();
+    });
+  });
+
   $(function() {
-    var action, modal_alert, process_error, wb;
-    wb = null;
-    action = '';
+    var modal_alert, process_error;
     $(document).bind('keydown', 'meta+o', function() {
       return $('#load').click();
     });
@@ -106,26 +127,10 @@
           return modal_alert(window.tr("FileAlreadyExists"));
       }
     };
-    $('#cancel').click(function() {
+    return $('#cancel').click(function() {
       $('#password').val('');
       $('#actions').css('display', 'block');
       return $('#info').css('display', 'none');
-    });
-    return new QWebChannel(qt.webChannelTransport, function(channel) {
-      wb = channel.objects.welcome_bridge;
-      $(window.trs).each(function() {
-        var locale;
-        locale = this;
-        return $('#' + locale).click(function() {
-          window.locale = locale;
-          window.update_translation();
-          return wb.setLang(locale);
-        });
-      });
-      return wb.lang(function(r) {
-        window.locale = r;
-        return window.update_translation();
-      });
     });
   });
 

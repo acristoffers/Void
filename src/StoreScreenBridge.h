@@ -26,6 +26,7 @@
 #include <QObject>
 
 #include "Store.h"
+#include "StoreScreen.h"
 
 struct StoreScreenBridgePrivate;
 
@@ -33,7 +34,7 @@ class StoreScreenBridge : public QObject
 {
     Q_OBJECT
 public:
-    StoreScreenBridge(const QString &path, const QString &password, const bool create);
+    StoreScreenBridge(const QString &path, const QString &password, const bool create, StoreScreen* parent);
     ~StoreScreenBridge();
 
     Q_INVOKABLE void setLang(QString lang);

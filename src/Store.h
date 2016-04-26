@@ -33,6 +33,7 @@ struct StorePrivate;
 class Store : public QObject
 {
     Q_OBJECT
+    Q_ENUMS(StoreError)
 public:
     /**
      *  \brief Errors returned by Store
@@ -66,29 +67,29 @@ public:
     Store(const QString path, const QString password, const bool create = false);
     ~Store();
 
-    void addFile(const QString storePath, const QByteArray data);
-    void addFile(const QString filePath, const QString storePath);
-    QByteArray decryptFile(const QString path);
-    void decryptFile(const QString storePath, const QString path);
-    void move(const QString oldPath, const QString newPath);
-    void remove(const QString path);
+    Q_INVOKABLE void addFile(const QString storePath, const QByteArray data);
+    Q_INVOKABLE void addFile(const QString filePath, const QString storePath);
+    Q_INVOKABLE QByteArray decryptFile(const QString path);
+    Q_INVOKABLE void decryptFile(const QString storePath, const QString path);
+    Q_INVOKABLE void move(const QString oldPath, const QString newPath);
+    Q_INVOKABLE void remove(const QString path);
 
-    void makePath(const QString path);
+    Q_INVOKABLE void makePath(const QString path);
 
-    QStringList listAllDirectories() const;
-    QStringList listAllEntries() const;
-    QStringList listAllFiles() const;
-    QStringList listSubdirectories(QString path) const;
-    QStringList listFiles(QString path) const;
-    QStringList listEntries(QString path) const;
-    QStringList searchStartsWith(QString filter, quint8 type) const;
-    QStringList searchEndsWith(QString filter, quint8 type) const;
-    QStringList searchContains(QString filter, quint8 type) const;
-    QStringList searchRegex(QString filter, quint8 type) const;
+    Q_INVOKABLE QStringList listAllDirectories() const;
+    Q_INVOKABLE QStringList listAllEntries() const;
+    Q_INVOKABLE QStringList listAllFiles() const;
+    Q_INVOKABLE QStringList listSubdirectories(QString path) const;
+    Q_INVOKABLE QStringList listFiles(QString path) const;
+    Q_INVOKABLE QStringList listEntries(QString path) const;
+    Q_INVOKABLE QStringList searchStartsWith(QString filter, quint8 type) const;
+    Q_INVOKABLE QStringList searchEndsWith(QString filter, quint8 type) const;
+    Q_INVOKABLE QStringList searchContains(QString filter, quint8 type) const;
+    Q_INVOKABLE QStringList searchRegex(QString filter, quint8 type) const;
 
-    QByteArray fileMetadata(const QString path, const QString key);
-    void setFileMetadata(const QString path, const QString key, const QByteArray data);
-    quint64 fileSize(const QString path);
+    Q_INVOKABLE QByteArray fileMetadata(const QString path, const QString key);
+    Q_INVOKABLE void setFileMetadata(const QString path, const QString key, const QByteArray data);
+    Q_INVOKABLE quint64 fileSize(const QString path);
 
 private:
     std::unique_ptr<StorePrivate> _p;

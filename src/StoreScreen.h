@@ -39,6 +39,9 @@ public:
     ~StoreScreen();
 
     Store::StoreError error;
+
+    std::shared_ptr<QWebChannel> channel();
+
 private:
     std::unique_ptr<StoreScreenPrivate> _p;
 protected:

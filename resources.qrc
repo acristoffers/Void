@@ -35,5 +35,7 @@
         <file>html/fonts/roboto-regular.ttf</file>
         <file>html/fonts/roboto.css</file>
         <file>html/js/jquery.hotkeys.js</file>
+        <file>html/js/bootstrap-treeview.min.js</file>
+        <file>html/css/bootstrap-treeview.min.css</file>
     </qresource>
 </RCC>

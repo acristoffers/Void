@@ -34,17 +34,18 @@
 struct StoreScreenPrivate
 {
     std::unique_ptr<StoreScreenBridge> bridge;
-    std::unique_ptr<QWebChannel>       channel;
+    std::shared_ptr<QWebChannel>       channel;
 };
 
 StoreScreen::StoreScreen(const QString &path, const QString &password, const bool create) : QWebEngineView()
 {
     _p.reset(new StoreScreenPrivate);
-    _p->channel.reset(new QWebChannel);
-    _p->bridge.reset( new StoreScreenBridge(path, password, create) );
+    _p->channel = std::make_shared<QWebChannel> ();
+    _p->bridge.reset( new StoreScreenBridge(path, password, create, this) );
 
     error = _p->bridge->error;
     if ( error != Store::Success ) {
+        deleteLater();
         return;
     }
 
@@ -66,6 +67,11 @@ StoreScreen::StoreScreen(const QString &path, const QString &password, const boo
     _p->channel->registerObject( QStringLiteral("store_bridge"), _p->bridge.get() );
 
     show();
+}
+
+std::shared_ptr<QWebChannel> StoreScreen::channel()
+{
+    return _p->channel;
 }
 
 StoreScreen::~StoreScreen() = default;

@@ -20,10 +20,24 @@
  * THE SOFTWARE.
 ###
 
-$ ->
-    wb = null
-    action = ''
+wb = null
+action = ''
 
+new QWebChannel qt.webChannelTransport, (channel) ->
+    wb = channel.objects.welcome_bridge;
+
+    $(window.trs).each ->
+        locale = this
+        $('#' + locale).click ->
+            window.locale = locale
+            window.update_translation()
+            wb.setLang locale
+
+    wb.lang (r) ->
+        window.locale = r
+        window.update_translation()
+
+$ ->
     $(document).bind 'keydown', 'meta+o', ->
         $('#load').click()
 
@@ -87,17 +101,3 @@ $ ->
         $('#password').val('')
         $('#actions').css('display', 'block')
         $('#info').css('display', 'none')
-
-    new QWebChannel qt.webChannelTransport, (channel) ->
-        wb = channel.objects.welcome_bridge;
-
-        $(window.trs).each ->
-            locale = this
-            $('#' + locale).click ->
-                window.locale = locale
-                window.update_translation()
-                wb.setLang locale
-
-        wb.lang (r) ->
-            window.locale = r
-            window.update_translation()

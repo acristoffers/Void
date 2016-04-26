@@ -23,17 +23,24 @@
 #include "StoreScreenBridge.h"
 
 #include <QSettings>
+#include <QtWebChannel>
 
 struct StoreScreenBridgePrivate
 {
     std::unique_ptr<Store> store;
+    StoreScreen            *parent;
 };
 
-StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &password, const bool create) : QObject()
+StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &password, const bool create, StoreScreen *parent) : QObject()
 {
     _p.reset(new StoreScreenBridgePrivate);
     _p->store.reset( new Store(path, password, create) );
-    error = _p->store->error;
+    error      = _p->store->error;
+    _p->parent = parent;
+
+    if ( error == Store::Success ) {
+        _p->parent->channel()->registerObject(QStringLiteral("store"), _p->store.get());
+    }
 }
 
 StoreScreenBridge::~StoreScreenBridge() = default;
