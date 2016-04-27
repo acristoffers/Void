@@ -23,7 +23,7 @@
  */
 
 (function() {
-  var folderTree, path, path_tree_node, sb, set_path, store, tree_opts, update_tree, update_tree_flat_struct, wcp;
+  var folderTree, make_dir_entry, path, path_tree_node, sb, set_path, store, tree_opts, update_tree, update_tree_flat_struct, wcp;
 
   if (!Array.prototype.last) {
     Array.prototype.last = function() {
@@ -66,19 +66,31 @@
     $('#path a').click(function() {
       return set_path($(this).attr('data-path'));
     });
+    store.listSubdirectories(path, function(es) {
+      $('#entries').html('');
+      $(es).each(function() {
+        return $('#entries').append(make_dir_entry(this));
+      });
+      $('#entries .entry[data-type=folder]').dblclick(function() {
+        return set_path($(this).attr('data-path'));
+      });
+      return $('#entries .entry').click(function() {
+        var self;
+        self = $(this);
+        $('#entries .entry').removeClass('btn-info');
+        if (self.attr('data-selected') === "true") {
+          self.addClass('btn-default');
+          return self.attr('data-selected', false);
+        } else {
+          self.removeClass('btn-default');
+          self.addClass('btn-info');
+          $('#entries .entry').attr('data-selected', false);
+          return self.attr('data-selected', true);
+        }
+      });
+    });
     return $('#left-panel').treeview(true).selectNode(path_tree_node[path]);
   };
-
-  wcp = (function() {
-    var deferred;
-    deferred = new $.Deferred;
-    new QWebChannel(qt.webChannelTransport, function(channel) {
-      sb = channel.objects.store_bridge;
-      store = channel.objects.store;
-      return deferred.resolve();
-    });
-    return deferred.promise();
-  })();
 
   folderTree = function(_path) {
     var node, node_name;
@@ -148,8 +160,17 @@
     });
   };
 
+  make_dir_entry = function(path) {
+    var name;
+    name = path.split('/').last();
+    name = $('#hidden-div').text(name).html();
+    path = $('#hidden-div').text(path).html();
+    return '<div class="entry btn btn-default btn-raised" data-type="folder" data-path="' + path + '"><i class="icon material-icons">folder</i><span class="name">' + name + '</span></div>';
+  };
+
   $(function() {
-    var right_panel_shown;
+    var right_panel_shown, right_panel_width, view;
+    $.material.init();
     wcp.done(function() {
       $(window.trs).each(function() {
         var locale;
@@ -168,17 +189,43 @@
       return set_path('/');
     });
     right_panel_shown = true;
-    return $('#info-toggle').click(function() {
+    right_panel_width = $('#right-panel').css('width');
+    $('#info-toggle').click(function() {
       if (right_panel_shown) {
-        $('#right-panel').hide();
+        $('#right-panel').hide(200);
         $('#content').css('right', 0);
         return right_panel_shown = false;
       } else {
-        $('#right-panel').show();
-        $('#content').css('right', $('#right-panel').css('width'));
+        $('#right-panel').show(200);
+        $('#content').css('right', right_panel_width);
         return right_panel_shown = true;
       }
     });
+    view = 'grid';
+    return $('#grid-toggle').click(function() {
+      if (view === 'grid') {
+        $('#grid-toggle i').html('view_module');
+        $('#entries').removeClass('grid-view');
+        $('#entries').addClass('list-view');
+        return view = 'list';
+      } else {
+        $('#grid-toggle i').html('view_list');
+        $('#entries').addClass('grid-view');
+        $('#entries').removeClass('list-view');
+        return view = 'grid';
+      }
+    });
   });
+
+  wcp = (function() {
+    var deferred;
+    deferred = new $.Deferred;
+    new QWebChannel(qt.webChannelTransport, function(channel) {
+      sb = channel.objects.store_bridge;
+      store = channel.objects.store;
+      return deferred.resolve();
+    });
+    return deferred.promise();
+  })();
 
 }).call(this);

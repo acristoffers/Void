@@ -61,6 +61,7 @@ nav.navbar {
     overflow-y: auto;
 }
 #content {
+    transition: right 200ms linear;
     position: fixed;
     top: 0;
     bottom: 0;
@@ -83,5 +84,32 @@ nav.navbar {
 .treeview {
     span.icon {
         margin-right: 0.5em !important;
+    }
+}
+#hidden-div {
+    display: none;
+}
+#entries {
+    padding-right: 1em;
+    .entry {
+        transition: width 200ms linear;
+        display: inline-block;
+        margin: 0.5em;
+        padding-right: 15px;
+        padding-left: 0;
+        text-align: left;
+        .icon {
+            margin: 0 5px;
+        }
+    }
+}
+#entries.list-view {
+    .entry {
+        width: 100%;
+    }
+}
+#entries.grid-view {
+    .entry {
+        width: 200px;
     }
 }

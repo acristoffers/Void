@@ -49,17 +49,29 @@ set_path = (new_path) ->
     $('#path a').click ->
         set_path $(this).attr 'data-path'
 
+    store.listSubdirectories path, (es) ->
+        $('#entries').html ''
+
+        $(es).each ->
+            $('#entries').append make_dir_entry(this)
+
+        $('#entries .entry[data-type=folder]').dblclick ->
+            set_path $(this).attr 'data-path'
+
+        $('#entries .entry').click ->
+            self = $(this)
+            $('#entries .entry').removeClass 'btn-info'
+
+            if self.attr('data-selected') == "true"
+                self.addClass 'btn-default'
+                self.attr 'data-selected', false
+            else
+                self.removeClass 'btn-default'
+                self.addClass 'btn-info'
+                $('#entries .entry').attr 'data-selected', false
+                self.attr 'data-selected', true
+
     $('#left-panel').treeview(true).selectNode path_tree_node[path]
-
-wcp = do ->
-    deferred = new $.Deferred
-
-    new QWebChannel qt.webChannelTransport, (channel) ->
-        sb = channel.objects.store_bridge
-        store = channel.objects.store
-        deferred.resolve()
-
-    deferred.promise()
 
 folderTree = (_path) ->
     node_name = _path.split('/').last()
@@ -111,7 +123,15 @@ update_tree_flat_struct = ->
             path_tree_node[node.path] = node
             counter++
 
+make_dir_entry = (path)->
+    name = path.split('/').last()
+    name = $('#hidden-div').text(name).html()
+    path = $('#hidden-div').text(path).html()
+    '<div class="entry btn btn-default btn-raised" data-type="folder" data-path="' + path + '"><i class="icon material-icons">folder</i><span class="name">' + name + '</span></div>'
+
 $ ->
+    $.material.init()
+
     wcp.done ->
         $(window.trs).each ->
             locale = this
@@ -128,12 +148,36 @@ $ ->
         set_path '/'
 
     right_panel_shown = true
+    right_panel_width = $('#right-panel').css 'width'
     $('#info-toggle').click ->
         if right_panel_shown
-            $('#right-panel').hide()
+            $('#right-panel').hide 200
             $('#content').css 'right', 0
             right_panel_shown = false
         else
-            $('#right-panel').show()
-            $('#content').css 'right', $('#right-panel').css 'width'
+            $('#right-panel').show 200
+            $('#content').css 'right', right_panel_width
             right_panel_shown = true
+
+    view = 'grid'
+    $('#grid-toggle').click ->
+        if view == 'grid'
+            $('#grid-toggle i').html 'view_module'
+            $('#entries').removeClass 'grid-view'
+            $('#entries').addClass 'list-view'
+            view = 'list'
+        else
+            $('#grid-toggle i').html 'view_list'
+            $('#entries').addClass 'grid-view'
+            $('#entries').removeClass 'list-view'
+            view = 'grid'
+
+wcp = do ->
+    deferred = new $.Deferred
+
+    new QWebChannel qt.webChannelTransport, (channel) ->
+        sb = channel.objects.store_bridge
+        store = channel.objects.store
+        deferred.resolve()
+
+    deferred.promise()
