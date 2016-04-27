@@ -48,6 +48,7 @@
 
   $(function() {
     var modal_alert, process_error;
+    $.material.init();
     $(document).bind('keydown', 'meta+o', function() {
       return $('#load').click();
     });

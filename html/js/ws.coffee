@@ -38,6 +38,8 @@ new QWebChannel qt.webChannelTransport, (channel) ->
         window.update_translation()
 
 $ ->
+    $.material.init()
+
     $(document).bind 'keydown', 'meta+o', ->
         $('#load').click()
 
