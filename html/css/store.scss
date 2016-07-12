@@ -19,7 +19,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-$panel_size: 20em;
+$panel_size: 20rem;
 @mixin user-select($opt) {
     -webkit-user-select: $opt;
     user-select: $opt;
@@ -30,6 +30,9 @@ $panel_size: 20em;
 *[normal-cursor] {
     cursor: default;
 }
+html {
+    font-size: 14pt;
+}
 body {
     background: #222;
     color: white;
@@ -39,13 +42,13 @@ nav.navbar {
     .navbar-brand {
         img {
             display: inline-block;
-            width: 2em;
+            width: 2rem;
             height: auto;
         }
     }
     #languages {
         img {
-            width: 2em;
+            width: 2rem;
             height: auto;
         }
     }
@@ -57,7 +60,7 @@ nav.navbar {
     left: 0;
     width: $panel_size;
     border-right: 1px solid gray;
-    padding: 70px 1em 1em;
+    padding: 70px 1rem 1rem;
     overflow-y: auto;
 }
 #content {
@@ -67,7 +70,7 @@ nav.navbar {
     bottom: 0;
     right: $panel_size;
     left: $panel_size;
-    padding: 70px 1em 1em;
+    padding: (70px) 1rem 1rem;
     overflow-y: auto;
 }
 #right-panel {
@@ -78,23 +81,23 @@ nav.navbar {
     width: $panel_size;
     background-color: #333;
     border-left: 1px solid gray;
-    padding: 70px 1em 1em;
+    padding: 70px 1rem 1rem;
     overflow-y: auto;
 }
 .treeview {
     span.icon {
-        margin-right: 0.5em !important;
+        margin-right: 0.5rem !important;
     }
 }
 #hidden-div {
     display: none;
 }
 #entries {
-    padding-right: 1em;
+    padding-right: 1rem;
     .entry {
         transition: width 200ms linear;
         display: inline-block;
-        margin: 0.5em;
+        margin: 0.5rem;
         padding-right: 15px;
         padding-left: 0;
         text-align: left;

@@ -26,12 +26,15 @@
 * {
     @include user-select(none);
 }
+html {
+    font-size: 14pt;
+}
 body {
     background: #222;
 }
 #logo {
     position: fixed;
-    top: 5em;
+    top: 5rem;
     left: 125px;
     img {
         width: 150px;
@@ -40,7 +43,7 @@ body {
 }
 #info {
     position: fixed;
-    top: 20em;
+    top: 20rem;
     left: 25px;
     display: none;
     input {
@@ -55,7 +58,7 @@ body {
 }
 #actions {
     position: fixed;
-    top: 20em;
+    top: 20rem;
     left: 25px;
     button {
         display: block;
@@ -64,14 +67,14 @@ body {
 }
 #languages {
     position: fixed;
-    bottom: 1em;
-    left: 6em;
+    bottom: 1rem;
+    left: 6rem;
     img {
         cursor: pointer;
         display: inline-block;
-        width: 2em;
+        width: 2rem;
         height: auto;
-        margin-right: 1em;
-        margin-left: 1em;
+        margin-right: 1rem;
+        margin-left: 1rem;
     }
 }
