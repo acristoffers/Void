@@ -167,7 +167,7 @@ void Store::addFile(const QString storePath, const QByteArray data)
     if ( _p->storeFS->error == StoreFS::Success ) {
         QMimeDatabase mimedb;
         QMimeType     mimetype = mimedb.mimeTypeForData(data);
-        _p->storeFS->file(storePath)->metadata["mimetype"] = mimetype.name().toUtf8();
+        _p->storeFS->file(storePath)->metadata[QStringLiteral("mimetype")] = mimetype.name().toUtf8();
 
         _p->save();
     }
@@ -197,7 +197,7 @@ void Store::addFile(const QString filePath, const QString storePath)
     if ( _p->storeFS->error == StoreFS::Success ) {
         QMimeDatabase mimedb;
         QMimeType     mimetype = mimedb.mimeTypeForFile(filePath);
-        _p->storeFS->file(storePath)->metadata["mimetype"] = mimetype.name().toUtf8();
+        _p->storeFS->file(storePath)->metadata[QStringLiteral("mimetype")] = mimetype.name().toUtf8();
 
         _p->save();
     }

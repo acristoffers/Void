@@ -39,7 +39,7 @@ StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &passwor
     _p->parent = parent;
 
     if ( error == Store::Success ) {
-        _p->parent->channel()->registerObject(QStringLiteral("store"), _p->store.get());
+        _p->parent->channel()->registerObject( QStringLiteral("store"), _p->store.get() );
     }
 }
 
@@ -49,16 +49,16 @@ void StoreScreenBridge::setLang(QString lang)
 {
     QSettings settings;
 
-    settings.setValue("lang", lang);
+    settings.setValue(QStringLiteral("lang"), lang);
 }
 
 QString StoreScreenBridge::lang()
 {
     QSettings settings;
 
-    if ( !settings.contains("lang") ) {
-        settings.setValue("lang", "en");
+    if ( !settings.contains( QStringLiteral("lang") ) ) {
+        settings.setValue( QStringLiteral("lang"), QStringLiteral("en") );
     }
 
-    return settings.value("lang").toString();
+    return settings.value( QStringLiteral("lang") ).toString();
 }

@@ -21,14 +21,14 @@ WelcomeScreenBridge::~WelcomeScreenBridge() = default;
 
 bool WelcomeScreenBridge::getExisting()
 {
-    _p->path = QFileDialog::getExistingDirectory( nullptr, "Load Store", QDir::homePath() );
+    _p->path = QFileDialog::getExistingDirectory( nullptr, QStringLiteral("Load Store"), QDir::homePath() );
 
     return !_p->path.isEmpty();
 }
 
 bool WelcomeScreenBridge::getNew()
 {
-    _p->path = QFileDialog::getSaveFileName( nullptr, "Load Store", QDir::homePath() );
+    _p->path = QFileDialog::getSaveFileName( nullptr, QStringLiteral("Load Store"), QDir::homePath() );
 
     return !_p->path.isEmpty();
 }
@@ -58,54 +58,54 @@ void WelcomeScreenBridge::setLang(QString lang)
 {
     QSettings settings;
 
-    settings.setValue("lang", lang);
+    settings.setValue(QStringLiteral("lang"), lang);
 }
 
 QString WelcomeScreenBridge::lang()
 {
     QSettings settings;
 
-    if ( !settings.contains("lang") ) {
-        settings.setValue("lang", "en");
+    if ( !settings.contains( QStringLiteral("lang") ) ) {
+        settings.setValue( QStringLiteral("lang"), QStringLiteral("en") );
     }
 
-    return settings.value("lang").toString();
+    return settings.value( QStringLiteral("lang") ).toString();
 }
 
 QString WelcomeScreenBridge::StoreError2QString(Store::StoreError error)
 {
     switch ( error ) {
         case Store::Success:
-            return "Success";
+            return QStringLiteral("Success");
 
         case Store::DoesntExistAndCreationIsNotPermitted:
-            return "DoesntExistAndCreationIsNotPermitted";
+            return QStringLiteral("DoesntExistAndCreationIsNotPermitted");
 
         case Store::CantCreateCryptoObject:
-            return "CantCreateCryptoObject";
+            return QStringLiteral("CantCreateCryptoObject");
 
         case Store::CantOpenStoreFile:
-            return "CantOpenStoreFile";
+            return QStringLiteral("CantOpenStoreFile");
 
         case Store::CantOpenFile:
-            return "CantOpenFile";
+            return QStringLiteral("CantOpenFile");
 
         case Store::CantWriteToFile:
-            return "CantWriteToFile";
+            return QStringLiteral("CantWriteToFile");
 
         case Store::FileTooLarge:
-            return "FileTooLarge";
+            return QStringLiteral("FileTooLarge");
 
         case Store::NoSuchFile:
-            return "NoSuchFile";
+            return QStringLiteral("NoSuchFile");
 
         case Store::PartCorrupted:
-            return "PartCorrupted";
+            return QStringLiteral("PartCorrupted");
 
         case Store::WrongCheckSum:
-            return "WrongCheckSum";
+            return QStringLiteral("WrongCheckSum");
 
         case Store::FileAlreadyExists:
-            return "FileAlreadyExists";
+            return QStringLiteral("FileAlreadyExists");
     }
 }

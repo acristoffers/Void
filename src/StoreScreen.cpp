@@ -49,19 +49,19 @@ StoreScreen::StoreScreen(const QString &path, const QString &password, const boo
         return;
     }
 
-    page()->setBackgroundColor("#222222");
+    page()->setBackgroundColor( QStringLiteral("#222222") );
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(windowFlags() & ~Qt::WindowFullscreenButtonHint);
 
     QSettings settings;
-    if ( settings.contains("storeWindowGeometry") ) {
-        restoreGeometry( settings.value("storeWindowGeometry").toByteArray() );
+    if ( settings.contains( QStringLiteral("storeWindowGeometry") ) ) {
+        restoreGeometry( settings.value( QStringLiteral("storeWindowGeometry") ).toByteArray() );
     } else {
         setGeometry( QStyle::alignedRect( Qt::LeftToRight, Qt::AlignCenter, QSize(1024, 768), qApp->desktop()->availableGeometry() ) );
-        settings.setValue( "storeWindowGeometry", saveGeometry() );
+        settings.setValue( QStringLiteral("storeWindowGeometry"), saveGeometry() );
     }
 
-    load( QUrl("qrc:/html/store.htm") );
+    load( QUrl( QStringLiteral("qrc:/html/store.htm") ) );
 
     page()->setWebChannel( _p->channel.get() );
     _p->channel->registerObject( QStringLiteral("store_bridge"), _p->bridge.get() );
@@ -94,7 +94,8 @@ void StoreScreen::closeEvent(QCloseEvent *)
 {
     QSettings settings;
 
-    settings.setValue( "storeWindowGeometry", saveGeometry() );
+
+    settings.setValue( QStringLiteral("storeWindowGeometry"), saveGeometry() );
 }
 
 void StoreScreen::contextMenuEvent(QContextMenuEvent *event)

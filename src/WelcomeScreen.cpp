@@ -42,14 +42,15 @@ WelcomeScreen::WelcomeScreen() : QWebEngineView()
     _p->channel.reset(new QWebChannel);
     _p->bridge.reset( new WelcomeScreenBridge(this) );
 
-    page()->setBackgroundColor("#222222");
+    page()->setBackgroundColor( QStringLiteral("#222222") );
+
     setGeometry( QStyle::alignedRect( Qt::LeftToRight, Qt::AlignCenter, QSize(400, 600), qApp->desktop()->availableGeometry() ) );
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(windowFlags() & ~Qt::WindowFullscreenButtonHint & ~Qt::WindowMaximizeButtonHint);
     setMaximumSize(400, 600);
     setMinimumSize(400, 600);
 
-    load( QUrl("qrc:/html/ws.htm") );
+    load( QUrl( QStringLiteral("qrc:/html/ws.htm") ) );
 
     page()->setWebChannel( _p->channel.get() );
     _p->channel->registerObject( QStringLiteral("welcome_bridge"), _p->bridge.get() );
