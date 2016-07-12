@@ -30,10 +30,18 @@ unless Array.prototype.first
 
 sb = null
 store = null
-path = '/'
+path = ''
 path_tree_node = {}
+last_path_change = 0
+
+time = ->
+    new Date().getTime()
 
 set_path = (new_path) ->
+    if path == new_path && (last_path_change - time() < 1000)
+        return
+
+    last_path_change = time()
     path = new_path
     path_parts = path.split '/'
     path_parts = [''] if path_parts.last() == ''
@@ -49,19 +57,49 @@ set_path = (new_path) ->
     $('#path a').click ->
         set_path $(this).attr 'data-path'
 
-    store.listSubdirectories path, (es) ->
-        $('#entries').html ''
+    store.listSubdirectories path, (ds) ->
+        store.listFiles path, (fs) ->
+            $('#entries').html ''
+            $(ds).each ->
+                add_dir_entry(this)
+            $(fs).each ->
+                add_file_entry(this)
 
-        $(es).each ->
-            $('#entries').append make_dir_entry(this)
+    $('#left-panel').treeview(true).selectNode path_tree_node[path]
 
-        $('#entries .entry[data-type=folder]').dblclick ->
-            set_path $(this).attr 'data-path'
+reset_click_listener = ->
+    $('#entries .entry').unbind 'dblclick'
+    $('#entries .entry').unbind 'click'
 
-        $('#entries .entry').click ->
-            self = $(this)
+    $('#entries .entry[data-type=folder]').dblclick ->
+        set_path $(this).attr 'data-path'
+
+    $('#entries .entry').click (e)->
+        self = $(this)
+
+        if e.ctrlKey || e.metaKey
+            if self.attr('data-selected') == "true"
+                self.removeClass 'btn-info'
+                self.addClass 'btn-default'
+                self.attr 'data-selected', false
+            else
+                self.removeClass 'btn-default'
+                self.addClass 'btn-info'
+                self.attr 'data-selected', true
+        else if e.shiftKey
+            can_select = false
+            $('#entries .entry').each ->
+                entry = $(this)
+
+                if entry.attr('data-path') == self.attr('data-path') || self.attr('data-selected') == true
+                    can_select = !can_select
+
+                if can_select
+                    self.removeClass 'btn-default'
+                    self.addClass 'btn-info'
+                    self.attr 'data-selected', true
+        else
             $('#entries .entry').removeClass 'btn-info'
-
             if self.attr('data-selected') == "true"
                 self.addClass 'btn-default'
                 self.attr 'data-selected', false
@@ -70,8 +108,6 @@ set_path = (new_path) ->
                 self.addClass 'btn-info'
                 $('#entries .entry').attr 'data-selected', false
                 self.attr 'data-selected', true
-
-    $('#left-panel').treeview(true).selectNode path_tree_node[path]
 
 folderTree = (_path) ->
     node_name = _path.split('/').last()
@@ -123,11 +159,30 @@ update_tree_flat_struct = ->
             path_tree_node[node.path] = node
             counter++
 
-make_dir_entry = (path)->
+add_dir_entry = (path)->
     name = path.split('/').last()
     name = $('#hidden-div').text(name).html()
-    path = $('#hidden-div').text(path).html()
-    '<div class="entry btn btn-default btn-raised" data-type="folder" data-path="' + path + '"><i class="icon material-icons">folder</i><span class="name">' + name + '</span></div>'
+    $('#entries').append '<div class="entry btn btn-default btn-raised" data-type="folder" data-path="' + path + '"><i class="icon material-icons">folder</i><span class="name">' + name + '</span></div>'
+    reset_click_listener()
+
+add_file_entry = (path)->
+    name = path.split('/').last()
+    name = $('#hidden-div').text(name).html()
+
+    store.fileMetadata path, 'mimetype', (result)->
+        icon = 'insert_drive_file'
+
+        if result.startsWith 'image'
+            icon = 'image'
+        else if result.startsWith 'video'
+            icon = 'local_movies'
+        else if result.startsWith 'audio'
+            icon = 'library_music'
+        else if result.startsWith 'text'
+            icon = 'mode_edit'
+
+        $('#entries').append '<div class="entry btn btn-default btn-raised" data-type="file" data-path="' + path + '"><i class="icon material-icons">' + icon + '</i><span class="name">' + name + '</span></div>'
+        reset_click_listener()
 
 $ ->
     $.material.init()
