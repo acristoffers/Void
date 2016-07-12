@@ -172,6 +172,11 @@ $ ->
             $('#entries').removeClass 'list-view'
             view = 'grid'
 
+    $(window).on
+        dragover: -> false
+        dragend: -> false
+        drop: -> false
+
 wcp = do ->
     deferred = new $.Deferred
 

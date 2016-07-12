@@ -103,3 +103,8 @@ $ ->
         $('#password').val('')
         $('#actions').css('display', 'block')
         $('#info').css('display', 'none')
+
+    $(window).on
+        dragover: -> false
+        dragend: -> false
+        drop: -> false
