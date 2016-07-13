@@ -32,40 +32,71 @@ sb = null
 store = null
 path = ''
 path_tree_node = {}
-last_path_change = 0
 
 time = ->
     new Date().getTime()
 
-set_path = (new_path) ->
-    if path == new_path && (last_path_change - time() < 1000)
-        return
+update_views = ->
+    set_path path
+    update_tree()
 
-    last_path_change = time()
-    path = new_path
+set_path = (new_path) ->
+    path = new_path || ''
     path_parts = path.split '/'
     path_parts = [''] if path_parts.last() == ''
     composite_path = ''
-    $('#path').html ''
+    html = ''
 
     for part in path_parts
         composite_path += '/' + part
-        composite_path = composite_path.replace '//', '/'
+        composite_path = composite_path.replace /\/+/ig, '/'
         part = 'Home' if part == ''
-        $('#path').append '<li><a href="#" data-path="' + composite_path + '">' + part + '</a></li>'
+        html += '<li><a href="#" data-path="' + composite_path + '">' + part + '</a></li>'
 
+    $('#path').html html
     $('#path a').click ->
         set_path $(this).attr 'data-path'
 
     store.listSubdirectories path, (ds) ->
         store.listFiles path, (fs) ->
             $('#entries').html ''
-            $(ds).each ->
-                add_dir_entry(this)
-            $(fs).each ->
-                add_file_entry(this)
+            ds = ds.map (d) -> make_dir_entry(d)
+            fs = fs.map (f) -> make_file_entry(f)
+
+            $('#entries').append ds.join('') + fs.join('')
+
+            $('.entry[data-type=file]').each ->
+                entry = $(this)
+                entry_path = entry.attr('data-path')
+                store.fileMetadata entry_path, 'mimetype', (result) ->
+                    icon = 'insert_drive_file'
+
+                    if result.startsWith 'image'
+                        icon = 'image'
+                    else if result.startsWith 'video'
+                        icon = 'local_movies'
+                    else if result.startsWith 'audio'
+                        icon = 'library_music'
+                    else if result.startsWith 'text'
+                        icon = 'mode_edit'
+
+                    entry.find('i').html icon
+
+            reset_click_listener()
 
     $('#left-panel').treeview(true).selectNode path_tree_node[path]
+
+select = (node) ->
+    node = $(node)
+    node.removeClass 'btn-default'
+    node.addClass 'btn-info'
+    node.attr 'data-selected', true
+
+deselect = (node) ->
+    node = $(node)
+    node.removeClass 'btn-info'
+    node.addClass 'btn-default'
+    node.attr 'data-selected', false
 
 reset_click_listener = ->
     $('#entries .entry').unbind 'dblclick'
@@ -74,18 +105,14 @@ reset_click_listener = ->
     $('#entries .entry[data-type=folder]').dblclick ->
         set_path $(this).attr 'data-path'
 
-    $('#entries .entry').click (e)->
+    $('#entries .entry').click (e) ->
         self = $(this)
 
         if e.ctrlKey || e.metaKey
             if self.attr('data-selected') == "true"
-                self.removeClass 'btn-info'
-                self.addClass 'btn-default'
-                self.attr 'data-selected', false
+                deselect self
             else
-                self.removeClass 'btn-default'
-                self.addClass 'btn-info'
-                self.attr 'data-selected', true
+                select self
         else if e.shiftKey
             can_select = false
             $('#entries .entry').each ->
@@ -159,33 +186,30 @@ update_tree_flat_struct = ->
             path_tree_node[node.path] = node
             counter++
 
-add_dir_entry = (path)->
+make_dir_entry = (path) ->
     name = path.split('/').last()
     name = $('#hidden-div').text(name).html()
-    $('#entries').append '<div class="entry btn btn-default btn-raised" data-type="folder" data-path="' + path + '"><i class="icon material-icons">folder</i><span class="name">' + name + '</span></div>'
-    reset_click_listener()
+    '<div class="entry btn btn-default btn-raised" data-type="folder" data-path="' + path + '"><i class="icon material-icons">folder</i><span class="name">' + name + '</span></div>'
 
-add_file_entry = (path)->
+make_file_entry = (path) ->
     name = path.split('/').last()
     name = $('#hidden-div').text(name).html()
+    '<div class="entry btn btn-default btn-raised" data-type="file" data-path="' + path + '"><i class="icon material-icons"></i><span class="name">' + name + '</span></div>'
 
-    store.fileMetadata path, 'mimetype', (result)->
-        icon = 'insert_drive_file'
+basename = (path) ->
+    path.split('/').last()
 
-        if result.startsWith 'image'
-            icon = 'image'
-        else if result.startsWith 'video'
-            icon = 'local_movies'
-        else if result.startsWith 'audio'
-            icon = 'library_music'
-        else if result.startsWith 'text'
-            icon = 'mode_edit'
-
-        $('#entries').append '<div class="entry btn btn-default btn-raised" data-type="file" data-path="' + path + '"><i class="icon material-icons">' + icon + '</i><span class="name">' + name + '</span></div>'
-        reset_click_listener()
+toast_hide = time()
+setInterval (-> $('#toast').hide() if time() > toast_hide ), 5000
+toast = (msg) ->
+    $('#toast').html msg
+    $('#toast').show()
+    toast_hide = time() + 5000
 
 $ ->
     $.material.init()
+
+    $('#toast').hide()
 
     wcp.done ->
         $(window.trs).each ->
@@ -198,6 +222,14 @@ $ ->
         sb.lang (r) ->
             window.locale = r
             window.update_translation()
+
+        sb.startAddFile.connect (fsPath, storePath) ->
+            toast 'Adding ' + storePath
+
+        sb.endAddFile.connect (fsPath, storePath) ->
+            toast 'Added ' + storePath
+            update_tree()
+            set_path '/'
 
         update_tree()
         set_path '/'
@@ -226,6 +258,55 @@ $ ->
             $('#entries').addClass 'grid-view'
             $('#entries').removeClass 'list-view'
             view = 'grid'
+
+    $('#add-file').click ->
+        $('#add-modal').modal 'hide'
+        sb.getFile (fs) ->
+            for f in fs
+                file_name = basename f
+                target_path = path + '/' + file_name
+                target_path = target_path.replace(/\/+/ig, '/')
+                sb.asyncAddFile f, target_path, ->
+                    setTimeout update_views, 1000
+
+    $('#add-folder').click ->
+        $('#add-modal').modal 'hide'
+        sb.getFolder (folder) ->
+            folder_name = basename folder
+
+            target_folder = path + '/' + folder_name
+            target_folder = target_folder.replace(/\/+/ig, '/')
+            sb.listFilesInFolder folder, (fs) ->
+                for f in fs
+                    file_store_path = f.replace(folder, target_folder).replace(/\/+/ig,'/')
+                    sb.asyncAddFile f, file_store_path, ->
+                        setTimeout update_views, 1000
+
+    $('#remove-selected').click ->
+        $('#remove-modal').modal 'hide'
+        for entry in $('.entry[data-selected=true]')
+            entry_path = $(entry).attr 'data-path'
+            store.remove entry_path, ->
+                toast entry_path + ' removed'
+                setTimeout update_views, 1000
+
+    $(document).bind 'keydown', 'ctrl+a', ->
+        deselect $('.entry')
+
+    $(document).bind 'keydown', 'meta+a', ->
+        select $('.entry')
+
+    $(document).keydown (e) ->
+        switch e.keyCode
+            when 46 # Delete
+                $('#remove-modal').modal 'show'
+            when 8 # Backspace
+                $('#remove-modal').modal 'show'
+            when 27 # Esc
+                $('.modal').modal 'hide'
+                deselect $('.entry')
+            when 13 # Enter
+                $('.entry[data-selected=true]').first().dblclick()
 
     $(window).on
         dragover: -> false

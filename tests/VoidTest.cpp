@@ -555,7 +555,7 @@ void VoidTest::storeAddFile()
 
     QByteArray data = "Hello World";
 
-    store.addFile("/hello.txt", data);
+    store.addFileFromData("/hello.txt", data);
     QCOMPARE(store.error, Store::Success);
     data = store.decryptFile("/hello.txt");
     QCOMPARE(store.error, Store::Success);
@@ -616,7 +616,7 @@ void VoidTest::storeRenameFile()
 
     QByteArray data = "Hello World";
 
-    store.addFile("/hello.txt", data);
+    store.addFileFromData("/hello.txt", data);
     QCOMPARE(store.error,                     Store::Success);
     QCOMPARE(store.decryptFile("/hello.txt"), data);
 
@@ -626,10 +626,10 @@ void VoidTest::storeRenameFile()
     QCOMPARE( store.decryptFile("/hello.txt"),      QByteArray() );
     QCOMPARE( store.error,                          Store::NoSuchFile);
 
-    store.addFile("/dir/hello.txt", data);
+    store.addFileFromData("/dir/hello.txt", data);
     QCOMPARE(store.error,                         Store::Success);
     QCOMPARE(store.decryptFile("/dir/hello.txt"), data);
-    store.addFile("/dir/hello2.txt", data);
+    store.addFileFromData("/dir/hello2.txt", data);
     QCOMPARE(store.error,                          Store::Success);
     QCOMPARE(store.decryptFile("/dir/hello2.txt"), data);
 
@@ -661,11 +661,11 @@ void VoidTest::storeFetchAll()
 
     QByteArray data = "Hello World";
 
-    store.addFile("/dir/hello", data);
+    store.addFileFromData("/dir/hello", data);
     QCOMPARE(store.error, Store::Success);
-    store.addFile("/dir/subdir/hello.txt", data);
+    store.addFileFromData("/dir/subdir/hello.txt", data);
     QCOMPARE(store.error, Store::Success);
-    store.addFile("/folder/subdir/hello2.txt", data);
+    store.addFileFromData("/folder/subdir/hello2.txt", data);
     QCOMPARE(store.error,                                 Store::Success);
 
     QStringList paths = store.listAllDirectories();
@@ -709,7 +709,7 @@ void VoidTest::storeCheckMetadata()
 
     QByteArray data = "#!/usr/bin/env ruby\n\nputs 'Hello World'\n";
 
-    store.addFile("/hello.rb", data);
+    store.addFileFromData("/hello.rb", data);
     QCOMPARE(store.error, Store::Success);
 
     QString       mimetypeString = store.fileMetadata("/hello.rb", "mimetype");
@@ -743,11 +743,11 @@ void VoidTest::storeListEntries()
 
     QByteArray data = "Hello World";
 
-    store.addFile("/dir/hello", data);
+    store.addFileFromData("/dir/hello", data);
     QCOMPARE(store.error, Store::Success);
-    store.addFile("/dir/subdir/hello.txt", data);
+    store.addFileFromData("/dir/subdir/hello.txt", data);
     QCOMPARE(store.error, Store::Success);
-    store.addFile("/dir/hello2.txt", data);
+    store.addFileFromData("/dir/hello2.txt", data);
     QCOMPARE(store.error,                       Store::Success);
 
     QStringList paths = store.listSubdirectories("/dir");
@@ -781,11 +781,11 @@ void VoidTest::storeSearch()
 
     QByteArray data = "Hello World";
 
-    store.addFile("/dir/hello", data);
+    store.addFileFromData("/dir/hello", data);
     QCOMPARE(store.error, Store::Success);
-    store.addFile("/dir/subdir/hello.txt", data);
+    store.addFileFromData("/dir/subdir/hello.txt", data);
     QCOMPARE(store.error, Store::Success);
-    store.addFile("/folder/subdir/hello2.txt", data);
+    store.addFileFromData("/folder/subdir/hello2.txt", data);
     QCOMPARE(store.error, Store::Success);
 
     // searchStartsWith

@@ -22,13 +22,38 @@
 
 #include "StoreScreenBridge.h"
 
+#include <QDir>
+#include <QFileDialog>
+#include <QRunnable>
 #include <QSettings>
+#include <QThreadPool>
 #include <QtWebChannel>
+
+class Runner : public QRunnable
+{
+public:
+    Runner(std::function<void (void)> );
+    void run() override;
+
+private:
+    std::function<void (void)> func;
+};
+
+Runner::Runner(std::function<void (void)> func)
+{
+    this->func = func;
+}
+
+void Runner::run()
+{
+    func();
+}
 
 struct StoreScreenBridgePrivate
 {
     std::unique_ptr<Store> store;
     StoreScreen            *parent;
+    QMutex                 mutex;
 };
 
 StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &password, const bool create, StoreScreen *parent) : QObject()
@@ -41,6 +66,8 @@ StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &passwor
     if ( error == Store::Success ) {
         _p->parent->channel()->registerObject( QStringLiteral("store"), _p->store.get() );
     }
+
+    connect(this, &StoreScreenBridge::routeSignalSignal, this, &StoreScreenBridge::routeSignalSlot, Qt::QueuedConnection);
 }
 
 StoreScreenBridge::~StoreScreenBridge() = default;
@@ -52,7 +79,7 @@ void StoreScreenBridge::setLang(QString lang)
     settings.setValue(QStringLiteral("lang"), lang);
 }
 
-QString StoreScreenBridge::lang()
+QString StoreScreenBridge::lang() const
 {
     QSettings settings;
 
@@ -61,4 +88,63 @@ QString StoreScreenBridge::lang()
     }
 
     return settings.value( QStringLiteral("lang") ).toString();
+}
+
+void StoreScreenBridge::asyncAddFile(const QString fsPath, const QString storePath)
+{
+    Runner *runner = new Runner([fsPath, storePath, this]() {
+        QMutexLocker locker(&_p->mutex);
+
+        QVariantList args;
+        args << fsPath;
+        args << storePath;
+
+        emit routeSignalSignal("startAddFile", args);
+        _p->store->addFile(fsPath, storePath);
+        emit routeSignalSignal("endAddFile", args);
+    });
+
+    QThreadPool::globalInstance()->start(runner);
+}
+
+QStringList StoreScreenBridge::getFile() const
+{
+    return QFileDialog::getOpenFileNames( nullptr, QStringLiteral("Load Store"), QDir::homePath() );
+}
+
+QString StoreScreenBridge::getFolder() const
+{
+    return QFileDialog::getExistingDirectory( nullptr, QStringLiteral("Load Store"), QDir::homePath() );
+}
+
+QStringList StoreScreenBridge::listFilesInFolder(const QString folder) const
+{
+    QStringList fs;
+    QStringList ds;
+
+    ds << folder;
+
+    while ( !ds.empty() ) {
+        QDir d( ds.first() );
+        ds.removeFirst();
+
+        for ( auto  e : d.entryList(QDir::Files | QDir::Readable) ) {
+            fs << d.filePath(e);
+        }
+
+        for ( auto  e : d.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable) ) {
+            ds << d.filePath(e);
+        }
+    }
+
+    return fs;
+}
+
+void StoreScreenBridge::routeSignalSlot(const QString signal, const QVariantList args)
+{
+    if ( signal == "startAddFile" ) {
+        emit startAddFile( args[0].toString(), args[1].toString() );
+    } else if ( signal == "endAddFile" ) {
+        emit endAddFile( args[0].toString(), args[1].toString() );
+    }
 }

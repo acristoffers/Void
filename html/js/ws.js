@@ -128,10 +128,21 @@
           return modal_alert(window.tr("FileAlreadyExists"));
       }
     };
-    return $('#cancel').click(function() {
+    $('#cancel').click(function() {
       $('#password').val('');
       $('#actions').css('display', 'block');
       return $('#info').css('display', 'none');
+    });
+    return $(window).on({
+      dragover: function() {
+        return false;
+      },
+      dragend: function() {
+        return false;
+      },
+      drop: function() {
+        return false;
+      }
     });
   });
 

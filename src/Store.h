@@ -67,7 +67,7 @@ public:
     Store(const QString path, const QString password, const bool create = false);
     ~Store();
 
-    Q_INVOKABLE void addFile(const QString storePath, const QByteArray data);
+    Q_INVOKABLE void addFileFromData(const QString storePath, const QByteArray data);
     Q_INVOKABLE void addFile(const QString filePath, const QString storePath);
     Q_INVOKABLE QByteArray decryptFile(const QString path);
     Q_INVOKABLE void decryptFile(const QString storePath, const QString path);

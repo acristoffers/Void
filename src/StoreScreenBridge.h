@@ -34,15 +34,30 @@ class StoreScreenBridge : public QObject
 {
     Q_OBJECT
 public:
-    StoreScreenBridge(const QString &path, const QString &password, const bool create, StoreScreen* parent);
+    StoreScreenBridge(const QString &path, const QString &password, const bool create, StoreScreen *parent);
     ~StoreScreenBridge();
 
     Q_INVOKABLE void setLang(QString lang);
-    Q_INVOKABLE QString lang();
+    Q_INVOKABLE QString lang() const;
+
+    Q_INVOKABLE void asyncAddFile(const QString fsPath, const QString storePath);
+    Q_INVOKABLE QStringList getFile() const;
+    Q_INVOKABLE QString getFolder() const;
+    Q_INVOKABLE QStringList listFilesInFolder(const QString folder) const;
 
     Store::StoreError error;
 private:
     std::unique_ptr<StoreScreenBridgePrivate> _p;
+public slots:
+    // Kind of ugly hack to make threaded signal work. Seems like connections
+    // from QWebChannel are not queued, so we need a router to get it out of
+    // the thread and into GUI-thread before dispatching it to the browser.
+    void routeSignalSlot(const QString signal, const QVariantList args);
+
+signals:
+    void routeSignalSignal(const QString signal, const QVariantList args);
+    void startAddFile(const QString fsPath, const QString storePath);
+    void endAddFile(const QString fsPath, const QString storePath);
 };
 
 #endif // STORESCREENBRIDGE_H

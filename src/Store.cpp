@@ -160,7 +160,7 @@ Store::Store(const QString path, const QString password, const bool create) : QO
  *  \see Store#decryptFile(const QString, const QString)
  *  \see Store#error
  */
-void Store::addFile(const QString storePath, const QByteArray data)
+void Store::addFileFromData(const QString storePath, const QByteArray data)
 {
     _p->storeFS->addFile(storePath, data);
 

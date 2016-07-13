@@ -19,7 +19,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-$panel_size: 20rem;
+$panel_size: 15rem;
 @mixin user-select($opt) {
     -webkit-user-select: $opt;
     user-select: $opt;
@@ -70,7 +70,7 @@ nav.navbar {
     bottom: 0;
     right: $panel_size;
     left: $panel_size;
-    padding: (70px) 1rem 1rem;
+    padding: (80px) 1rem 1rem;
     overflow-y: auto;
 }
 #right-panel {
@@ -83,6 +83,11 @@ nav.navbar {
     border-left: 1px solid gray;
     padding: 70px 1rem 1rem;
     overflow-y: auto;
+}
+#fab-add {
+    position: fixed;
+    left: $panel_size - 5rem;
+    bottom: 2rem;
 }
 .treeview {
     span.icon {
@@ -101,6 +106,9 @@ nav.navbar {
         padding-right: 15px;
         padding-left: 0;
         text-align: left;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+        text-overflow: ellipsis !important;
         .icon {
             margin: 0 5px;
         }
@@ -115,4 +123,14 @@ nav.navbar {
     .entry {
         width: 200px;
     }
+}
+.modal {
+    color: black;
+}
+#toast {
+    color: black;
+    position: fixed;
+    bottom: 0.5rem;
+    left: $panel_size + 1rem;
+    right: $panel_size + 1rem;
 }

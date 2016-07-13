@@ -48,7 +48,14 @@
       'PartCorrupted': 'File part appears to be corrupted.',
       'WrongCheckSum': 'Wrong file checksum (i.e.: not the expected content).',
       'FileAlreadyExists': 'File already exists.',
-      'Error': 'Error'
+      'Error': 'Error',
+      'AddFile': 'Add a file',
+      'AddFolder': 'Add a folder',
+      'AddFileFolderModalTitle': 'Add file or folder',
+      'AddFileFolderModalBody': 'Do you wish to add a file or folder?',
+      'ConfirmRemovalModalTitle': 'Are you sure?',
+      'ConfirmRemovalModalBody': 'Are you sure that you want to delete the selected files and folders. This action cannot be undone.',
+      'Remove': 'Remove'
     },
     fr: {
       'Language': 'Langue',
@@ -70,7 +77,14 @@
       'PartCorrupted': 'Une partie du fichier semble être endommagé.',
       'WrongCheckSum': 'checksum de fichier incorrect (pas le contenu attendu).',
       'FileAlreadyExists': 'Le fichier existe déjà.',
-      'Error': 'Erreur'
+      'Error': 'Erreur',
+      'AddFile': 'Ajouter un fichier',
+      'AddFolder': 'Ajouter un dossier',
+      'AddFileFolderModalTitle': 'Ajouter fichier et dossier',
+      'AddFileFolderModalBody': 'Voulez-vous ajouter un fichier ou un dossier?',
+      'ConfirmRemovalModalTitle': 'Êtes-vous sûr?',
+      'ConfirmRemovalModalBody': 'Etes-vous sûr de vouloir supprimer les fichiers et dossiers sélectionnés? Cette action ne peut pas être annulée.',
+      'Remove': 'Supprimer'
     },
     pt: {
       'Language': 'Idioma',
@@ -92,7 +106,14 @@
       'PartCorrupted': 'Uma parte do arquivo se corrompeu.',
       'WrongCheckSum': 'Soma de verificação errada (conteúdo não é o esperado).',
       'FileAlreadyExists': 'Arquivo já existe.',
-      'Error': 'Erro'
+      'Error': 'Erro',
+      'AddFile': 'Adicionar arquivo',
+      'AddFolder': 'Adicionar diretório',
+      'AddFileFolderModalTitle': 'Adicionar arquivo e diretório',
+      'AddFileFolderModalBody': 'Você deseja adicionar um arquivo ou diretório?',
+      'ConfirmRemovalModalTitle': 'Tem certeza?',
+      'ConfirmRemovalModalBody': 'Tem certeza que deseja remover os arquivos e diretórios selecionados? Essa ação não pode ser desfeita.',
+      'Remove': 'Remover'
     },
     de: {
       'Language': 'Sprache',
@@ -114,7 +135,14 @@
       'PartCorrupted': 'Dateipart scheint korrupt zu sein.',
       'WrongCheckSum': 'Falsches Checksum (Inhalt ist nicht was erwartet war).',
       'FileAlreadyExists': 'Die Datei existiert bereits.',
-      'Error': 'Fehler'
+      'Error': 'Fehler',
+      'AddFile': 'Datei hinzufügen',
+      'AddFolder': 'Ordner hinzufügen',
+      'AddFileFolderModalTitle': 'Datei und Ordner hinzufügen',
+      'AddFileFolderModalBody': 'Möchten Sie eine Detei oder einen Ordner hinzufügen?',
+      'ConfirmRemovalModalTitle': 'Sind Sie sicher?',
+      'ConfirmRemovalModalBody': 'Sind Sie sicher, dass Sie die ausgewählten Dateien und Ornder löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden.',
+      'Remove': 'Löschen'
     }
   };
 
