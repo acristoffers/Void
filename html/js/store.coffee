@@ -99,13 +99,13 @@ deselect = (node) ->
     node.attr 'data-selected', false
 
 reset_click_listener = ->
-    $('#entries .entry').unbind 'dblclick'
-    $('#entries .entry').unbind 'click'
+    $('.entry').unbind 'dblclick'
+    $('.entry').unbind 'click'
 
-    $('#entries .entry[data-type=folder]').dblclick ->
+    $('.entry[data-type=folder]').dblclick ->
         set_path $(this).attr 'data-path'
 
-    $('#entries .entry').click (e) ->
+    $('.entry').click (e) ->
         self = $(this)
 
         if e.ctrlKey || e.metaKey
@@ -114,27 +114,22 @@ reset_click_listener = ->
             else
                 select self
         else if e.shiftKey
-            can_select = false
-            $('#entries .entry').each ->
-                entry = $(this)
-
-                if entry.attr('data-path') == self.attr('data-path') || self.attr('data-selected') == true
-                    can_select = !can_select
-
-                if can_select
-                    self.removeClass 'btn-default'
-                    self.addClass 'btn-info'
-                    self.attr 'data-selected', true
+            entries = $('.entry')
+            self_index = entries.index self
+            target_index = entries.index $('.entry[data-selected=true]').first()
+            first = if self_index < target_index then self_index else target_index
+            last = if self_index > target_index then self_index else target_index
+            if first == -1 || last == -1
+                select self
+                return
+            entries = entries.slice first, last + 1
+            select $(entries)
         else
-            $('#entries .entry').removeClass 'btn-info'
+            deselect $('.entry')
             if self.attr('data-selected') == "true"
-                self.addClass 'btn-default'
-                self.attr 'data-selected', false
+                deselect self
             else
-                self.removeClass 'btn-default'
-                self.addClass 'btn-info'
-                $('#entries .entry').attr 'data-selected', false
-                self.attr 'data-selected', true
+                select self
 
 folderTree = (_path) ->
     node_name = _path.split('/').last()

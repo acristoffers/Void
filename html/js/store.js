@@ -126,13 +126,13 @@
   };
 
   reset_click_listener = function() {
-    $('#entries .entry').unbind('dblclick');
-    $('#entries .entry').unbind('click');
-    $('#entries .entry[data-type=folder]').dblclick(function() {
+    $('.entry').unbind('dblclick');
+    $('.entry').unbind('click');
+    $('.entry[data-type=folder]').dblclick(function() {
       return set_path($(this).attr('data-path'));
     });
-    return $('#entries .entry').click(function(e) {
-      var can_select, self;
+    return $('.entry').click(function(e) {
+      var entries, first, last, self, self_index, target_index;
       self = $(this);
       if (e.ctrlKey || e.metaKey) {
         if (self.attr('data-selected') === "true") {
@@ -141,29 +141,23 @@
           return select(self);
         }
       } else if (e.shiftKey) {
-        can_select = false;
-        return $('#entries .entry').each(function() {
-          var entry;
-          entry = $(this);
-          if (entry.attr('data-path') === self.attr('data-path') || self.attr('data-selected') === true) {
-            can_select = !can_select;
-          }
-          if (can_select) {
-            self.removeClass('btn-default');
-            self.addClass('btn-info');
-            return self.attr('data-selected', true);
-          }
-        });
+        entries = $('.entry');
+        self_index = entries.index(self);
+        target_index = entries.index($('.entry[data-selected=true]').first());
+        first = self_index < target_index ? self_index : target_index;
+        last = self_index > target_index ? self_index : target_index;
+        if (first === -1 || last === -1) {
+          select(self);
+          return;
+        }
+        entries = entries.slice(first, last + 1);
+        return select($(entries));
       } else {
-        $('#entries .entry').removeClass('btn-info');
+        deselect($('.entry'));
         if (self.attr('data-selected') === "true") {
-          self.addClass('btn-default');
-          return self.attr('data-selected', false);
+          return deselect(self);
         } else {
-          self.removeClass('btn-default');
-          self.addClass('btn-info');
-          $('#entries .entry').attr('data-selected', false);
-          return self.attr('data-selected', true);
+          return select(self);
         }
       }
     });
