@@ -23,7 +23,7 @@
  */
 
 (function() {
-  var basename, deselect, folderTree, make_dir_entry, make_file_entry, path, path_tree_node, reset_click_listener, sb, select, set_path, store, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp;
+  var basename, deselect, folderTree, isElementInViewport, make_dir_entry, make_file_entry, path, path_tree_node, reset_click_listener, sb, select, set_path, store, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp;
 
   if (!Array.prototype.last) {
     Array.prototype.last = function() {
@@ -267,6 +267,15 @@
     return toast_hide = time() + 5000;
   };
 
+  isElementInViewport = function(el) {
+    var rect;
+    if (typeof jQuery === "function" && el instanceof jQuery) {
+      el = el[0];
+    }
+    rect = el.getBoundingClientRect();
+    return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || $(window).height()) && rect.right <= (window.innerWidth || $(window).width());
+  };
+
   $(function() {
     var right_panel_shown, right_panel_width, view;
     $.material.init();
@@ -383,6 +392,7 @@
       return select($('.entry'));
     });
     $(document).keydown(function(e) {
+      var elements_per_row, entries, first_selected, index, ref;
       switch (e.keyCode) {
         case 46:
           return $('#remove-modal').modal('show');
@@ -392,7 +402,68 @@
           $('.modal').modal('hide');
           return deselect($('.entry'));
         case 13:
-          return $('.entry[data-selected=true]').first().dblclick();
+          return (ref = $('.entry[data-selected=true]').first()) != null ? ref.dblclick() : void 0;
+        case 37:
+          entries = $('.entry');
+          first_selected = $('.entry[data-selected=true]').first() || entries.first();
+          index = (((entries.index(first_selected) - 1) % entries.size()) + entries.size()) % entries.size();
+          deselect(entries);
+          select(entries.get(index));
+          if (!isElementInViewport(entries.get(index))) {
+            $('.entry[data-selected=true]').get(0).scrollIntoView();
+            $('#content').scrollTop($('#content').scrollTop() - 90);
+            if (!isElementInViewport(entries.get(index))) {
+              return $('.entry[data-selected=true]').get(0).scrollIntoView();
+            }
+          }
+          break;
+        case 38:
+          entries = $('.entry');
+          first_selected = $('.entry[data-selected=true]').first() || entries.first();
+          e = $(entries.first());
+          elements_per_row = Math.floor($('#entries').width() / (e.outerWidth() + e.innerWidth() - e.width()));
+          elements_per_row = elements_per_row || 1;
+          index = (((entries.index(first_selected) - elements_per_row) % entries.size()) + entries.size()) % entries.size();
+          deselect(entries);
+          select(entries.get(index));
+          if (!isElementInViewport(entries.get(index))) {
+            $('.entry[data-selected=true]').get(0).scrollIntoView();
+            $('#content').scrollTop($('#content').scrollTop() - 90);
+            if (!isElementInViewport(entries.get(index))) {
+              return $('.entry[data-selected=true]').get(0).scrollIntoView();
+            }
+          }
+          break;
+        case 39:
+          entries = $('.entry');
+          first_selected = $('.entry[data-selected=true]').first();
+          index = (((entries.index(first_selected) + 1) % entries.size()) + entries.size()) % entries.size();
+          deselect(entries);
+          select(entries.get(index));
+          if (!isElementInViewport(entries.get(index))) {
+            $('.entry[data-selected=true]').get(0).scrollIntoView();
+            $('#content').scrollTop($('#content').scrollTop() - 90);
+            if (!isElementInViewport(entries.get(index))) {
+              return $('.entry[data-selected=true]').get(0).scrollIntoView();
+            }
+          }
+          break;
+        case 40:
+          entries = $('.entry');
+          first_selected = $('.entry[data-selected=true]').first() || entries.first();
+          e = $(entries.first());
+          elements_per_row = Math.floor($('#entries').width() / (e.outerWidth() + e.innerWidth() - e.width()));
+          elements_per_row = elements_per_row || 1;
+          index = (((entries.index(first_selected) + elements_per_row) % entries.size()) + entries.size()) % entries.size();
+          deselect(entries);
+          select(entries.get(index));
+          if (!isElementInViewport(entries.get(index))) {
+            $('.entry[data-selected=true]').get(0).scrollIntoView();
+            $('#content').scrollTop($('#content').scrollTop() - 90);
+            if (!isElementInViewport(entries.get(index))) {
+              return $('.entry[data-selected=true]').get(0).scrollIntoView();
+            }
+          }
       }
     });
     return $(window).on({
