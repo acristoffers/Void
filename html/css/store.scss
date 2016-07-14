@@ -146,3 +146,42 @@ nav.navbar {
     left: $panel_size + 1rem;
     right: $panel_size + 1rem;
 }
+#image-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.7);
+    #image-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 4em;
+        overflow: auto;
+        text-align: center;
+        img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+    #image-navigation {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 4rem;
+        text-align: center;
+        line-height: 3rem;
+        background-color: rgba(0, 0, 0, 0.9);
+        i {
+            vertical-align: middle;
+            font-size: 3rem !important;
+            cursor: pointer;
+        }
+    }
+}

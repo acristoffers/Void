@@ -48,6 +48,7 @@ void SchemeHandler::requestStarted(QWebEngineUrlRequestJob *job)
     Runner *runner = new Runner([job, this]() {
         QString path = job->requestUrl().path();
         QString scheme = job->requestUrl().scheme();
+        QString mime = _p->store->fileMetadata(path, "mimetype");
         QBuffer *buffer = new QBuffer;
         QByteArray data( _p->store->decryptFile(path) );
 
@@ -57,9 +58,7 @@ void SchemeHandler::requestStarted(QWebEngineUrlRequestJob *job)
         if ( _p->store->error != Store::Success ) {
             job->fail(QWebEngineUrlRequestJob::RequestFailed);
             return;
-        }
-
-        if ( scheme == "thumb" ) {
+        } else if ( scheme == "thumb" ) {
             QImage image = QImage::fromData(data);
             image = image.scaledToWidth(200, Qt::SmoothTransformation);
             image.save(buffer, "PNG");
@@ -69,7 +68,7 @@ void SchemeHandler::requestStarted(QWebEngineUrlRequestJob *job)
 
         buffer->seek(0);
 
-        job->reply("image/png", buffer);
+        job->reply(scheme == "thumb" ? "image/png" : mime.toUtf8(), buffer);
     });
 
     QThreadPool::globalInstance()->start(runner);

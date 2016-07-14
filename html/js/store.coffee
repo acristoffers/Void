@@ -85,6 +85,8 @@ set_path = (new_path) ->
                     entry.attr 'data-mimetype', mimetype
                     entry.attr 'data-filetype', mimetype.split('/').first()
 
+                    reset_click_listener()
+
             reset_click_listener()
 
     $('#left-panel').treeview(true).selectNode path_tree_node[path]
@@ -107,6 +109,8 @@ reset_click_listener = ->
 
     $('.entry[data-type=folder]').dblclick ->
         set_path $(this).attr 'data-path'
+
+    $('.entry[data-filetype=image]').dblclick open_image_view
 
     $('.entry').click (e) ->
         self = $(this)
@@ -218,10 +222,38 @@ navigate_up = ->
     parent = path.split('/').slice(0, -1).join('/') || '/'
     set_path parent
 
+zoom_factor = 1
+current_image = null
+open_image_view = ->
+    image_entry = $ $('.entry[data-selected=true]').filter('[data-filetype=image]').first() || $('[data-filetype=image]').first()
+    return unless image_entry?
+    $('#image-view #image').attr 'src', 'decrypt://' + image_entry.attr 'data-path'
+    $('#image-view').show()
+    current_image = image_entry
+
+set_zoom = (zoom) ->
+    width = Math.ceil $('#image-view #image').get(0).naturalWidth
+    height = Math.ceil $('#image-view #image').get(0).naturalHeight
+
+    if zoom > 0 && zoom <= 5
+        zoom_factor = zoom
+    else
+        zoom_factor = -1
+        cw = $('#image-view #image-container').width()
+        ch = $('#image-view #image-container').height()
+        zoom = Math.min cw / width, ch / height
+
+    width *= zoom
+    height *= zoom
+
+    $('#image-view #image').css 'width', width + 'px'
+    $('#image-view #image').css 'height', height + 'px'
+
 $ ->
     $.material.init()
 
     $('#toast').hide()
+    $('#image-view').hide()
 
     wcp.done ->
         $(window.trs).each ->
@@ -302,6 +334,63 @@ $ ->
                 toast entry_path + ' removed'
                 setTimeout update_views, 1000
 
+    $('#zoom-fit').click ->
+        set_zoom -1
+
+    $('#zoom-original').click ->
+        set_zoom 1
+
+    $('#zoom-in').click ->
+        set_zoom zoom_factor + 0.05
+
+    $('#zoom-out').click ->
+        set_zoom zoom_factor - 0.05
+
+    $('#image-view #next').click ->
+        images = $('.entry[data-filetype=image]')
+        index = ( ( (images.index(current_image) + 1) % images.size()) + images.size() ) % images.size()
+        $('#image-view #image').attr 'src', 'decrypt://' + $(images[index]).attr 'data-path'
+        current_image = $ images[index]
+
+    $('#image-view #prev').click ->
+        images = $('.entry[data-filetype=image]')
+        index = ( ( (images.index(current_image) - 1) % images.size()) + images.size() ) % images.size()
+        $('#image-view #image').attr 'src', 'decrypt://' + $(images[index]).attr 'data-path'
+        current_image = $ images[index]
+
+    $('#image-view #image').load ->
+        set_zoom zoom_factor
+
+    $(document).bind 'keydown', 'ctrl+0', ->
+        $('#zoom-original').click()
+
+    $(document).bind 'keydown', 'ctrl+9', ->
+        $('#zoom-fit').click()
+
+    $(document).bind 'keydown', 'ctrl++', ->
+        $('#zoom-in').click()
+
+    $(document).bind 'keydown', 'ctrl+=', ->
+        $('#zoom-in').click()
+
+    $(document).bind 'keydown', 'ctrl+-', ->
+        $('#zoom-out').click()
+
+    $(document).bind 'keydown', 'meta+0', ->
+        $('#zoom-original').click()
+
+    $(document).bind 'keydown', 'meta+9', ->
+        $('#zoom-fit').click()
+
+    $(document).bind 'keydown', 'meta++', ->
+        $('#zoom-in').click()
+
+    $(document).bind 'keydown', 'meta+=', ->
+        $('#zoom-in').click()
+
+    $(document).bind 'keydown', 'meta+-', ->
+        $('#zoom-out').click()
+
     $(document).bind 'keydown', 'ctrl+a', ->
         deselect $('.entry')
 
@@ -315,11 +404,16 @@ $ ->
             when 8 # Backspace
                 navigate_up()
             when 27 # Esc
+                current_image = null
+                $('#image-view').hide()
                 $('.modal').modal 'hide'
                 deselect $('.entry')
             when 13 # Enter
                 $('.entry[data-selected=true]').first()?.dblclick()
             when 37 # Left
+                if current_image?
+                    $('#image-view #prev').click()
+                    return
                 entries = $('.entry')
                 first_selected = $('.entry[data-selected=true]').first() || entries.first()
                 index = ( ( (entries.index(first_selected) - 1) % entries.size()) + entries.size() ) % entries.size()
@@ -347,6 +441,9 @@ $ ->
                     unless isElementInViewport entries.get(index)
                         $('.entry[data-selected=true]').get(0).scrollIntoView()
             when 39 # Right
+                if current_image?
+                    $('#image-view #next').click()
+                    return
                 entries = $('.entry')
                 first_selected = $('.entry[data-selected=true]').first()
                 index = ( ( (entries.index(first_selected) + 1) % entries.size()) + entries.size() ) % entries.size()
