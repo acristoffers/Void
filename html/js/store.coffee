@@ -63,24 +63,27 @@ set_path = (new_path) ->
             ds = ds.map (d) -> make_dir_entry(d)
             fs = fs.map (f) -> make_file_entry(f)
 
-            $('#entries').append ds.join('') + fs.join('')
+            $('#entries').append ds.join('') + '<br>' + fs.join('')
 
             $('.entry[data-type=file]').each ->
                 entry = $(this)
                 entry_path = entry.attr('data-path')
-                store.fileMetadata entry_path, 'mimetype', (result) ->
+                store.fileMetadata entry_path, 'mimetype', (mimetype) ->
                     icon = 'insert_drive_file'
 
-                    if result.startsWith 'image'
-                        icon = 'image'
-                    else if result.startsWith 'video'
+                    if mimetype.startsWith 'video'
                         icon = 'local_movies'
-                    else if result.startsWith 'audio'
+                    else if mimetype.startsWith 'audio'
                         icon = 'library_music'
-                    else if result.startsWith 'text'
+                    else if mimetype.startsWith 'text'
                         icon = 'mode_edit'
 
-                    entry.find('i').html icon
+                    if mimetype.startsWith 'image'
+                        entry.find('i').replaceWith '<img class="icon" src="thumb://' + entry.attr('data-path') + '">'
+                    else
+                        entry.find('i').html icon
+                    entry.attr 'data-mimetype', mimetype
+                    entry.attr 'data-filetype', mimetype.split('/').first()
 
             reset_click_listener()
 

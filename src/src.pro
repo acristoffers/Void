@@ -28,7 +28,9 @@ HEADERS += \
     WelcomeScreen.h \
     WelcomeScreenBridge.h \
     StoreScreen.h \
-    StoreScreenBridge.h
+    StoreScreenBridge.h \
+    SchemeHandler.h \
+    Runner.h
 
 SOURCES += \
     main.cpp \
@@ -39,7 +41,9 @@ SOURCES += \
     WelcomeScreen.cpp \
     WelcomeScreenBridge.cpp \
     StoreScreen.cpp \
-    StoreScreenBridge.cpp
+    StoreScreenBridge.cpp \
+    SchemeHandler.cpp \
+    Runner.cpp
 
 PRECOMPILED_HEADER = precompiled.h
 

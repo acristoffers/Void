@@ -24,34 +24,14 @@
 
 #include <QDir>
 #include <QFileDialog>
-#include <QRunnable>
 #include <QSettings>
-#include <QThreadPool>
 #include <QtWebChannel>
 
-class Runner : public QRunnable
-{
-public:
-    Runner(std::function<void (void)> );
-    void run() override;
-
-private:
-    std::function<void (void)> func;
-};
-
-Runner::Runner(std::function<void (void)> func)
-{
-    this->func = func;
-}
-
-void Runner::run()
-{
-    func();
-}
+#include "Runner.h"
 
 struct StoreScreenBridgePrivate
 {
-    std::unique_ptr<Store> store;
+    std::shared_ptr<Store> store;
     StoreScreen            *parent;
     QMutex                 mutex;
 };
@@ -68,6 +48,11 @@ StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &passwor
     }
 
     connect(this, &StoreScreenBridge::routeSignalSignal, this, &StoreScreenBridge::routeSignalSlot, Qt::QueuedConnection);
+}
+
+std::shared_ptr<Store> StoreScreenBridge::store()
+{
+    return _p->store;
 }
 
 StoreScreenBridge::~StoreScreenBridge() = default;

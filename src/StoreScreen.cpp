@@ -28,7 +28,9 @@
 #include <QSettings>
 #include <QStyle>
 #include <QWebChannel>
+#include <QWebEngineProfile>
 
+#include "SchemeHandler.h"
 #include "StoreScreenBridge.h"
 
 struct StoreScreenPrivate
@@ -52,6 +54,11 @@ StoreScreen::StoreScreen(const QString &path, const QString &password, const boo
     page()->setBackgroundColor( QStringLiteral("#222222") );
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(windowFlags() & ~Qt::WindowFullscreenButtonHint);
+
+    QWebEngineProfile::defaultProfile()->installUrlSchemeHandler( "decrypt", new SchemeHandler( _p->bridge->store() ) );
+    QWebEngineProfile::defaultProfile()->installUrlSchemeHandler( "thumb", new SchemeHandler( _p->bridge->store() ) );
+    QWebEngineProfile::defaultProfile()->setHttpCacheMaximumSize(1);
+    QWebEngineProfile::defaultProfile()->setHttpCacheType(QWebEngineProfile::NoCache);
 
     QSettings settings;
     if ( settings.contains( QStringLiteral("storeWindowGeometry") ) ) {
@@ -93,7 +100,6 @@ void StoreScreen::changeEvent(QEvent *e)
 void StoreScreen::closeEvent(QCloseEvent *)
 {
     QSettings settings;
-
 
     settings.setValue( QStringLiteral("storeWindowGeometry"), saveGeometry() );
 }

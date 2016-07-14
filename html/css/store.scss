@@ -61,7 +61,7 @@ nav.navbar {
     width: $panel_size;
     border-right: 1px solid gray;
     padding: 70px 1rem 1rem;
-    overflow-y: auto;
+    overflow: auto !important;
 }
 #content {
     transition: right 200ms linear;
@@ -122,6 +122,18 @@ nav.navbar {
 #entries.grid-view {
     .entry {
         width: 200px;
+    }
+    .entry[data-filetype=image] {
+        text-align: center;
+        height: auto;
+        .icon {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .name {
+            padding: 5px;
+        }
     }
 }
 .modal {

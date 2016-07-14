@@ -36,6 +36,7 @@ class StoreScreenBridge : public QObject
 public:
     StoreScreenBridge(const QString &path, const QString &password, const bool create, StoreScreen *parent);
     ~StoreScreenBridge();
+    std::shared_ptr<Store> store();
 
     Q_INVOKABLE void setLang(QString lang);
     Q_INVOKABLE QString lang() const;

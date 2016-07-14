@@ -85,24 +85,28 @@
         fs = fs.map(function(f) {
           return make_file_entry(f);
         });
-        $('#entries').append(ds.join('') + fs.join(''));
+        $('#entries').append(ds.join('') + '<br>' + fs.join(''));
         $('.entry[data-type=file]').each(function() {
           var entry, entry_path;
           entry = $(this);
           entry_path = entry.attr('data-path');
-          return store.fileMetadata(entry_path, 'mimetype', function(result) {
+          return store.fileMetadata(entry_path, 'mimetype', function(mimetype) {
             var icon;
             icon = 'insert_drive_file';
-            if (result.startsWith('image')) {
-              icon = 'image';
-            } else if (result.startsWith('video')) {
+            if (mimetype.startsWith('video')) {
               icon = 'local_movies';
-            } else if (result.startsWith('audio')) {
+            } else if (mimetype.startsWith('audio')) {
               icon = 'library_music';
-            } else if (result.startsWith('text')) {
+            } else if (mimetype.startsWith('text')) {
               icon = 'mode_edit';
             }
-            return entry.find('i').html(icon);
+            if (mimetype.startsWith('image')) {
+              entry.find('i').replaceWith('<img class="icon" src="thumb://' + entry.attr('data-path') + '">');
+            } else {
+              entry.find('i').html(icon);
+            }
+            entry.attr('data-mimetype', mimetype);
+            return entry.attr('data-filetype', mimetype.split('/').first());
           });
         });
         return reset_click_listener();
