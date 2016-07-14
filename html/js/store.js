@@ -23,7 +23,7 @@
  */
 
 (function() {
-  var basename, deselect, folderTree, isElementInViewport, make_dir_entry, make_file_entry, path, path_tree_node, reset_click_listener, sb, select, set_path, store, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp;
+  var basename, deselect, folderTree, isElementInViewport, make_dir_entry, make_file_entry, navigate_up, path, path_tree_node, reset_click_listener, sb, select, set_path, store, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp;
 
   if (!Array.prototype.last) {
     Array.prototype.last = function() {
@@ -276,6 +276,12 @@
     return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || $(window).height()) && rect.right <= (window.innerWidth || $(window).width());
   };
 
+  navigate_up = function() {
+    var parent;
+    parent = path.split('/').slice(0, -1).join('/') || '/';
+    return set_path(parent);
+  };
+
   $(function() {
     var right_panel_shown, right_panel_width, view;
     $.material.init();
@@ -397,7 +403,7 @@
         case 46:
           return $('#remove-modal').modal('show');
         case 8:
-          return $('#remove-modal').modal('show');
+          return navigate_up();
         case 27:
           $('.modal').modal('hide');
           return deselect($('.entry'));

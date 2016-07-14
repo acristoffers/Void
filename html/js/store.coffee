@@ -214,6 +214,10 @@ isElementInViewport = (el) ->
     rect.bottom <= (window.innerHeight || $(window).height()) &&
     rect.right <= (window.innerWidth || $(window).width())
 
+navigate_up = ->
+    parent = path.split('/').slice(0, -1).join('/') || '/'
+    set_path parent
+
 $ ->
     $.material.init()
 
@@ -309,7 +313,7 @@ $ ->
             when 46 # Delete
                 $('#remove-modal').modal 'show'
             when 8 # Backspace
-                $('#remove-modal').modal 'show'
+                navigate_up()
             when 27 # Esc
                 $('.modal').modal 'hide'
                 deselect $('.entry')
