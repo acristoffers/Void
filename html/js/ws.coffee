@@ -104,6 +104,10 @@ $ ->
         $('#actions').css('display', 'block')
         $('#info').css('display', 'none')
 
+    $(document).keydown (e) ->
+        if e.keyCode == 27 # Esc
+            $('#cancel').click()
+
     $(window).on
         dragover: -> false
         dragend: -> false

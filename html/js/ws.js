@@ -133,6 +133,11 @@
       $('#actions').css('display', 'block');
       return $('#info').css('display', 'none');
     });
+    $(document).keydown(function(e) {
+      if (e.keyCode === 27) {
+        return $('#cancel').click();
+      }
+    });
     return $(window).on({
       dragover: function() {
         return false;
