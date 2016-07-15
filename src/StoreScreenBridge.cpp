@@ -29,6 +29,8 @@
 
 #include "Runner.h"
 
+#include <QDebug>
+
 struct StoreScreenBridgePrivate
 {
     std::shared_ptr<Store> store;
@@ -123,6 +125,22 @@ QStringList StoreScreenBridge::listFilesInFolder(const QString folder) const
     }
 
     return fs;
+}
+
+void StoreScreenBridge::saveSetting(const QString key, const QString value) const
+{
+    QSettings settings;
+
+    settings.beginGroup("js");
+    settings.setValue(key, value);
+}
+
+QString StoreScreenBridge::setting(const QString key) const
+{
+    QSettings settings;
+
+    settings.beginGroup("js");
+    return settings.value(key, "").toString();
 }
 
 void StoreScreenBridge::routeSignalSlot(const QString signal, const QVariantList args)

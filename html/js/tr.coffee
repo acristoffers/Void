@@ -51,6 +51,7 @@ tr =
         'ConfirmRemovalModalTitle': 'Are you sure?'
         'ConfirmRemovalModalBody': 'Are you sure that you want to delete the selected files and folders. This action cannot be undone.'
         'Remove': 'Remove'
+        'FileSaved': 'File saved'
     fr:
         'Language': 'Langue'
         'English': 'Anglais'
@@ -79,6 +80,7 @@ tr =
         'ConfirmRemovalModalTitle': 'Êtes-vous sûr?'
         'ConfirmRemovalModalBody': 'Etes-vous sûr de vouloir supprimer les fichiers et dossiers sélectionnés? Cette action ne peut pas être annulée.'
         'Remove': 'Supprimer'
+        'FileSaved': 'Fichier enregistré'
     pt:
         'Language': 'Idioma'
         'English': 'Inglês'
@@ -107,6 +109,7 @@ tr =
         'ConfirmRemovalModalTitle': 'Tem certeza?'
         'ConfirmRemovalModalBody': 'Tem certeza que deseja remover os arquivos e diretórios selecionados? Essa ação não pode ser desfeita.'
         'Remove': 'Remover'
+        'FileSaved': 'Arquivo salvo'
     de:
         'Language': 'Sprache'
         'English': 'Englicsh'
@@ -135,6 +138,7 @@ tr =
         'ConfirmRemovalModalTitle': 'Sind Sie sicher?'
         'ConfirmRemovalModalBody': 'Sind Sie sicher, dass Sie die ausgewählten Dateien und Ornder löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden.'
         'Remove': 'Löschen'
+        'FileSaved': 'Datei gespeichert'
 
 window.locale = 'en'
 window.tr = (str) ->

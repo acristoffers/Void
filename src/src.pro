@@ -48,6 +48,7 @@ SOURCES += \
 PRECOMPILED_HEADER = precompiled.h
 
 QMAKE_RESOURCE_FLAGS += --compress 9 --threshold 1
-RESOURCES += ../resources.qrc
+RESOURCES += ../resources.qrc \
+    ../ace_resources.qrc
 
 DISTFILES += ../uncrustify.cfg

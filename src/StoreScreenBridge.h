@@ -45,6 +45,8 @@ public:
     Q_INVOKABLE QStringList getFile() const;
     Q_INVOKABLE QString getFolder() const;
     Q_INVOKABLE QStringList listFilesInFolder(const QString folder) const;
+    Q_INVOKABLE void saveSetting(const QString key, const QString value) const;
+    Q_INVOKABLE QString setting(const QString key) const;
 
     Store::StoreError error;
 private:

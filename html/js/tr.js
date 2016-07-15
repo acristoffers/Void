@@ -55,7 +55,8 @@
       'AddFileFolderModalBody': 'Do you wish to add a file or folder?',
       'ConfirmRemovalModalTitle': 'Are you sure?',
       'ConfirmRemovalModalBody': 'Are you sure that you want to delete the selected files and folders. This action cannot be undone.',
-      'Remove': 'Remove'
+      'Remove': 'Remove',
+      'FileSaved': 'File saved'
     },
     fr: {
       'Language': 'Langue',
@@ -84,7 +85,8 @@
       'AddFileFolderModalBody': 'Voulez-vous ajouter un fichier ou un dossier?',
       'ConfirmRemovalModalTitle': 'Êtes-vous sûr?',
       'ConfirmRemovalModalBody': 'Etes-vous sûr de vouloir supprimer les fichiers et dossiers sélectionnés? Cette action ne peut pas être annulée.',
-      'Remove': 'Supprimer'
+      'Remove': 'Supprimer',
+      'FileSaved': 'Fichier enregistré'
     },
     pt: {
       'Language': 'Idioma',
@@ -113,7 +115,8 @@
       'AddFileFolderModalBody': 'Você deseja adicionar um arquivo ou diretório?',
       'ConfirmRemovalModalTitle': 'Tem certeza?',
       'ConfirmRemovalModalBody': 'Tem certeza que deseja remover os arquivos e diretórios selecionados? Essa ação não pode ser desfeita.',
-      'Remove': 'Remover'
+      'Remove': 'Remover',
+      'FileSaved': 'Arquivo salvo'
     },
     de: {
       'Language': 'Sprache',
@@ -142,7 +145,8 @@
       'AddFileFolderModalBody': 'Möchten Sie eine Detei oder einen Ordner hinzufügen?',
       'ConfirmRemovalModalTitle': 'Sind Sie sicher?',
       'ConfirmRemovalModalBody': 'Sind Sie sicher, dass Sie die ausgewählten Dateien und Ornder löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden.',
-      'Remove': 'Löschen'
+      'Remove': 'Löschen',
+      'FileSaved': 'Datei gespeichert'
     }
   };
 

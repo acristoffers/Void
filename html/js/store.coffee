@@ -32,6 +32,33 @@ sb = null
 store = null
 path = ''
 path_tree_node = {}
+editor = null
+
+supported_languages = ['abap', 'abc', 'actionscript', 'ada', 'apache', 'applescript',
+'asciidoc', 'assembler', 'assembly', 'autohotkey', 'batchfile', 'c9search', 'c_cpp',
+'cirru', 'clojure', 'cobol', 'coffee', 'coldfusion', 'conf', 'csharp', 'css',
+'curly', 'dart', 'diff', 'django', 'dockerfile', 'dot', 'eiffel', 'elixir', 'r', 'io',
+'elixir', 'elm', 'erlang', 'forth', 'fortran', 'ftl', 'gcode', 'gherkin',
+'gitignore', 'glsl', 'gobstones', 'golang', 'groovy', 'haml', 'handlebars',
+'haskell', 'haxe', 'html', 'html', 'html', 'ini', 'jack', 'jade', 'java',
+'javascript', 'julia', 'latex', 'lean', 'less', 'liquid', 'lisp', 'live',
+'livescript', 'log', 'logiql', 'lsl', 'lua', 'luapage', 'lucene', 'makefile',
+'markdown', 'mask', 'mate', 'matlab', 'mavens', 'maze', 'mel', 'mips',
+'mipsassembler', 'modeon', 'modeoniq', 'modep', 'modex', 'mushcode', 'mysql',
+'nix', 'nsis', 'objectivec', 'ocaml', 'pascal', 'perl', 'pgsql', 'php',
+'plain', 'powershell', 'praat', 'prolog', 'properties', 'protobuf', 'python',
+'razor', 'rdoc', 'rhtml', 'rst', 'ruby', 'rust', 'sass', 'scad',
+'scala', 'scheme', 'script', 'scss', 'sh', 'smarty', 'snippets', 'soy', 'space',
+'sql', 'sqlserver', 'stylus', 'svg', 'swift', 'swig', 'tcl', 'template', 'tex',
+'text', 'textile', 'toml', 'twig', 'typescript', 'vala', 'vbscript', 'velocity',
+'verilog', 'vhdl', 'wollok', 'x86', 'xml', 'xquery', 'yaml']
+
+ace_themes = ['ambiance', 'chaos', 'chrome', 'clouds', 'clouds_midnight', 'cobalt',
+'crimson_editor', 'dawn', 'dreamweaver', 'eclipse', 'github', 'idle_fingers', 'iplastic',
+'katzenmilch', 'kr_theme', 'kuroir', 'merbivore', 'merbivore_soft', 'mono_industrial',
+'monokai', 'pastel_on_dark', 'solarized_dark', 'solarized_light', 'sqlserver', 'terminal',
+'textmate', 'tomorrow', 'tomorrow_night', 'tomorrow_night_blue', 'tomorrow_night_bright',
+'tomorrow_night_eighties', 'twilight', 'vibrant_ink', 'xcode']
 
 time = ->
     new Date().getTime()
@@ -39,6 +66,17 @@ time = ->
 update_views = ->
     set_path path
     update_tree()
+
+is_text = (mimetype) ->
+    m = supported_languages.filter (e) -> e.length > 2
+    m = m.map (lang) ->
+        { lang: lang, percent: if mimetype.includes lang then lang.length / mimetype.length else 0 }
+
+    f = (acc, e) ->
+        if e.percent > acc.percent then e else acc
+
+    r = m.reduce f
+    if r.percent > 0 then r.lang else null
 
 set_path = (new_path) ->
     path = new_path || ''
@@ -75,7 +113,7 @@ set_path = (new_path) ->
                         icon = 'local_movies'
                     else if mimetype.startsWith 'audio'
                         icon = 'library_music'
-                    else if mimetype.startsWith 'text'
+                    else if is_text mimetype
                         icon = 'mode_edit'
 
                     if mimetype.startsWith 'image'
@@ -83,7 +121,7 @@ set_path = (new_path) ->
                     else
                         entry.find('i').html icon
                     entry.attr 'data-mimetype', mimetype
-                    entry.attr 'data-filetype', mimetype.split('/').first()
+                    entry.attr 'data-filetype', if is_text mimetype then 'text' else mimetype.split('/').first()
 
                     reset_click_listener()
 
@@ -111,6 +149,8 @@ reset_click_listener = ->
         set_path $(this).attr 'data-path'
 
     $('.entry[data-filetype=image]').dblclick open_image_view
+
+    $('.entry[data-filetype=text]').dblclick open_text_view
 
     $('.entry').click (e) ->
         self = $(this)
@@ -249,34 +289,23 @@ set_zoom = (zoom) ->
     $('#image-view #image').css 'width', width + 'px'
     $('#image-view #image').css 'height', height + 'px'
 
-$ ->
-    $.material.init()
+open_file_path = null
+open_text_view = ->
+    entry = $ $('.entry[data-selected=true]').filter('[data-filetype=text]').first() || $('[data-filetype=text]').first()
+    $('#text-editor-container').show()
+    type = is_text entry.attr 'data-mimetype'
+    editor.getSession().setMode 'ace/mode/' + type
+    $('#editor-lang').val type
+    open_file_path = entry.attr 'data-path'
+    store.decryptFile entry.attr('data-path'), (content) ->
+        editor.setValue content
+        editor.clearSelection()
+        editor.gotoLine 1, 0, true
+        editor.focus()
+    editor_mode_bindings()
 
-    $('#toast').hide()
-    $('#image-view').hide()
-
-    wcp.done ->
-        $(window.trs).each ->
-            locale = this
-            $('#' + locale).click ->
-                window.locale = locale
-                window.update_translation()
-                sb.setLang locale
-
-        sb.lang (r) ->
-            window.locale = r
-            window.update_translation()
-
-        sb.startAddFile.connect (fsPath, storePath) ->
-            toast 'Adding ' + storePath
-
-        sb.endAddFile.connect (fsPath, storePath) ->
-            toast 'Added ' + storePath
-            update_tree()
-            set_path '/'
-
-        update_tree()
-        set_path '/'
+set_shortcuts = ->
+    $(document).unbind()
 
     right_panel_shown = true
     right_panel_width = $('#right-panel').css 'width'
@@ -361,6 +390,12 @@ $ ->
     $('#image-view #image').load ->
         set_zoom zoom_factor
 
+    $('#text-editor-save').click ->
+        content = editor.getValue()
+        store.remove open_file_path, ->
+            store.addFileFromData open_file_path, content, ->
+                toast window.tr 'FileSaved'
+
     $(document).bind 'keydown', 'ctrl+0', ->
         $('#zoom-original').click()
 
@@ -405,6 +440,8 @@ $ ->
                 navigate_up()
             when 27 # Esc
                 current_image = null
+                open_file_path = null
+                $('#text-editor-container').hide()
                 $('#image-view').hide()
                 $('.modal').modal 'hide'
                 deselect $('.entry')
@@ -470,6 +507,66 @@ $ ->
                     # Prevents last row from getting clipped
                     unless isElementInViewport entries.get(index)
                         $('.entry[data-selected=true]').get(0).scrollIntoView()
+
+editor_mode_bindings = ->
+    $(document).unbind()
+    $(document).keydown (e) ->
+        if e.keyCode == 27 # Esc
+            current_image = null
+            open_file_path = null
+            $('#text-editor-container').hide()
+            $('#image-view').hide()
+            $('.modal').modal 'hide'
+            deselect $('.entry')
+            set_shortcuts()
+$ ->
+    $.material.init()
+
+    $('#toast').hide()
+    $('#image-view').hide()
+    $('#text-editor-container').hide()
+
+    editor = ace.edit 'text-editor'
+    editor.setTheme 'ace/theme/ambiance'
+
+    $('#editor-lang').append '<option>' + lang + '</option>' for lang in supported_languages
+    $('#editor-lang').change ->
+        editor.getSession().setMode 'ace/mode/' + $(this).val()
+
+    $('#editor-theme').append '<option>' + theme + '</option>' for theme in ace_themes
+    $('#editor-theme').change ->
+        editor.setTheme 'ace/theme/' + $(this).val()
+        sb.saveSetting 'ace-theme', $(this).val()
+
+    set_shortcuts()
+
+    wcp.done ->
+        $(window.trs).each ->
+            locale = this
+            $('#' + locale).click ->
+                window.locale = locale
+                window.update_translation()
+                sb.setLang locale
+
+        sb.lang (r) ->
+            window.locale = r
+            window.update_translation()
+
+        sb.startAddFile.connect (fsPath, storePath) ->
+            toast 'Adding ' + storePath
+
+        sb.endAddFile.connect (fsPath, storePath) ->
+            toast 'Added ' + storePath
+            update_tree()
+            set_path '/'
+
+        sb.setting 'ace-theme', (theme) ->
+            if theme
+                editor.setTheme 'ace/theme/' + theme
+                $('#editor-theme').val theme
+
+        update_tree()
+        set_path '/'
 
     $(window).on
         dragover: -> false

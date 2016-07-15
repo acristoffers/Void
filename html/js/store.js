@@ -23,7 +23,7 @@
  */
 
 (function() {
-  var basename, current_image, deselect, folderTree, isElementInViewport, make_dir_entry, make_file_entry, navigate_up, open_image_view, path, path_tree_node, reset_click_listener, sb, select, set_path, set_zoom, store, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp, zoom_factor;
+  var ace_themes, basename, current_image, deselect, editor, editor_mode_bindings, folderTree, isElementInViewport, is_text, make_dir_entry, make_file_entry, navigate_up, open_file_path, open_image_view, open_text_view, path, path_tree_node, reset_click_listener, sb, select, set_path, set_shortcuts, set_zoom, store, supported_languages, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp, zoom_factor;
 
   if (!Array.prototype.last) {
     Array.prototype.last = function() {
@@ -45,6 +45,12 @@
 
   path_tree_node = {};
 
+  editor = null;
+
+  supported_languages = ['abap', 'abc', 'actionscript', 'ada', 'apache', 'applescript', 'asciidoc', 'assembler', 'assembly', 'autohotkey', 'batchfile', 'c9search', 'c_cpp', 'cirru', 'clojure', 'cobol', 'coffee', 'coldfusion', 'conf', 'csharp', 'css', 'curly', 'dart', 'diff', 'django', 'dockerfile', 'dot', 'eiffel', 'elixir', 'r', 'io', 'elixir', 'elm', 'erlang', 'forth', 'fortran', 'ftl', 'gcode', 'gherkin', 'gitignore', 'glsl', 'gobstones', 'golang', 'groovy', 'haml', 'handlebars', 'haskell', 'haxe', 'html', 'html', 'html', 'ini', 'jack', 'jade', 'java', 'javascript', 'julia', 'latex', 'lean', 'less', 'liquid', 'lisp', 'live', 'livescript', 'log', 'logiql', 'lsl', 'lua', 'luapage', 'lucene', 'makefile', 'markdown', 'mask', 'mate', 'matlab', 'mavens', 'maze', 'mel', 'mips', 'mipsassembler', 'modeon', 'modeoniq', 'modep', 'modex', 'mushcode', 'mysql', 'nix', 'nsis', 'objectivec', 'ocaml', 'pascal', 'perl', 'pgsql', 'php', 'plain', 'powershell', 'praat', 'prolog', 'properties', 'protobuf', 'python', 'razor', 'rdoc', 'rhtml', 'rst', 'ruby', 'rust', 'sass', 'scad', 'scala', 'scheme', 'script', 'scss', 'sh', 'smarty', 'snippets', 'soy', 'space', 'sql', 'sqlserver', 'stylus', 'svg', 'swift', 'swig', 'tcl', 'template', 'tex', 'text', 'textile', 'toml', 'twig', 'typescript', 'vala', 'vbscript', 'velocity', 'verilog', 'vhdl', 'wollok', 'x86', 'xml', 'xquery', 'yaml'];
+
+  ace_themes = ['ambiance', 'chaos', 'chrome', 'clouds', 'clouds_midnight', 'cobalt', 'crimson_editor', 'dawn', 'dreamweaver', 'eclipse', 'github', 'idle_fingers', 'iplastic', 'katzenmilch', 'kr_theme', 'kuroir', 'merbivore', 'merbivore_soft', 'mono_industrial', 'monokai', 'pastel_on_dark', 'solarized_dark', 'solarized_light', 'sqlserver', 'terminal', 'textmate', 'tomorrow', 'tomorrow_night', 'tomorrow_night_blue', 'tomorrow_night_bright', 'tomorrow_night_eighties', 'twilight', 'vibrant_ink', 'xcode'];
+
   time = function() {
     return new Date().getTime();
   };
@@ -52,6 +58,32 @@
   update_views = function() {
     set_path(path);
     return update_tree();
+  };
+
+  is_text = function(mimetype) {
+    var f, m, r;
+    m = supported_languages.filter(function(e) {
+      return e.length > 2;
+    });
+    m = m.map(function(lang) {
+      return {
+        lang: lang,
+        percent: mimetype.includes(lang) ? lang.length / mimetype.length : 0
+      };
+    });
+    f = function(acc, e) {
+      if (e.percent > acc.percent) {
+        return e;
+      } else {
+        return acc;
+      }
+    };
+    r = m.reduce(f);
+    if (r.percent > 0) {
+      return r.lang;
+    } else {
+      return null;
+    }
   };
 
   set_path = function(new_path) {
@@ -97,7 +129,7 @@
               icon = 'local_movies';
             } else if (mimetype.startsWith('audio')) {
               icon = 'library_music';
-            } else if (mimetype.startsWith('text')) {
+            } else if (is_text(mimetype)) {
               icon = 'mode_edit';
             }
             if (mimetype.startsWith('image')) {
@@ -106,7 +138,7 @@
               entry.find('i').html(icon);
             }
             entry.attr('data-mimetype', mimetype);
-            entry.attr('data-filetype', mimetype.split('/').first());
+            entry.attr('data-filetype', is_text(mimetype) ? 'text' : mimetype.split('/').first());
             return reset_click_listener();
           });
         });
@@ -137,6 +169,7 @@
       return set_path($(this).attr('data-path'));
     });
     $('.entry[data-filetype=image]').dblclick(open_image_view);
+    $('.entry[data-filetype=text]').dblclick(open_text_view);
     return $('.entry').click(function(e) {
       var entries, first, last, self, self_index, target_index;
       self = $(this);
@@ -317,36 +350,29 @@
     return $('#image-view #image').css('height', height + 'px');
   };
 
-  $(function() {
-    var right_panel_shown, right_panel_width, view;
-    $.material.init();
-    $('#toast').hide();
-    $('#image-view').hide();
-    wcp.done(function() {
-      $(window.trs).each(function() {
-        var locale;
-        locale = this;
-        return $('#' + locale).click(function() {
-          window.locale = locale;
-          window.update_translation();
-          return sb.setLang(locale);
-        });
-      });
-      sb.lang(function(r) {
-        window.locale = r;
-        return window.update_translation();
-      });
-      sb.startAddFile.connect(function(fsPath, storePath) {
-        return toast('Adding ' + storePath);
-      });
-      sb.endAddFile.connect(function(fsPath, storePath) {
-        toast('Added ' + storePath);
-        update_tree();
-        return set_path('/');
-      });
-      update_tree();
-      return set_path('/');
+  open_file_path = null;
+
+  open_text_view = function() {
+    var entry, type;
+    entry = $($('.entry[data-selected=true]').filter('[data-filetype=text]').first() || $('[data-filetype=text]').first());
+    $('#text-editor-container').show();
+    type = is_text(entry.attr('data-mimetype'));
+    editor.getSession().setMode('ace/mode/' + type);
+    $('#editor-lang').val(type);
+    open_file_path = entry.attr('data-path');
+    store.decryptFile(entry.attr('data-path'), function(content) {
+      editor.setValue(content);
+      editor.focus();
+      editor.clearSelection();
+      editor.gotoLine(1, 0, true);
+      return editor.updateSelectionMarkers();
     });
+    return editor_mode_bindings();
+  };
+
+  set_shortcuts = function() {
+    var right_panel_shown, right_panel_width, view;
+    $(document).unbind();
     right_panel_shown = true;
     right_panel_width = $('#right-panel').css('width');
     $('#info-toggle').click(function() {
@@ -456,6 +482,15 @@
     $('#image-view #image').load(function() {
       return set_zoom(zoom_factor);
     });
+    $('#text-editor-save').click(function() {
+      var content;
+      content = editor.getValue();
+      return store.remove(open_file_path, function() {
+        return store.addFileFromData(open_file_path, content, function() {
+          return toast(window.tr('FileSaved'));
+        });
+      });
+    });
     $(document).bind('keydown', 'ctrl+0', function() {
       return $('#zoom-original').click();
     });
@@ -492,7 +527,7 @@
     $(document).bind('keydown', 'meta+a', function() {
       return select($('.entry'));
     });
-    $(document).keydown(function(e) {
+    return $(document).keydown(function(e) {
       var elements_per_row, entries, first_selected, index, ref;
       switch (e.keyCode) {
         case 46:
@@ -501,6 +536,8 @@
           return navigate_up();
         case 27:
           current_image = null;
+          open_file_path = null;
+          $('#text-editor-container').hide();
           $('#image-view').hide();
           $('.modal').modal('hide');
           return deselect($('.entry'));
@@ -576,6 +613,78 @@
             }
           }
       }
+    });
+  };
+
+  editor_mode_bindings = function() {
+    $(document).unbind();
+    return $(document).keydown(function(e) {
+      if (e.keyCode === 27) {
+        current_image = null;
+        open_file_path = null;
+        $('#text-editor-container').hide();
+        $('#image-view').hide();
+        $('.modal').modal('hide');
+        deselect($('.entry'));
+        return set_shortcuts();
+      }
+    });
+  };
+
+  $(function() {
+    var i, j, lang, len, len1, theme;
+    $.material.init();
+    $('#toast').hide();
+    $('#image-view').hide();
+    $('#text-editor-container').hide();
+    editor = ace.edit('text-editor');
+    editor.setTheme('ace/theme/ambiance');
+    for (i = 0, len = supported_languages.length; i < len; i++) {
+      lang = supported_languages[i];
+      $('#editor-lang').append('<option>' + lang + '</option>');
+    }
+    $('#editor-lang').change(function() {
+      return editor.getSession().setMode('ace/mode/' + $(this).val());
+    });
+    for (j = 0, len1 = ace_themes.length; j < len1; j++) {
+      theme = ace_themes[j];
+      $('#editor-theme').append('<option>' + theme + '</option>');
+    }
+    $('#editor-theme').change(function() {
+      editor.setTheme('ace/theme/' + $(this).val());
+      return sb.saveSetting('ace-theme', $(this).val());
+    });
+    set_shortcuts();
+    wcp.done(function() {
+      $(window.trs).each(function() {
+        var locale;
+        locale = this;
+        return $('#' + locale).click(function() {
+          window.locale = locale;
+          window.update_translation();
+          return sb.setLang(locale);
+        });
+      });
+      sb.lang(function(r) {
+        window.locale = r;
+        return window.update_translation();
+      });
+      sb.startAddFile.connect(function(fsPath, storePath) {
+        return toast('Adding ' + storePath);
+      });
+      sb.endAddFile.connect(function(fsPath, storePath) {
+        toast('Added ' + storePath);
+        update_tree();
+        return set_path('/');
+      });
+      sb.setting('ace-theme', function(theme) {
+        if (theme) {
+          editor.setTheme('ace/theme/' + theme);
+          return $('#editor-theme').val(theme);
+        }
+      });
+      update_tree();
+      return set_path('/');
     });
     return $(window).on({
       dragover: function() {
