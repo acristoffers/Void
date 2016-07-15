@@ -25,6 +25,7 @@
 #include <math.h>
 
 #include <QDataStream>
+#include <QDir>
 #include <QFile>
 #include <QRegularExpression>
 
@@ -234,7 +235,7 @@ StoreFSDirPtr StoreFS::dir(QString path) const
     }
 
     if ( path.endsWith("/") ) {
-        path.remove( QRegularExpression( QStringLiteral("[/]+$")) );
+        path.remove( QRegularExpression( QStringLiteral("[/]+$") ) );
     }
 
     if ( _p->pathIdMap.contains(path) && _p->idDirMap.contains(_p->pathIdMap[path]) ) {
@@ -314,6 +315,7 @@ QString StoreFS::path(quint64 id)
 QStringList StoreFS::allDirs() const
 {
     QStringList paths;
+
     auto        ids = _p->idDirMap.keys();
 
     for ( auto id : ids ) {
@@ -349,6 +351,7 @@ QStringList StoreFS::allEntries() const
 QStringList StoreFS::allFiles() const
 {
     QStringList paths;
+
     auto        ids = _p->idFileMap.keys();
 
     for ( auto id : ids ) {
@@ -367,7 +370,7 @@ QStringList StoreFS::allFiles() const
  */
 QList<StoreFSDirPtr> StoreFS::subdirs(QString path)
 {
-    error = Success;
+    error  = Success;
     auto d = dir(path);
 
     if ( d == nullptr ) {
@@ -387,7 +390,7 @@ QList<StoreFSDirPtr> StoreFS::subdirs(QString path)
  */
 QList<StoreFSFilePtr> StoreFS::subfiles(QString path)
 {
-    error = Success;
+    error  = Success;
     auto d = dir(path);
 
     if ( d == nullptr ) {
@@ -536,7 +539,7 @@ StoreFSDirPtr StoreFS::makePath(QString path)
         return _p->root;
     }
 
-    QStringList   parts  = path.split(QStringLiteral("/"));
+    QStringList   parts  = path.split( QStringLiteral("/") );
     StoreFSDirPtr folder = _p->root;
 
     parts.removeFirst();
@@ -652,12 +655,12 @@ StoreFSFilePtr StoreFS::addFile(QString path, QByteArray data)
         return nullptr;
     }
 
-    QStringList pathList = path.split(QStringLiteral("/"));
+    QStringList pathList = path.split( QStringLiteral("/") );
     QString     name     = pathList.last();
 
     pathList.removeLast();
 
-    QString        parentPath = pathList.join(QStringLiteral("/"));
+    QString        parentPath = pathList.join( QStringLiteral("/") );
     StoreFSDirPtr  parent     = makePath(parentPath);
     StoreFSFilePtr file(new StoreFSFile);
 
@@ -744,12 +747,12 @@ StoreFSFilePtr StoreFS::addFile(QString filePath, QString path)
         return nullptr;
     }
 
-    QStringList pathList = path.split(QStringLiteral("/"));
+    QStringList pathList = path.split( QStringLiteral("/") );
     QString     name     = pathList.last();
 
     pathList.removeLast();
 
-    QString        parentPath = pathList.join(QStringLiteral("/"));
+    QString        parentPath = pathList.join( QStringLiteral("/") );
     StoreFSDirPtr  parent     = makePath(parentPath);
     StoreFSFilePtr file(new StoreFSFile);
 
@@ -933,6 +936,9 @@ void StoreFS::decryptFile(QString storePath, QString path)
         return;
     }
 
+    QString destFolder = path.split("/").mid(0, path.split("/").size() - 1).join("/");
+    QDir().mkpath(destFolder);
+
     QFile outFile(path);
     if ( !outFile.open(QIODevice::WriteOnly) ) {
         error = CantOpenFile;
@@ -997,8 +1003,8 @@ void StoreFS::moveFile(const QString oldPath, const QString newPath)
         return;
     }
 
-    QString newName       = newPath.split(QStringLiteral("/")).last();
-    QString newParentPath = newPath.mid( 0, newPath.lastIndexOf(QStringLiteral("/")) );
+    QString newName       = newPath.split( QStringLiteral("/") ).last();
+    QString newParentPath = newPath.mid( 0, newPath.lastIndexOf( QStringLiteral("/") ) );
 
     StoreFSDirPtr newParent = this->makePath(newParentPath);
 

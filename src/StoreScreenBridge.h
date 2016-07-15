@@ -42,6 +42,7 @@ public:
     Q_INVOKABLE QString lang() const;
 
     Q_INVOKABLE void asyncAddFile(const QString fsPath, const QString storePath);
+    Q_INVOKABLE void decrypt(const QStringList paths, const QString currentP);
     Q_INVOKABLE QStringList getFile() const;
     Q_INVOKABLE QString getFolder() const;
     Q_INVOKABLE QStringList listFilesInFolder(const QString folder) const;
@@ -61,6 +62,8 @@ signals:
     void routeSignalSignal(const QString signal, const QVariantList args);
     void startAddFile(const QString fsPath, const QString storePath);
     void endAddFile(const QString fsPath, const QString storePath);
+    void startDecryptFile(const QString path);
+    void endDecryptFile(const QString path);
 };
 
 #endif // STORESCREENBRIDGE_H

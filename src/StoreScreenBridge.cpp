@@ -29,8 +29,6 @@
 
 #include "Runner.h"
 
-#include <QDebug>
-
 struct StoreScreenBridgePrivate
 {
     std::shared_ptr<Store> store;
@@ -94,6 +92,38 @@ void StoreScreenBridge::asyncAddFile(const QString fsPath, const QString storePa
     QThreadPool::globalInstance()->start(runner);
 }
 
+void StoreScreenBridge::decrypt(const QStringList paths, const QString currentPath)
+{
+    QString target_path = QFileDialog::getExistingDirectory( nullptr, QStringLiteral("Save to"), QDir::homePath() );
+
+    if ( target_path.isEmpty() ) {
+        return;
+    }
+
+    QMap<QString, QString> fileList;
+    for ( QString path : paths ) {
+        for ( QString file : _p->store->searchStartsWith(path, 1) ) {
+            QString target_file_path = file;
+            target_file_path = target_path + "/" + target_file_path.remove( 0, currentPath.size() );
+            fileList[file]   = target_file_path.replace(QRegularExpression("/+"), "/");
+        }
+    }
+
+    for ( QString path : fileList.keys() ) {
+        QString dest    = fileList[path];
+        Runner  *runner = new Runner([path, dest, this]() {
+            QVariantList args;
+            args << path;
+
+            emit routeSignalSignal("startDecryptFile", args);
+            _p->store->decryptFile(path, dest);
+            emit routeSignalSignal("endDecryptFile", args);
+        });
+
+        QThreadPool::globalInstance()->start(runner);
+    }
+}
+
 QStringList StoreScreenBridge::getFile() const
 {
     return QFileDialog::getOpenFileNames( nullptr, QStringLiteral("Load Store"), QDir::homePath() );
@@ -149,5 +179,9 @@ void StoreScreenBridge::routeSignalSlot(const QString signal, const QVariantList
         emit startAddFile( args[0].toString(), args[1].toString() );
     } else if ( signal == "endAddFile" ) {
         emit endAddFile( args[0].toString(), args[1].toString() );
+    } else if ( signal == "startDecryptFile" ) {
+        emit startDecryptFile( args[0].toString() );
+    } else if ( signal == "endDecryptFile" ) {
+        emit endDecryptFile( args[0].toString() );
     }
 }

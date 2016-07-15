@@ -52,6 +52,10 @@ tr =
         'ConfirmRemovalModalBody': 'Are you sure that you want to delete the selected files and folders. This action cannot be undone.'
         'Remove': 'Remove'
         'FileSaved': 'File saved'
+        'Adding': 'Adding'
+        'Added': 'Added'
+        'Decrypting': 'Decrypting'
+        'Decrypted': 'Decrypted'
     fr:
         'Language': 'Langue'
         'English': 'Anglais'
@@ -81,6 +85,10 @@ tr =
         'ConfirmRemovalModalBody': 'Etes-vous sûr de vouloir supprimer les fichiers et dossiers sélectionnés? Cette action ne peut pas être annulée.'
         'Remove': 'Supprimer'
         'FileSaved': 'Fichier enregistré'
+        'Adding': 'En ajoutant de'
+        'Added': 'A ajouté'
+        'Decrypting': 'En décryptant de'
+        'Decrypted': 'A décrypté'
     pt:
         'Language': 'Idioma'
         'English': 'Inglês'
@@ -110,6 +118,10 @@ tr =
         'ConfirmRemovalModalBody': 'Tem certeza que deseja remover os arquivos e diretórios selecionados? Essa ação não pode ser desfeita.'
         'Remove': 'Remover'
         'FileSaved': 'Arquivo salvo'
+        'Adding': 'Adicionando'
+        'Added': 'Adicionado'
+        'Decrypting': 'Descriptografando'
+        'Decrypted': 'Descriptografado'
     de:
         'Language': 'Sprache'
         'English': 'Englicsh'
@@ -139,6 +151,10 @@ tr =
         'ConfirmRemovalModalBody': 'Sind Sie sicher, dass Sie die ausgewählten Dateien und Ornder löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden.'
         'Remove': 'Löschen'
         'FileSaved': 'Datei gespeichert'
+        'Adding': 'Hinzufügt'
+        'Added': 'Hinzugefügt:'
+        'Decrypting': 'Entschlüßelt'
+        'Decrypted': 'Entschlüßelte'
 
 window.locale = 'en'
 window.tr = (str) ->

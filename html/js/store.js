@@ -23,7 +23,7 @@
  */
 
 (function() {
-  var ace_themes, basename, current_image, deselect, editor, editor_mode_bindings, folderTree, isElementInViewport, is_text, make_dir_entry, make_file_entry, navigate_up, open_file_path, open_image_view, open_text_view, path, path_tree_node, reset_click_listener, sb, select, set_path, set_shortcuts, set_zoom, store, supported_languages, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp, zoom_factor;
+  var ace_themes, basename, current_image, decrypt_entries, deselect, editor, editor_mode_bindings, folderTree, isElementInViewport, is_text, make_dir_entry, make_file_entry, navigate_up, open_file_path, open_image_view, open_text_view, path, path_tree_node, reset_click_listener, sb, select, set_path, set_shortcuts, set_zoom, store, supported_languages, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp, zoom_factor;
 
   if (!Array.prototype.last) {
     Array.prototype.last = function() {
@@ -88,6 +88,7 @@
 
   set_path = function(new_path) {
     var composite_path, html, i, len, part, path_parts;
+    deselect($('.entry'));
     path = new_path || '';
     path_parts = path.split('/');
     if (path_parts.last() === '') {
@@ -152,14 +153,18 @@
     node = $(node);
     node.removeClass('btn-default');
     node.addClass('btn-info');
-    return node.attr('data-selected', true);
+    node.attr('data-selected', true);
+    return $('#file-decrypt').removeClass('hidden');
   };
 
   deselect = function(node) {
     node = $(node);
     node.removeClass('btn-info');
     node.addClass('btn-default');
-    return node.attr('data-selected', false);
+    node.attr('data-selected', false);
+    if ($('.entry[data-selected=true]').size() === 0) {
+      return $('#file-decrypt').addClass('hidden');
+    }
   };
 
   reset_click_listener = function() {
@@ -362,17 +367,26 @@
     open_file_path = entry.attr('data-path');
     store.decryptFile(entry.attr('data-path'), function(content) {
       editor.setValue(content);
-      editor.focus();
       editor.clearSelection();
       editor.gotoLine(1, 0, true);
-      return editor.updateSelectionMarkers();
+      return editor.focus();
     });
     return editor_mode_bindings();
   };
 
+  decrypt_entries = function() {
+    var entries, paths;
+    entries = $('.entry[data-selected=true]');
+    paths = entries.map(function() {
+      return $(this).attr('data-path');
+    });
+    return sb.decrypt(paths.get(), path);
+  };
+
   set_shortcuts = function() {
     var right_panel_shown, right_panel_width, view;
-    $(document).unbind();
+    $(document).unbind('keydown');
+    $('#file-decrypt').click(decrypt_entries);
     right_panel_shown = true;
     right_panel_width = $('#right-panel').css('width');
     $('#info-toggle').click(function() {
@@ -527,6 +541,8 @@
     $(document).bind('keydown', 'meta+a', function() {
       return select($('.entry'));
     });
+    $(document).bind('keydown', 'ctrl+d', decrypt_entries);
+    $(document).bind('keydown', 'meta+d', decrypt_entries);
     return $(document).keydown(function(e) {
       var elements_per_row, entries, first_selected, index, ref;
       switch (e.keyCode) {
@@ -617,7 +633,7 @@
   };
 
   editor_mode_bindings = function() {
-    $(document).unbind();
+    $(document).unbind('keydown');
     return $(document).keydown(function(e) {
       if (e.keyCode === 27) {
         current_image = null;
@@ -670,12 +686,18 @@
         return window.update_translation();
       });
       sb.startAddFile.connect(function(fsPath, storePath) {
-        return toast('Adding ' + storePath);
+        return toast(window.tr('Adding') + ' ' + storePath);
       });
       sb.endAddFile.connect(function(fsPath, storePath) {
-        toast('Added ' + storePath);
+        toast(window.tr('Added') + ' ' + storePath);
         update_tree();
         return set_path('/');
+      });
+      sb.startDecryptFile.connect(function(path) {
+        return toast(window.tr('Decrypting') + ' ' + path);
+      });
+      sb.startDecryptFile.connect(function(path) {
+        return toast(window.tr('Decrypted') + ' ' + path);
       });
       sb.setting('ace-theme', function(theme) {
         if (theme) {

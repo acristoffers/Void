@@ -79,6 +79,7 @@ is_text = (mimetype) ->
     if r.percent > 0 then r.lang else null
 
 set_path = (new_path) ->
+    deselect $('.entry')
     path = new_path || ''
     path_parts = path.split '/'
     path_parts = [''] if path_parts.last() == ''
@@ -134,12 +135,15 @@ select = (node) ->
     node.removeClass 'btn-default'
     node.addClass 'btn-info'
     node.attr 'data-selected', true
+    $('#file-decrypt').removeClass 'hidden'
 
 deselect = (node) ->
     node = $(node)
     node.removeClass 'btn-info'
     node.addClass 'btn-default'
     node.attr 'data-selected', false
+    if $('.entry[data-selected=true]').size() == 0
+        $('#file-decrypt').addClass 'hidden'
 
 reset_click_listener = ->
     $('.entry').unbind 'dblclick'
@@ -304,8 +308,15 @@ open_text_view = ->
         editor.focus()
     editor_mode_bindings()
 
+decrypt_entries = ->
+    entries = $('.entry[data-selected=true]')
+    paths = entries.map -> $(this).attr 'data-path'
+    sb.decrypt paths.get(), path
+
 set_shortcuts = ->
     $(document).unbind 'keydown'
+
+    $('#file-decrypt').click decrypt_entries
 
     right_panel_shown = true
     right_panel_width = $('#right-panel').css 'width'
@@ -432,6 +443,10 @@ set_shortcuts = ->
     $(document).bind 'keydown', 'meta+a', ->
         select $('.entry')
 
+    $(document).bind 'keydown', 'ctrl+d', decrypt_entries
+
+    $(document).bind 'keydown', 'meta+d', decrypt_entries
+
     $(document).keydown (e) ->
         switch e.keyCode
             when 46 # Delete
@@ -553,12 +568,18 @@ $ ->
             window.update_translation()
 
         sb.startAddFile.connect (fsPath, storePath) ->
-            toast 'Adding ' + storePath
+            toast window.tr('Adding') + ' ' + storePath
 
         sb.endAddFile.connect (fsPath, storePath) ->
-            toast 'Added ' + storePath
+            toast window.tr('Added') + ' ' + storePath
             update_tree()
             set_path '/'
+
+        sb.startDecryptFile.connect (path) ->
+            toast window.tr('Decrypting') + ' ' + path
+
+        sb.startDecryptFile.connect (path) ->
+            toast window.tr('Decrypted') + ' ' + path
 
         sb.setting 'ace-theme', (theme) ->
             if theme
