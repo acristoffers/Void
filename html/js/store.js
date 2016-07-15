@@ -23,7 +23,7 @@
  */
 
 (function() {
-  var ace_themes, basename, current_image, decrypt_entries, deselect, editor, editor_mode_bindings, folderTree, isElementInViewport, is_text, make_dir_entry, make_file_entry, navigate_up, open_file_path, open_image_view, open_text_view, path, path_tree_node, reset_click_listener, sb, select, set_path, set_shortcuts, set_zoom, store, supported_languages, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp, zoom_factor;
+  var ace_themes, basename, current_image, decrypt_entries, deselect, editor, editor_mode_bindings, folderTree, humanFileSize, isElementInViewport, is_text, make_dir_entry, make_file_entry, navigate_up, open_file_path, open_image_view, open_text_view, path, path_tree_node, reset_click_listener, sb, select, set_path, set_shortcuts, set_zoom, store, supported_languages, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp, zoom_factor;
 
   if (!Array.prototype.last) {
     Array.prototype.last = function() {
@@ -87,7 +87,7 @@
   };
 
   set_path = function(new_path) {
-    var composite_path, html, i, len, part, path_parts;
+    var composite_path, html, j, len, part, path_parts;
     deselect($('.entry'));
     path = new_path || '';
     path_parts = path.split('/');
@@ -96,8 +96,8 @@
     }
     composite_path = '';
     html = '';
-    for (i = 0, len = path_parts.length; i < len; i++) {
-      part = path_parts[i];
+    for (j = 0, len = path_parts.length; j < len; j++) {
+      part = path_parts[j];
       composite_path += '/' + part;
       composite_path = composite_path.replace(/\/+/ig, '/');
       if (part === '') {
@@ -155,22 +155,57 @@
     return $('#left-panel').treeview(true).selectNode(path_tree_node[path]);
   };
 
+  humanFileSize = function(size) {
+    var i;
+    if (size === 0) {
+      return '0 bytes';
+    }
+    i = Math.floor(Math.log(size) / Math.log(1024));
+    return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+  };
+
   select = function(node) {
+    var entry, j, len, ref, results, selection_size;
     node = $(node);
     node.removeClass('btn-default');
     node.addClass('btn-info');
     node.attr('data-selected', true);
-    return $('#file-decrypt').removeClass('hidden');
+    $('#file-decrypt').removeClass('hidden');
+    $('#selection-size').removeClass('hidden');
+    selection_size = 0;
+    ref = $('.entry[data-selected=true]');
+    results = [];
+    for (j = 0, len = ref.length; j < len; j++) {
+      entry = ref[j];
+      results.push(store.fileSize($(entry).attr('data-path'), function(size) {
+        selection_size += size;
+        return $('#selection-size').html(humanFileSize(selection_size));
+      }));
+    }
+    return results;
   };
 
   deselect = function(node) {
+    var entry, j, len, ref, results, selection_size;
     node = $(node);
     node.removeClass('btn-info');
     node.addClass('btn-default');
     node.attr('data-selected', false);
     if ($('.entry[data-selected=true]').size() === 0) {
-      return $('#file-decrypt').addClass('hidden');
+      $('#file-decrypt').addClass('hidden');
+      $('#selection-size').addClass('hidden');
     }
+    selection_size = 0;
+    ref = $('.entry[data-selected=true]');
+    results = [];
+    for (j = 0, len = ref.length; j < len; j++) {
+      entry = ref[j];
+      results.push(store.fileSize($(entry).attr('data-path'), function(size) {
+        selection_size += size;
+        return $('#selection-size').html(humanFileSize(selection_size));
+      }));
+    }
+    return results;
   };
 
   reset_click_listener = function() {
@@ -412,10 +447,10 @@
     $('#add-file').click(function() {
       $('#add-modal').modal('hide');
       return sb.getFile(function(fs) {
-        var f, file_name, i, len, results, target_path;
+        var f, file_name, j, len, results, target_path;
         results = [];
-        for (i = 0, len = fs.length; i < len; i++) {
-          f = fs[i];
+        for (j = 0, len = fs.length; j < len; j++) {
+          f = fs[j];
           file_name = basename(f);
           target_path = path + '/' + file_name;
           target_path = target_path.replace(/\/+/ig, '/');
@@ -434,10 +469,10 @@
         target_folder = path + '/' + folder_name;
         target_folder = target_folder.replace(/\/+/ig, '/');
         return sb.listFilesInFolder(folder, function(fs) {
-          var f, file_store_path, i, len, results;
+          var f, file_store_path, j, len, results;
           results = [];
-          for (i = 0, len = fs.length; i < len; i++) {
-            f = fs[i];
+          for (j = 0, len = fs.length; j < len; j++) {
+            f = fs[j];
             file_store_path = f.replace(folder, target_folder).replace(/\/+/ig, '/');
             results.push(sb.asyncAddFile(f, file_store_path, function() {
               return setTimeout(update_views, 1000);
@@ -448,12 +483,12 @@
       });
     });
     $('#remove-selected').click(function() {
-      var entry, entry_path, i, len, ref, results;
+      var entry, entry_path, j, len, ref, results;
       $('#remove-modal').modal('hide');
       ref = $('.entry[data-selected=true]');
       results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        entry = ref[i];
+      for (j = 0, len = ref.length; j < len; j++) {
+        entry = ref[j];
         entry_path = $(entry).attr('data-path');
         results.push(store.remove(entry_path, function() {
           toast(entry_path + ' removed');
@@ -643,22 +678,22 @@
   };
 
   $(function() {
-    var i, j, lang, len, len1, theme;
+    var j, k, lang, len, len1, theme;
     $.material.init();
     $('#toast').hide();
     $('#image-view').hide();
     $('#text-editor-container').hide();
     editor = ace.edit('text-editor');
     editor.setTheme('ace/theme/ambiance');
-    for (i = 0, len = supported_languages.length; i < len; i++) {
-      lang = supported_languages[i];
+    for (j = 0, len = supported_languages.length; j < len; j++) {
+      lang = supported_languages[j];
       $('#editor-lang').append('<option>' + lang + '</option>');
     }
     $('#editor-lang').change(function() {
       return editor.getSession().setMode('ace/mode/' + $(this).val());
     });
-    for (j = 0, len1 = ace_themes.length; j < len1; j++) {
-      theme = ace_themes[j];
+    for (k = 0, len1 = ace_themes.length; k < len1; k++) {
+      theme = ace_themes[k];
       $('#editor-theme').append('<option>' + theme + '</option>');
     }
     $('#editor-theme').change(function() {

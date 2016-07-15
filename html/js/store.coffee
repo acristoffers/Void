@@ -137,20 +137,41 @@ set_path = (new_path) ->
 
     $('#left-panel').treeview(true).selectNode path_tree_node[path]
 
+humanFileSize = (size) ->
+    return '0 bytes' if size == 0
+    i = Math.floor( Math.log(size) / Math.log(1024) )
+    ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+
 select = (node) ->
     node = $(node)
     node.removeClass 'btn-default'
     node.addClass 'btn-info'
     node.attr 'data-selected', true
+
     $('#file-decrypt').removeClass 'hidden'
+    $('#selection-size').removeClass 'hidden'
+
+    selection_size = 0
+    for entry in $('.entry[data-selected=true]')
+        store.fileSize $(entry).attr('data-path'), (size) ->
+            selection_size += size
+            $('#selection-size').html humanFileSize selection_size
 
 deselect = (node) ->
     node = $(node)
     node.removeClass 'btn-info'
     node.addClass 'btn-default'
     node.attr 'data-selected', false
+
     if $('.entry[data-selected=true]').size() == 0
         $('#file-decrypt').addClass 'hidden'
+        $('#selection-size').addClass 'hidden'
+
+    selection_size = 0
+    for entry in $('.entry[data-selected=true]')
+        store.fileSize $(entry).attr('data-path'), (size) ->
+            selection_size += size
+            $('#selection-size').html humanFileSize selection_size
 
 reset_click_listener = ->
     $('.entry').unbind 'dblclick'
