@@ -139,7 +139,13 @@
               entry.find('i').html(icon);
             }
             entry.attr('data-mimetype', mimetype);
-            entry.attr('data-filetype', is_text(mimetype) ? 'text' : mimetype.split('/').first());
+            if (mimetype.startsWith('image')) {
+              entry.attr('data-filetype', 'image');
+            } else if (is_text(mimetype)) {
+              entry.attr('data-filetype', 'text');
+            } else {
+              entry.attr(mimetype.split('/').first());
+            }
             return reset_click_listener();
           });
         });
@@ -389,17 +395,6 @@
     $('#file-decrypt').click(decrypt_entries);
     right_panel_shown = true;
     right_panel_width = $('#right-panel').css('width');
-    $('#info-toggle').click(function() {
-      if (right_panel_shown) {
-        $('#right-panel').hide(200);
-        $('#content').css('right', 0);
-        return right_panel_shown = false;
-      } else {
-        $('#right-panel').show(200);
-        $('#content').css('right', right_panel_width);
-        return right_panel_shown = true;
-      }
-    });
     view = 'grid';
     $('#grid-toggle').click(function() {
       if (view === 'grid') {

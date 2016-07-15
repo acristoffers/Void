@@ -68,20 +68,9 @@ nav.navbar {
     position: fixed;
     top: 0;
     bottom: 0;
-    right: $panel_size;
+    right: 0;
     left: $panel_size;
     padding: (80px) 1rem 1rem;
-    overflow-y: auto;
-}
-#right-panel {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: $panel_size;
-    background-color: #333;
-    border-left: 1px solid gray;
-    padding: 70px 1rem 1rem;
     overflow-y: auto;
 }
 #fab-add {

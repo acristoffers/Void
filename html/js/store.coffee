@@ -327,15 +327,6 @@ set_shortcuts = ->
 
     right_panel_shown = true
     right_panel_width = $('#right-panel').css 'width'
-    $('#info-toggle').click ->
-        if right_panel_shown
-            $('#right-panel').hide 200
-            $('#content').css 'right', 0
-            right_panel_shown = false
-        else
-            $('#right-panel').show 200
-            $('#content').css 'right', right_panel_width
-            right_panel_shown = true
 
     view = 'grid'
     $('#grid-toggle').click ->
