@@ -305,7 +305,7 @@ open_text_view = ->
     editor_mode_bindings()
 
 set_shortcuts = ->
-    $(document).unbind()
+    $(document).unbind 'keydown'
 
     right_panel_shown = true
     right_panel_width = $('#right-panel').css 'width'
@@ -509,7 +509,7 @@ set_shortcuts = ->
                         $('.entry[data-selected=true]').get(0).scrollIntoView()
 
 editor_mode_bindings = ->
-    $(document).unbind()
+    $(document).unbind 'keydown'
     $(document).keydown (e) ->
         if e.keyCode == 27 # Esc
             current_image = null
