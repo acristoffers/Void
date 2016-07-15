@@ -121,8 +121,15 @@ set_path = (new_path) ->
                         entry.find('i').replaceWith '<img class="icon" src="thumb://' + entry.attr('data-path') + '">'
                     else
                         entry.find('i').html icon
+
                     entry.attr 'data-mimetype', mimetype
-                    entry.attr 'data-filetype', if is_text mimetype then 'text' else mimetype.split('/').first()
+
+                    if mimetype.startsWith 'image'
+                        entry.attr 'data-filetype', 'image'
+                    else if is_text mimetype
+                        entry.attr 'data-filetype', 'text'
+                    else
+                        entry.attr mimetype.split('/').first()
 
                     reset_click_listener()
 
