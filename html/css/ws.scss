@@ -68,7 +68,9 @@ body {
 #languages {
     position: fixed;
     bottom: 1rem;
-    left: 3rem;
+    left: 0;
+    right: 0;
+    text-align: center;
     img {
         cursor: pointer;
         display: inline-block;
