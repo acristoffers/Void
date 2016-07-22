@@ -121,7 +121,7 @@ std::string Crypto::digest(const std::string &data, const CryptoParams params)
 
     _p.parseParams(params);
 
-    auto                           data_c      = reinterpret_cast<const unsigned char *> ( data.data() );
+    auto                           data_c = reinterpret_cast<const unsigned char *> ( data.data() );
     unsigned int                   digest_size = _p.digestSize;
     std::unique_ptr<unsigned char> digest(new unsigned char[digest_size]);
 
@@ -178,7 +178,7 @@ std::string Crypto::toBase64(const std::string &data)
 {
     CryptoPrivate::initNSS();
 
-    auto        secItem   = CryptoPrivate::stringToSECItemPtr(data);
+    auto        secItem = CryptoPrivate::stringToSECItemPtr(data);
     char        *base64_c = NSSBase64_EncodeItem( nullptr, nullptr, 0, secItem.get() );
     std::string base64( base64_c, strlen(base64_c) );
 
@@ -284,7 +284,7 @@ Crypto::Crypto(const std::string key, const std::string iv, const CryptoParams p
     _p->initNSS();
     _p->slot.reset( PK11_GetBestSlot(_p->cypherMechanism, nullptr) );
 
-    _p->IV = _p->stringToSECItemPtr(iv);
+    _p->IV      = _p->stringToSECItemPtr(iv);
     auto secKey = _p->stringToSECItemPtr(key);
     auto symKey = PK11_ImportSymKey(_p->slot.get(), _p->cypherMechanism, PK11_OriginUnwrap, CKA_ENCRYPT, secKey.get(), nullptr);
     _p->SymKey.reset(symKey);

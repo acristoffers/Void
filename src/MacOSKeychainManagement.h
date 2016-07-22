@@ -20,26 +20,17 @@
  *  THE SOFTWARE.
  */
 
-#ifndef SCHEMEHANDLER_H
-#define SCHEMEHANDLER_H
+#ifndef MACOSKEYCHAINMANAGEMENT
+#define MACOSKEYCHAINMANAGEMENT
 
-#include <memory>
+#include <QSslKey>
+#include <QSslCertificate>
 
-#include <QWebEngineUrlSchemeHandler>
+// Registers the certificate in the Keychain and sets trust
+// Only needed to be called for the CA, as QSslSocket registers Server and Client
+void RegisterCertificate(const QSslCertificate &cert, const QString &name);
 
-class Store;
-struct SchemeHandlerPrivate;
+// Removes a Certificate and its Private Key
+void RemoveCertificate(const QString &name);
 
-class SchemeHandler : public QWebEngineUrlSchemeHandler
-{
-    Q_OBJECT
-public:
-    SchemeHandler(std::shared_ptr<Store> );
-    ~SchemeHandler();
-    void requestStarted(QWebEngineUrlRequestJob *) override;
-
-private:
-    std::unique_ptr<SchemeHandlerPrivate> _p;
-};
-
-#endif // SCHEMEHANDLER_H
+#endif

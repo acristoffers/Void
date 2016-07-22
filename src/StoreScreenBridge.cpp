@@ -28,24 +28,31 @@
 #include <QtWebChannel>
 
 #include "Runner.h"
+#include "VideoPlayer.h"
 
 struct StoreScreenBridgePrivate
 {
-    std::shared_ptr<Store> store;
-    StoreScreen            *parent;
-    QMutex                 mutex;
+    std::shared_ptr<Store>       store;
+    std::shared_ptr<VideoPlayer> videoPlayer;
+    StoreScreen                  *parent;
+    QMutex                       mutex;
 };
 
 StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &password, const bool create, StoreScreen *parent) : QObject()
 {
     _p.reset(new StoreScreenBridgePrivate);
     _p->store.reset( new Store(path, password, create) );
+
     error      = _p->store->error;
     _p->parent = parent;
 
     if ( error == Store::Success ) {
         _p->parent->channel()->registerObject( QStringLiteral("store"), _p->store.get() );
+    } else {
+        return;
     }
+
+    _p->videoPlayer.reset( new VideoPlayer(_p->store) );
 
     connect(this, &StoreScreenBridge::routeSignalSignal, this, &StoreScreenBridge::routeSignalSlot, Qt::QueuedConnection);
 }
@@ -155,6 +162,11 @@ QStringList StoreScreenBridge::listFilesInFolder(const QString folder) const
     }
 
     return fs;
+}
+
+void StoreScreenBridge::playVideo(const QString path) const
+{
+    _p->videoPlayer->play(path);
 }
 
 void StoreScreenBridge::saveSetting(const QString key, const QString value) const

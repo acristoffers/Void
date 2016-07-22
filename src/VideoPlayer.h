@@ -20,26 +20,32 @@
  *  THE SOFTWARE.
  */
 
-#ifndef SCHEMEHANDLER_H
-#define SCHEMEHANDLER_H
+#ifndef VIDEOPLAYER_H
+#define VIDEOPLAYER_H
 
 #include <memory>
 
-#include <QWebEngineUrlSchemeHandler>
+#include <QObject>
+#include <QTcpServer>
 
+struct VideoPlayerPrivate;
 class Store;
-struct SchemeHandlerPrivate;
 
-class SchemeHandler : public QWebEngineUrlSchemeHandler
+class VideoPlayer : public QTcpServer
 {
     Q_OBJECT
 public:
-    SchemeHandler(std::shared_ptr<Store> );
-    ~SchemeHandler();
-    void requestStarted(QWebEngineUrlRequestJob *) override;
+    VideoPlayer(std::shared_ptr<Store> store);
+    ~VideoPlayer();
+
+    void play(const QString path);
 
 private:
-    std::unique_ptr<SchemeHandlerPrivate> _p;
+    std::unique_ptr<VideoPlayerPrivate> _p;
+
+    // QTcpServer interface
+protected:
+    void incomingConnection(qintptr handle) override;
 };
 
-#endif // SCHEMEHANDLER_H
+#endif // VIDEOPLAYER_H

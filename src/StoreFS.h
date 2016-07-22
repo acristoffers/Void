@@ -23,6 +23,8 @@
 #ifndef STOREDATASTRUCT_H
 #define STOREDATASTRUCT_H
 
+#include <memory>
+
 #include <QList>
 #include <QMap>
 

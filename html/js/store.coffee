@@ -129,7 +129,7 @@ set_path = (new_path) ->
                     else if is_text mimetype
                         entry.attr 'data-filetype', 'text'
                     else
-                        entry.attr mimetype.split('/').first()
+                        entry.attr 'data-filetype', mimetype.split('/').first()
 
                     reset_click_listener()
 
@@ -181,8 +181,8 @@ reset_click_listener = ->
         set_path $(this).attr 'data-path'
 
     $('.entry[data-filetype=image]').dblclick open_image_view
-
     $('.entry[data-filetype=text]').dblclick open_text_view
+    $('.entry[data-filetype=video]').dblclick open_video_view
 
     $('.entry').click (e) ->
         self = $(this)
@@ -336,6 +336,11 @@ open_text_view = ->
         editor.focus()
     editor_mode_bindings()
 
+open_video_view = ->
+    entry = $ $('.entry[data-selected=true]').filter('[data-filetype=video]').first() || $('[data-filetype=video]').first()
+    path = entry.attr 'data-path'
+    sb.playVideo path
+
 decrypt_entries = ->
     entries = $('.entry[data-selected=true]')
     paths = entries.map -> $(this).attr 'data-path'
@@ -477,6 +482,7 @@ set_shortcuts = ->
                 open_file_path = null
                 $('#text-editor-container').hide()
                 $('#image-view').hide()
+                $('#video-container').hide()
                 $('.modal').modal 'hide'
                 deselect $('.entry')
             when 13 # Enter
@@ -559,6 +565,7 @@ $ ->
     $('#toast').hide()
     $('#image-view').hide()
     $('#text-editor-container').hide()
+    $('#video-container').hide()
 
     editor = ace.edit 'text-editor'
     editor.setTheme 'ace/theme/ambiance'

@@ -25,6 +25,7 @@
 #include <QWebEngineSettings>
 
 #include "WelcomeScreen.h"
+#include "VideoPlayer.h"
 
 int main(int argc, char **argv)
 {

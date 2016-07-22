@@ -23,7 +23,7 @@
  */
 
 (function() {
-  var ace_themes, basename, current_image, decrypt_entries, deselect, editor, editor_mode_bindings, folderTree, humanFileSize, isElementInViewport, is_text, make_dir_entry, make_file_entry, navigate_up, open_file_path, open_image_view, open_text_view, path, path_tree_node, reset_click_listener, sb, select, set_path, set_shortcuts, set_zoom, store, supported_languages, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp, zoom_factor;
+  var ace_themes, basename, current_image, decrypt_entries, deselect, editor, editor_mode_bindings, folderTree, humanFileSize, isElementInViewport, is_text, make_dir_entry, make_file_entry, navigate_up, open_file_path, open_image_view, open_text_view, open_video_view, path, path_tree_node, reset_click_listener, sb, select, set_path, set_shortcuts, set_zoom, store, supported_languages, time, toast, toast_hide, tree_opts, update_tree, update_tree_flat_struct, update_views, wcp, zoom_factor;
 
   if (!Array.prototype.last) {
     Array.prototype.last = function() {
@@ -144,7 +144,7 @@
             } else if (is_text(mimetype)) {
               entry.attr('data-filetype', 'text');
             } else {
-              entry.attr(mimetype.split('/').first());
+              entry.attr('data-filetype', mimetype.split('/').first());
             }
             return reset_click_listener();
           });
@@ -216,6 +216,7 @@
     });
     $('.entry[data-filetype=image]').dblclick(open_image_view);
     $('.entry[data-filetype=text]').dblclick(open_text_view);
+    $('.entry[data-filetype=video]').dblclick(open_video_view);
     return $('.entry').click(function(e) {
       var entries, first, last, self, self_index, target_index;
       self = $(this);
@@ -415,6 +416,13 @@
     return editor_mode_bindings();
   };
 
+  open_video_view = function() {
+    var entry;
+    entry = $($('.entry[data-selected=true]').filter('[data-filetype=video]').first() || $('[data-filetype=video]').first());
+    path = entry.attr('data-path');
+    return sb.playVideo(path);
+  };
+
   decrypt_entries = function() {
     var entries, paths;
     entries = $('.entry[data-selected=true]');
@@ -585,6 +593,7 @@
           open_file_path = null;
           $('#text-editor-container').hide();
           $('#image-view').hide();
+          $('#video-container').hide();
           $('.modal').modal('hide');
           return deselect($('.entry'));
         case 13:
@@ -683,6 +692,7 @@
     $('#toast').hide();
     $('#image-view').hide();
     $('#text-editor-container').hide();
+    $('#video-container').hide();
     editor = ace.edit('text-editor');
     editor.setTheme('ace/theme/ambiance');
     for (j = 0, len = supported_languages.length; j < len; j++) {

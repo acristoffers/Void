@@ -23,6 +23,8 @@
 #ifndef STORE_H
 #define STORE_H
 
+#include <memory>
+
 #include <QObject>
 #include <QString>
 
