@@ -1,0 +1,28 @@
+<div flex>
+  <button mat-icon-button disabled *ngIf="!hasChildren()"></button>
+  <button (click)="isExpanded = !isExpanded" mat-icon-button *ngIf="hasChildren()">
+    <mat-icon class="mat-icon-rtl-mirror">
+      {{isExpanded ? 'expand_more' : 'chevron_right'}}
+    </mat-icon>
+  </button>
+  <button mat-flat-button class="clipped" (click)="setPath(node.path)" (contextmenu)="openMenu($event, menuTrigger)"
+    [color]="node.path == currentPath ? 'primary' : ''">{{node.name}}</button>
+  <span [matMenuTriggerFor]="rootMenu" [matMenuTriggerData]="{element: node}" #menuTrigger="matMenuTrigger"></span>
+</div>
+
+<ul [class.tree-invisible]="!isExpanded" *ngIf="hasChildren()">
+  <app-file-node-tree-item *ngFor="let child of sorted(node.children)" [(path)]="path" [node]="child"></app-file-node-tree-item>
+</ul>
+
+<mat-menu #rootMenu="matMenu" [overlapTrigger]="false">
+  <ng-template matMenuContent let-element="element">
+    <button mat-menu-item>
+      <mat-icon>edit</mat-icon>
+      <span>Rename</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>delete</mat-icon>
+      <span>Delete</span>
+    </button>
+  </ng-template>
+</mat-menu>

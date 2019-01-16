@@ -1,0 +1,21 @@
+<app-toolbar></app-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav [disableClose]="true" mode="side" opened>
+    <app-sidenav [(path)]="currentPath"></app-sidenav>
+  </mat-sidenav>
+
+  <div class="height-100" flex-col>
+    <app-file-toolbar [(path)]="currentPath" [(display)]="displayStyle" [(infoOpen)]="infoOpen"></app-file-toolbar>
+    <mat-sidenav-container>
+      <div>
+        <app-file-grid [(path)]="currentPath" [display]="displayStyle"></app-file-grid>
+      </div>
+
+      <mat-sidenav mode="side" position="end" [opened]="infoOpen">
+        <app-file-info></app-file-info>
+      </mat-sidenav>
+    </mat-sidenav-container>
+  </div>
+</mat-sidenav-container>
+<app-hotkeys-cheatsheet [title]="'Keyboard shortcuts' | translate"></app-hotkeys-cheatsheet>
+<app-image-viewer></app-image-viewer>

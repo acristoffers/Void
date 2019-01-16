@@ -1,0 +1,38 @@
+mat-card {
+  margin: 1rem;
+
+  #logo {
+    display: block;
+    width: 120px;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .w50 {
+    width: 45%;
+  }
+
+  .w100 {
+    width: 100%;
+  }
+
+  mat-card-content {
+    width: 300px;
+  }
+
+  mat-form-field {
+    width: 100%;
+    margin-top: 1rem 0;
+  }
+}
+
+#flags {
+  text-align: center;
+
+  .flag {
+    margin: 0 0.5rem;
+    width: 40px;
+    height: auto;
+    cursor: pointer;
+  }
+}

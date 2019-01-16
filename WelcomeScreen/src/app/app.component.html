@@ -1,0 +1,22 @@
+<mat-card class="example-card">
+  <img id="logo" mat-card-image src="assets/imgs/icon.svg">
+  <mat-card-content>
+    <mat-form-field *ngIf="!!storePath">
+      <input autofocus matInput placeholder="{{ 'Password' | translate}}" type="password" [(ngModel)]="password"
+        (keyup.enter)="open()">
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button (click)="select()" class="w50" mat-button color="primary" *ngIf="!storePath">{{ 'Open' | translate }}</button>
+    <button (click)="create()" class="w50" mat-button color="primary" *ngIf="!storePath">{{ 'Create' | translate }}</button>
+    <button (click)="open()" class="w50" mat-button color="primary" *ngIf="!!storePath">{{ 'Open' | translate }}</button>
+    <button (click)="cancel()" class="w50" mat-button color="primary" *ngIf="!!storePath">{{ 'Cancel' | translate }}</button>
+  </mat-card-actions>
+</mat-card>
+
+<div id="flags">
+  <a (click)="setLanguage('en')"><img class="flag" src="assets/imgs/en.svg"></a>
+  <a (click)="setLanguage('de')"><img class="flag" src="assets/imgs/de.svg"></a>
+  <a (click)="setLanguage('fr')"><img class="flag" src="assets/imgs/fr.svg"></a>
+  <a (click)="setLanguage('pt')"><img class="flag" src="assets/imgs/pt.svg"></a>
+</div>

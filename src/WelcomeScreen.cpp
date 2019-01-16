@@ -40,20 +40,20 @@ WelcomeScreen::WelcomeScreen() : QWebEngineView()
 {
     _p.reset(new WelcomeScreenPrivate);
     _p->channel.reset(new QWebChannel);
-    _p->bridge.reset( new WelcomeScreenBridge(this) );
+    _p->bridge.reset(new WelcomeScreenBridge(this) );
 
-    page()->setBackgroundColor( QStringLiteral("#222222") );
+    page()->setBackgroundColor(QStringLiteral("#222222") );
 
-    setGeometry( QStyle::alignedRect( Qt::LeftToRight, Qt::AlignCenter, QSize(400, 600), qApp->desktop()->availableGeometry() ) );
+    setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, QSize(400, 600), qApp->desktop()->availableGeometry() ) );
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(windowFlags() & ~Qt::WindowFullscreenButtonHint & ~Qt::WindowMaximizeButtonHint);
     setMaximumSize(400, 600);
     setMinimumSize(400, 600);
 
-    load( QUrl( QStringLiteral("qrc:/html/ws.htm") ) );
+    load(QUrl(QStringLiteral("qrc:/html/WelcomeScreen/index.html") ) );
 
-    page()->setWebChannel( _p->channel.get() );
-    _p->channel->registerObject( QStringLiteral("welcome_bridge"), _p->bridge.get() );
+    page()->setWebChannel(_p->channel.get() );
+    _p->channel->registerObject(QStringLiteral("welcome_bridge"), _p->bridge.get() );
 
     show();
 }

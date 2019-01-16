@@ -1,0 +1,63 @@
+@import '../../theme';
+
+.node-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 1rem;
+  white-space: nowrap;
+}
+
+.wrapper-grid {
+  display: grid;
+  grid-gap: 1rem;
+  padding: 1rem;
+  grid-template-columns: 30% 30% 30%;
+}
+
+.wrapper-list {
+  display: block;
+}
+
+.card-grid-image {
+  display: flex;
+  flex-direction: column;
+
+  .image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex: 1;
+  }
+}
+
+.card-grid-icon {
+  display: flex;
+  align-items: center;
+}
+
+.card-list-image {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem;
+  align-items: center;
+}
+
+.card-list-icon {
+  display: flex;
+  align-items: center;
+  margin: 1rem;
+}
+
+:host ::ng-deep mat-card.selected {
+  background-color: map-get($app-accent, default);
+  color: white;
+
+  mat-icon {
+    color: white;
+  }
+
+  mat-icon svg {
+    fill: white;
+  }
+}

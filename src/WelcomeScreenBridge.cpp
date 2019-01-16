@@ -43,14 +43,14 @@ WelcomeScreenBridge::~WelcomeScreenBridge() = default;
 
 bool WelcomeScreenBridge::getExisting()
 {
-    _p->path = QFileDialog::getExistingDirectory( nullptr, QStringLiteral("Load Store"), QDir::homePath() );
+    _p->path = QFileDialog::getExistingDirectory(nullptr, QStringLiteral("Load Store"), QDir::homePath() );
 
     return !_p->path.isEmpty();
 }
 
 bool WelcomeScreenBridge::getNew()
 {
-    _p->path = QFileDialog::getSaveFileName( nullptr, QStringLiteral("Load Store"), QDir::homePath() );
+    _p->path = QFileDialog::getSaveFileName(nullptr, QStringLiteral("Load Store"), QDir::homePath() );
 
     return !_p->path.isEmpty();
 }
@@ -87,11 +87,11 @@ QString WelcomeScreenBridge::lang()
 {
     QSettings settings;
 
-    if ( !settings.contains( QStringLiteral("lang") ) ) {
-        settings.setValue( QStringLiteral("lang"), QStringLiteral("en") );
+    if ( !settings.contains(QStringLiteral("lang") ) ) {
+        settings.setValue(QStringLiteral("lang"), QStringLiteral("en") );
     }
 
-    return settings.value( QStringLiteral("lang") ).toString();
+    return settings.value(QStringLiteral("lang") ).toString();
 }
 
 QString WelcomeScreenBridge::StoreError2QString(Store::StoreError error)

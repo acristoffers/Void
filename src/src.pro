@@ -1,7 +1,7 @@
 VERSION = 1.0.0
 
-QT     += core svg webenginewidgets webchannel multimedia multimediawidgets
-CONFIG += c++11 precompile_header
+QT     += core svg webenginewidgets webchannel multimedia multimediawidgets qml
+CONFIG += c++11 precompile_header sdk_no_version_check
 
 TEMPLATE = app
 TARGET   = Void
@@ -22,7 +22,7 @@ mac {
     LIBS        += -L/usr/local/opt/nss/lib -L/usr/local/opt/nspr/lib -L/usr/local/opt/openssl/lib -L/usr/local/lib -lnss3 -lnspr4 -lssl -lcrypto -lz
     HEADERS += MacOSKeychainManagement.h
     OBJECTIVE_SOURCES += MacOSKeychainManagement.mm
-LIBS += -framework Foundation -framework Security
+    LIBS += -framework Foundation -framework Security
 }
 
 HEADERS += \
@@ -36,7 +36,8 @@ HEADERS += \
     StoreScreenBridge.h \
     SchemeHandler.h \
     Runner.h \
-    VideoPlayer.h
+    VideoPlayer.h \
+    VideoPlayerWidget.h
 
 SOURCES += \
     main.cpp \
@@ -50,12 +51,14 @@ SOURCES += \
     StoreScreenBridge.cpp \
     SchemeHandler.cpp \
     Runner.cpp \
-    VideoPlayer.cpp
+    VideoPlayer.cpp \
+    VideoPlayerWidget.cpp
 
 PRECOMPILED_HEADER = precompiled.h
 
 QMAKE_RESOURCE_FLAGS += --compress 9 --threshold 1
-RESOURCES += ../resources.qrc \
-             ../ace_resources.qrc
+RESOURCES += ../resources.qrc
 
 DISTFILES += ../uncrustify.cfg
+
+FORMS += VideoPlayerWidget.ui

@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+<mat-dialog-content>
+  <mat-form-field>
+    <input autofocus matInput [type]="type" [(ngModel)]="value">
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="ok()">Ok</button>
+  <button mat-button (click)="cancel()">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

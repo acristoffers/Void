@@ -72,7 +72,7 @@ struct StoreFilePrivate
 StoreFile::StoreFile(QString path)
 {
     _p.reset(new StoreFilePrivate);
-    _p->storeFile.reset( new QFile(path) );
+    _p->storeFile.reset(new QFile(path) );
     if ( !_p->storeFile->open(QIODevice::ReadWrite) ) {
         error = CantOpenFile;
         return;
@@ -190,20 +190,25 @@ StoreFile::~StoreFile() = default;
 void StoreFilePrivate::save()
 {
     storeFile->seek(0);
-    QDataStream stream( storeFile.get() );
-    stream.setVersion(QDataStream::Qt_5_6);
 
-    QByteArray qsalt = QByteArray::fromStdString(salt);
-    QByteArray qiv   = QByteArray::fromStdString(iv);
-    stream << version
-           << qsalt
-           << qiv
-           << static_cast<quint8> (cryptoParams.digest)
-           << static_cast<quint8> (cryptoParams.encryption)
-           << static_cast<quint8> (cryptoParams.keyDerivationFunction)
-           << static_cast<quint8> (cryptoParams.keyDerivationHash)
-           << cryptoParams.keyDerivationCost
-           << data;
+    {
+        QDataStream stream(storeFile.get() );
+        stream.setVersion(QDataStream::Qt_5_6);
+
+        QByteArray qsalt = QByteArray::fromStdString(salt);
+        QByteArray qiv   = QByteArray::fromStdString(iv);
+        stream << version
+               << qsalt
+               << qiv
+               << static_cast<quint8> (cryptoParams.digest)
+               << static_cast<quint8> (cryptoParams.encryption)
+               << static_cast<quint8> (cryptoParams.keyDerivationFunction)
+               << static_cast<quint8> (cryptoParams.keyDerivationHash)
+               << cryptoParams.keyDerivationCost
+               << data;
+    }
+
+    storeFile->flush();
 }
 
 /**
@@ -214,7 +219,7 @@ void StoreFilePrivate::save()
  */
 void StoreFilePrivate::load()
 {
-    QDataStream stream( storeFile.get() );
+    QDataStream stream(storeFile.get() );
 
     stream.setVersion(QDataStream::Qt_5_6);
 

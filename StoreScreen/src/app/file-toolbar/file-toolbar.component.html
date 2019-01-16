@@ -1,0 +1,16 @@
+<mat-toolbar>
+  <app-path-indicator [(path)]="path"></app-path-indicator>
+  <span stretch></span>
+
+  <button mat-button (click)="newFile()">{{ 'New File' | translate }}</button>
+  <button mat-button (click)="newFolder()">{{ 'New Folder' | translate }}</button>
+  <button mat-button (click)="addFile()">{{ 'Add File' | translate }}</button>
+  <button mat-button (click)="addFolder()">{{ 'Add Folder' | translate }}</button>
+
+  <button mat-icon-button (click)="toggleDisplay()">
+    <mat-icon>{{display === 'list' ? 'grid_on' : 'list'}}</mat-icon>
+  </button>
+  <button mat-icon-button (click)="toggleInfo()">
+    <mat-icon>info</mat-icon>
+  </button>
+</mat-toolbar>

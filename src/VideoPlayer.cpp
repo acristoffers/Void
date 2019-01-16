@@ -43,6 +43,7 @@ namespace OpenSSL
 
 #include "Runner.h"
 #include "Store.h"
+#include "VideoPlayerWidget.h"
 
 #ifdef Q_OS_MAC
  #include "MacOSKeychainManagement.h"
@@ -133,33 +134,53 @@ void VideoPlayer::play(const QString path)
     _p->mimetype = _p->store->fileMetadata(path, "mimetype");
 
     if ( !isListening() ) {
-        listen(QHostAddress::LocalHost, 3000);
+        listen(QHostAddress::LocalHost);
     }
 
-    QMediaPlayer *player = new QMediaPlayer;
-    QVideoWidget *video  = new QVideoWidget;
-    QUrl         url;
+    QMediaPlayer      *player = new QMediaPlayer;
+    VideoPlayerWidget *video  = new VideoPlayerWidget;
+    QUrl              url;
 
-    _p->hash = QCryptographicHash::hash(_p->data, QCryptographicHash::Sha3_512).toHex();
+    _p->hash = QCryptographicHash::hash(path.toUtf8(), QCryptographicHash::Sha3_512).toHex();
 
     url.setScheme("https");
     url.setHost( serverAddress().toString() );
     url.setPort( serverPort() );
     url.setPath("/" + _p->hash);
 
-    video->show();
-    player->setMedia(url);
-    player->setVideoOutput(video);
-    player->play();
-
-    video->setAttribute(Qt::WA_DeleteOnClose, true);
-    connect(video, &QWidget::destroyed, [this, player]() {
-        player->stop();
+    connect(video, &VideoPlayerWidget::closing, [this, player, video]() {
         player->setMedia( QMediaContent() );
+
         _p->data.clear();
         _p->mimetype.clear();
         _p->hash.clear();
+
+        player->deleteLater();
+        video->deleteLater();
     });
+
+    connect(player, &QMediaPlayer::stateChanged, [video](QMediaPlayer::State state) {
+        if ( state == QMediaPlayer::PlayingState ) {
+            video->play();
+        } else {
+            video->pause();
+        }
+    });
+
+    connect(player, &QMediaPlayer::volumeChanged,     video,  &VideoPlayerWidget::setVolume);
+    connect(player, &QMediaPlayer::positionChanged,   video,  &VideoPlayerWidget::setPosition);
+
+    connect(video,  &VideoPlayerWidget::positionSet,  player, &QMediaPlayer::setPosition);
+    connect(video,  &VideoPlayerWidget::volumeSet,    player, &QMediaPlayer::setVolume);
+    connect(video,  &VideoPlayerWidget::playPressed,  player, &QMediaPlayer::play);
+    connect(video,  &VideoPlayerWidget::pausePressed, player, &QMediaPlayer::pause);
+
+    video->show();
+    player->setMedia(url);
+    player->setVideoOutput( video->videoWidget() );
+    player->play();
+
+    video->setVolume( static_cast<quint8> ( player->volume() ) );
 }
 
 QSslKey VideoPlayerPrivate::generateRSAKey() const
