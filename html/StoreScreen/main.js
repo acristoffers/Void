@@ -8886,7 +8886,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-toolbar></app-toolbar>\n<mat-sidenav-container>\n  <mat-sidenav [disableClose]=\"true\" mode=\"side\" opened>\n    <app-sidenav [(path)]=\"currentPath\"></app-sidenav>\n  </mat-sidenav>\n\n  <div class=\"height-100\" flex-col>\n    <app-file-toolbar [(path)]=\"currentPath\" [(display)]=\"displayStyle\" [(infoOpen)]=\"infoOpen\"></app-file-toolbar>\n    <mat-sidenav-container>\n      <div>\n        <app-file-grid [(path)]=\"currentPath\" [display]=\"displayStyle\"></app-file-grid>\n      </div>\n\n      <mat-sidenav mode=\"side\" position=\"end\" [opened]=\"infoOpen\">\n        <app-file-info></app-file-info>\n      </mat-sidenav>\n    </mat-sidenav-container>\n  </div>\n</mat-sidenav-container>\n\n<app-hotkeys-cheatsheet [title]=\"'Keyboard shortcuts' | translate\"></app-hotkeys-cheatsheet>\n<app-image-viewer></app-image-viewer>\n"
+module.exports = "<app-toolbar></app-toolbar>\n<mat-sidenav-container>\n  <mat-sidenav [disableClose]=\"true\" mode=\"side\" opened>\n    <app-sidenav [(path)]=\"currentPath\"></app-sidenav>\n  </mat-sidenav>\n\n  <div class=\"height-100\" flex-col>\n    <app-file-toolbar [(path)]=\"currentPath\" [(display)]=\"displayStyle\" [(infoOpen)]=\"infoOpen\"></app-file-toolbar>\n    <mat-sidenav-container>\n      <div>\n        <app-file-grid [(path)]=\"currentPath\" [display]=\"displayStyle\"></app-file-grid>\n      </div>\n\n      <mat-sidenav mode=\"side\" position=\"end\" [opened]=\"infoOpen\">\n        <app-file-info></app-file-info>\n      </mat-sidenav>\n    </mat-sidenav-container>\n  </div>\n</mat-sidenav-container>\n\n<app-hotkeys-cheatsheet [title]=\"'Keyboard shortcuts' | translate\"></app-hotkeys-cheatsheet>\n<app-image-viewer></app-image-viewer>\n<app-status-list></app-status-list>\n"
 
 /***/ }),
 
@@ -9003,12 +9003,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./input-dialog/input-dialog.component */ "./src/app/input-dialog/input-dialog.component.ts");
 /* harmony import */ var _hotkeys_cheatsheet_hotkeys_cheatsheet_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./hotkeys-cheatsheet/hotkeys-cheatsheet.component */ "./src/app/hotkeys-cheatsheet/hotkeys-cheatsheet.component.ts");
 /* harmony import */ var _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./image-viewer/image-viewer.component */ "./src/app/image-viewer/image-viewer.component.ts");
+/* harmony import */ var _status_list_status_list_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./status-list/status-list.component */ "./src/app/status-list/status-list.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -9047,7 +9049,8 @@ var AppModule = /** @class */ (function () {
                 _file_node_tree_item_file_node_tree_item_component__WEBPACK_IMPORTED_MODULE_17__["FileNodeTreeItemComponent"],
                 _input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_18__["InputDialogComponent"],
                 _hotkeys_cheatsheet_hotkeys_cheatsheet_component__WEBPACK_IMPORTED_MODULE_19__["HotkeysCheatsheetComponent"],
-                _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_20__["ImageViewerComponent"]
+                _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_20__["ImageViewerComponent"],
+                _status_list_status_list_component__WEBPACK_IMPORTED_MODULE_21__["StatusListComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -9067,6 +9070,7 @@ var AppModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_12__["MatMenuModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_12__["MatChipsModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_12__["MatDialogModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_12__["MatListModule"],
                 angular2_hotkeys__WEBPACK_IMPORTED_MODULE_11__["HotkeyModule"].forRoot()
             ],
             providers: [
@@ -9096,14 +9100,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileNode", function() { return FileNode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BridgeService", function() { return BridgeService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var sanitize_filename__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! sanitize-filename */ "./node_modules/sanitize-filename/index.js");
-/* harmony import */ var sanitize_filename__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(sanitize_filename__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-/* harmony import */ var _translation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./translation */ "./src/app/translation/index.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var sanitize_filename__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sanitize-filename */ "./node_modules/sanitize-filename/index.js");
+/* harmony import */ var sanitize_filename__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sanitize_filename__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _translation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./translation */ "./src/app/translation/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9119,8 +9122,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
-
 var FileNode = /** @class */ (function () {
     function FileNode() {
     }
@@ -9128,44 +9129,45 @@ var FileNode = /** @class */ (function () {
 }());
 
 var BridgeService = /** @class */ (function () {
-    function BridgeService(toast, translate, zone) {
+    function BridgeService(translate) {
         var _this = this;
-        this.toast = toast;
         this.translate = translate;
-        this.zone = zone;
-        this.treeUpdateDebounce = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"](null);
+        this.treeUpdateDebounce = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](null);
         if (BridgeService_1.fileTreeSubject == null) {
-            BridgeService_1.fileTreeSubject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"](this.rootNode());
+            BridgeService_1.fileTreeSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](this.rootNode());
         }
         if (BridgeService_1.keyPressedSubject == null) {
-            BridgeService_1.keyPressedSubject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"](null);
+            BridgeService_1.keyPressedSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](null);
         }
-        this.treeUpdateDebounce.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["debounceTime"])(1000)).subscribe(function () {
+        if (BridgeService_1.statusChange == null) {
+            BridgeService_1.statusChange = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](null);
+        }
+        this.treeUpdateDebounce.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["debounceTime"])(1000)).subscribe(function () {
             _this.generateTree().subscribe();
         });
         bridge.startAddFile.connect(function (fsPath, __) {
-            _this.zone.run(function () {
-                var msg1 = _this.translate.instant('Adding %s').replace('%s', fsPath);
-                _this.toast.open(msg1, null, { duration: 2000 });
+            BridgeService_1.statusChange.next({
+                type: 'addStart',
+                path: fsPath
             });
         });
         bridge.endAddFile.connect(function (fsPath, __) {
             _this.treeUpdateDebounce.next(null);
-            _this.zone.run(function () {
-                var msg1 = _this.translate.instant('Added %s').replace('%s', fsPath);
-                _this.toast.open(msg1, null, { duration: 2000 });
+            BridgeService_1.statusChange.next({
+                type: 'addEnd',
+                path: fsPath
             });
         });
         bridge.startDecryptFile.connect(function (fsPath) {
-            _this.zone.run(function () {
-                var msg1 = _this.translate.instant('Decrypting %s').replace('%s', fsPath);
-                _this.toast.open(msg1, null, { duration: 2000 });
+            BridgeService_1.statusChange.next({
+                type: 'decryptStart',
+                path: fsPath
             });
         });
         bridge.endDecryptFile.connect(function (fsPath) {
-            _this.zone.run(function () {
-                var msg1 = _this.translate.instant('Decrypted %s').replace('%s', fsPath);
-                _this.toast.open(msg1, null, { duration: 2000 });
+            BridgeService_1.statusChange.next({
+                type: 'decryptEnd',
+                path: fsPath
             });
         });
         this.generateTree().subscribe();
@@ -9178,55 +9180,59 @@ var BridgeService = /** @class */ (function () {
         bridge.setLang(lang);
     };
     BridgeService.prototype.lang = function () {
-        var lang = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(bridge.lang);
+        var lang = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(bridge.lang);
         return lang();
     };
     BridgeService.prototype.fileMetadata = function (path, key) {
-        var fileMetadata = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(store.fileMetadata);
+        var fileMetadata = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(store.fileMetadata);
         return fileMetadata(path, key);
     };
     BridgeService.prototype.createFile = function (path) {
         var _this = this;
-        var addFileFromData = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(store.addFileFromData);
-        return addFileFromData(path, 'placeholder').pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["flatMap"])(function () { return _this.generateTree(); }));
+        var addFileFromData = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(store.addFileFromData);
+        return addFileFromData(path, 'placeholder').pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["flatMap"])(function () { return _this.generateTree(); }));
     };
     BridgeService.prototype.createDir = function (path) {
         var _this = this;
-        var makePath = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(store.makePath);
-        return makePath(path).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["flatMap"])(function () { return _this.generateTree(); }));
+        var makePath = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(store.makePath);
+        return makePath(path).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["flatMap"])(function () { return _this.generateTree(); }));
     };
     BridgeService.prototype.addFile = function (path) {
         var _this = this;
-        var getFile = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(bridge.getFile);
+        var getFile = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(bridge.getFile);
         getFile().subscribe(function (fs) {
-            var addFile = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(store.addFile);
+            var addFile = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(store.addFile);
             fs.forEach(function (f) {
-                var fileName = lodash__WEBPACK_IMPORTED_MODULE_4__["last"](f.split('/'));
-                _this.zone.run(function () {
-                    var msg1 = _this.translate.instant('Adding %s').replace('%s', f);
-                    _this.toast.open(msg1, null, { duration: 2000 });
+                var fileName = lodash__WEBPACK_IMPORTED_MODULE_1__["last"](f.split('/'));
+                BridgeService_1.statusChange.next({
+                    type: 'addStart',
+                    path: f
                 });
                 addFile(f, _this.appendPath(path, fileName)).subscribe(function () {
                     _this.generateTree().subscribe();
-                    _this.zone.run(function () {
-                        var msg2 = _this.translate.instant('Added %s').replace('%s', f);
-                        _this.toast.open(msg2, null, { duration: 2000 });
+                    BridgeService_1.statusChange.next({
+                        type: 'addStart',
+                        path: f
                     });
                 });
             });
         });
     };
     BridgeService.prototype.addFolder = function (path) {
-        var getFolder = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(bridge.getFolder);
+        var getFolder = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(bridge.getFolder);
         getFolder().subscribe(function (folder) {
             if (folder.length === 0) {
                 return;
             }
-            var folderPath = lodash__WEBPACK_IMPORTED_MODULE_4__["slice"](folder.split('/'), 0, -1).join('/');
-            var listFilesInFolder = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(bridge.listFilesInFolder);
+            var folderPath = lodash__WEBPACK_IMPORTED_MODULE_1__["slice"](folder.split('/'), 0, -1).join('/');
+            var listFilesInFolder = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(bridge.listFilesInFolder);
             listFilesInFolder(folder).subscribe(function (fs) {
                 fs.forEach(function (f) {
                     var storePath = f.replace(folderPath, path).replace('//', '/');
+                    BridgeService_1.statusChange.next({
+                        type: 'addStart',
+                        path: f
+                    });
                     bridge.asyncAddFile(f, storePath);
                 });
             });
@@ -9237,31 +9243,31 @@ var BridgeService = /** @class */ (function () {
         if (ask === void 0) { ask = true; }
         var msg = this.translate.instant('Are you sure that you want to delete this item?');
         if (!ask || confirm(msg)) {
-            var remove = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(store.remove);
-            return remove(path).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["flatMap"])(function () { return _this.generateTree(); }));
+            var remove = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(store.remove);
+            return remove(path).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["flatMap"])(function () { return _this.generateTree(); }));
         }
         else {
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])();
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])();
         }
     };
     BridgeService.prototype.move = function (from, to) {
         var _this = this;
-        var move = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(store.move);
-        return move(from, to).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["flatMap"])(function () { return _this.generateTree(); }));
+        var move = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(store.move);
+        return move(from, to).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["flatMap"])(function () { return _this.generateTree(); }));
     };
     BridgeService.prototype.decrypt = function (path, currentPath) {
-        var decrypt = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(bridge.decrypt);
+        var decrypt = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(bridge.decrypt);
         return decrypt(path, currentPath);
     };
     BridgeService.prototype.sanitizeFileName = function (name) {
-        return sanitize_filename__WEBPACK_IMPORTED_MODULE_3__(name);
+        return sanitize_filename__WEBPACK_IMPORTED_MODULE_4__(name);
     };
     BridgeService.prototype.appendPath = function (path, name) {
         return (path + "/" + this.sanitizeFileName(name)).replace('//', '/');
     };
     BridgeService.prototype.playVideo = function (node) {
         if (node.type.startsWith('video')) {
-            var playVideo = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(bridge.playVideo);
+            var playVideo = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(bridge.playVideo);
             return playVideo(node.path);
         }
     };
@@ -9275,25 +9281,25 @@ var BridgeService = /** @class */ (function () {
     };
     BridgeService.prototype.generateTree = function () {
         var _this = this;
-        var listAllEntries = Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["bindCallback"])(store.listAllEntries);
-        return listAllEntries().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["flatMap"])(function (fs) {
+        var listAllEntries = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(store.listAllEntries);
+        return listAllEntries().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["flatMap"])(function (fs) {
             var tree = _this.rootNode();
             // this is the case of an empty store. The sole element is '/'.
             if (fs.length === 1) {
                 BridgeService_1.fileTreeSubject.next(tree);
-                return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])();
+                return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])();
             }
             var observables = [];
-            lodash__WEBPACK_IMPORTED_MODULE_4__["forEach"](fs, function (f) {
-                var nodes = lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](f.split('/'), function (n) { return n !== ''; });
+            lodash__WEBPACK_IMPORTED_MODULE_1__["forEach"](fs, function (f) {
+                var nodes = lodash__WEBPACK_IMPORTED_MODULE_1__["filter"](f.split('/'), function (n) { return n !== ''; });
                 if (nodes.length === 0) {
                     return;
                 }
                 var dir = tree;
-                lodash__WEBPACK_IMPORTED_MODULE_4__["forEach"](lodash__WEBPACK_IMPORTED_MODULE_4__["slice"](nodes, 0, nodes.length - 1), function (d) {
-                    var has = lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](dir.children, function (c) { return c.name === d; });
-                    if (!lodash__WEBPACK_IMPORTED_MODULE_4__["isEmpty"](has)) {
-                        dir = lodash__WEBPACK_IMPORTED_MODULE_4__["first"](has);
+                lodash__WEBPACK_IMPORTED_MODULE_1__["forEach"](lodash__WEBPACK_IMPORTED_MODULE_1__["slice"](nodes, 0, nodes.length - 1), function (d) {
+                    var has = lodash__WEBPACK_IMPORTED_MODULE_1__["filter"](dir.children, function (c) { return c.name === d; });
+                    if (!lodash__WEBPACK_IMPORTED_MODULE_1__["isEmpty"](has)) {
+                        dir = lodash__WEBPACK_IMPORTED_MODULE_1__["first"](has);
                     }
                     else {
                         var node = {
@@ -9308,13 +9314,13 @@ var BridgeService = /** @class */ (function () {
                 });
                 var self = _this;
                 (function (path, directory) {
-                    var obs = self.fileMetadata(path, 'mimetype').pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (md) {
-                        if (md == null && lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](directory.children, function (c) { return c.path === path; }).length !== 0) {
+                    var obs = self.fileMetadata(path, 'mimetype').pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (md) {
+                        if (md == null && lodash__WEBPACK_IMPORTED_MODULE_1__["filter"](directory.children, function (c) { return c.path === path; }).length !== 0) {
                             return;
                         }
                         var file = {
                             children: [],
-                            name: lodash__WEBPACK_IMPORTED_MODULE_4__["last"](path.split('/')),
+                            name: lodash__WEBPACK_IMPORTED_MODULE_1__["last"](path.split('/')),
                             type: md || 'inode/directory',
                             path: path
                         };
@@ -9323,7 +9329,7 @@ var BridgeService = /** @class */ (function () {
                     observables.push(obs);
                 })(f, dir);
             });
-            return rxjs__WEBPACK_IMPORTED_MODULE_1__["forkJoin"].apply(void 0, observables).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function () {
+            return rxjs__WEBPACK_IMPORTED_MODULE_2__["forkJoin"].apply(void 0, observables).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function () {
                 BridgeService_1.fileTreeSubject.next(tree);
             }));
         }));
@@ -9331,13 +9337,12 @@ var BridgeService = /** @class */ (function () {
     var BridgeService_1;
     BridgeService.fileTreeSubject = null;
     BridgeService.keyPressedSubject = null;
+    BridgeService.statusChange = null;
     BridgeService = BridgeService_1 = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
             providedIn: 'root'
         }),
-        __metadata("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_5__["MatSnackBar"],
-            _translation__WEBPACK_IMPORTED_MODULE_6__["TranslateService"],
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgZone"]])
+        __metadata("design:paramtypes", [_translation__WEBPACK_IMPORTED_MODULE_5__["TranslateService"]])
     ], BridgeService);
     return BridgeService;
 }());
@@ -9378,18 +9383,18 @@ module.exports = "/**\n * Applies styles for users in high contrast mode. Note t
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileGridComponent", function() { return FileGridComponent; });
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _bridge_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../bridge.service */ "./src/app/bridge.service.ts");
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-/* harmony import */ var _translation_translation_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../translation/translation.service */ "./src/app/translation/translation.service.ts");
-/* harmony import */ var angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! angular2-hotkeys */ "./node_modules/angular2-hotkeys/index.js");
-/* harmony import */ var angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../input-dialog/input-dialog.component */ "./src/app/input-dialog/input-dialog.component.ts");
-/* harmony import */ var _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../image-viewer/image-viewer.component */ "./src/app/image-viewer/image-viewer.component.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
+/* harmony import */ var angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! angular2-hotkeys */ "./node_modules/angular2-hotkeys/index.js");
+/* harmony import */ var angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _bridge_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../bridge.service */ "./src/app/bridge.service.ts");
+/* harmony import */ var _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../image-viewer/image-viewer.component */ "./src/app/image-viewer/image-viewer.component.ts");
+/* harmony import */ var _input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../input-dialog/input-dialog.component */ "./src/app/input-dialog/input-dialog.component.ts");
+/* harmony import */ var _translation_translation_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../translation/translation.service */ "./src/app/translation/translation.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9425,7 +9430,7 @@ var FileGridComponent = /** @class */ (function () {
         this.shift = false;
         this.ctrl = false;
         this.display = 'grid';
-        this.pathChange = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.pathChange = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.bridge.fileTreeObservable().subscribe(function (tree) {
             _this.zone.run(function () {
                 _this.rootNode = tree;
@@ -9439,15 +9444,15 @@ var FileGridComponent = /** @class */ (function () {
                 }
             });
         });
-        _bridge_service__WEBPACK_IMPORTED_MODULE_2__["BridgeService"].keyPressedSubject.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["filter"])(function (key) { return key === 'left'; })).subscribe(function (__) {
+        _bridge_service__WEBPACK_IMPORTED_MODULE_6__["BridgeService"].keyPressedSubject.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["filter"])(function (key) { return key === 'left'; })).subscribe(function (__) {
             _this.shift = false;
             _this.cursorLeft();
         });
-        _bridge_service__WEBPACK_IMPORTED_MODULE_2__["BridgeService"].keyPressedSubject.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["filter"])(function (key) { return key === 'right'; })).subscribe(function (__) {
+        _bridge_service__WEBPACK_IMPORTED_MODULE_6__["BridgeService"].keyPressedSubject.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["filter"])(function (key) { return key === 'right'; })).subscribe(function (__) {
             _this.shift = false;
             _this.cursorRight();
         });
-        _bridge_service__WEBPACK_IMPORTED_MODULE_2__["BridgeService"].keyPressedSubject.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_9__["filter"])(function (key) { return key === 'esc'; })).subscribe(function (__) {
+        _bridge_service__WEBPACK_IMPORTED_MODULE_6__["BridgeService"].keyPressedSubject.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["filter"])(function (key) { return key === 'esc'; })).subscribe(function (__) {
             _this.shift = false;
             _this.cursor = 0;
             if (_this.currentNode.children.length > 0) {
@@ -9457,45 +9462,45 @@ var FileGridComponent = /** @class */ (function () {
                 _this.selection = [];
             }
         });
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["Hotkey"](['backspace', 'delete'], function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["Hotkey"](['backspace', 'delete'], function (event) {
             _this.remove();
             return false;
         }));
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["Hotkey"]('enter', function (event) {
-            _this.open(lodash__WEBPACK_IMPORTED_MODULE_0__["first"](lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](_this.currentNode.children, function (i) { return i.path === lodash__WEBPACK_IMPORTED_MODULE_0__["first"](_this.selection); })));
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["Hotkey"]('enter', function (event) {
+            _this.open(lodash__WEBPACK_IMPORTED_MODULE_4__["first"](lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](_this.currentNode.children, function (i) { return i.path === lodash__WEBPACK_IMPORTED_MODULE_4__["first"](_this.selection); })));
             return false;
         }));
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["Hotkey"]('meta+a', function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["Hotkey"]('meta+a', function (event) {
             _this.shift = false;
-            _this.selection = lodash__WEBPACK_IMPORTED_MODULE_0__["map"](_this.currentNode.children, 'path');
+            _this.selection = lodash__WEBPACK_IMPORTED_MODULE_4__["map"](_this.currentNode.children, 'path');
             return false;
         }));
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["Hotkey"]('up', function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["Hotkey"]('up', function (event) {
             _this.shift = false;
             _this.cursorUp();
             return false;
         }));
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["Hotkey"]('down', function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["Hotkey"]('down', function (event) {
             _this.shift = false;
             _this.cursorDown();
             return false;
         }));
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["Hotkey"]('shift+left', function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["Hotkey"]('shift+left', function (event) {
             _this.shift = true;
             _this.cursorLeft();
             return false;
         }));
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["Hotkey"]('shift+right', function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["Hotkey"]('shift+right', function (event) {
             _this.shift = true;
             _this.cursorRight();
             return false;
         }));
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["Hotkey"]('shift+up', function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["Hotkey"]('shift+up', function (event) {
             _this.shift = true;
             _this.cursorUp();
             return false;
         }));
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["Hotkey"]('shift+down', function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["Hotkey"]('shift+down', function (event) {
             _this.shift = true;
             _this.cursorDown();
             return false;
@@ -9544,7 +9549,7 @@ var FileGridComponent = /** @class */ (function () {
             return [];
         }
         else {
-            return lodash__WEBPACK_IMPORTED_MODULE_0__["sortBy"](node.children, ['type', 'name']);
+            return lodash__WEBPACK_IMPORTED_MODULE_4__["sortBy"](node.children, ['type', 'name']);
         }
     };
     FileGridComponent.prototype.iconFor = function (node) {
@@ -9576,7 +9581,7 @@ var FileGridComponent = /** @class */ (function () {
         return className;
     };
     FileGridComponent.prototype.openMenu = function (event, viewChild, node) {
-        if (!lodash__WEBPACK_IMPORTED_MODULE_0__["includes"](this.selection, node.path)) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_4__["includes"](this.selection, node.path)) {
             this.clickOn(node);
         }
         event.preventDefault();
@@ -9598,9 +9603,9 @@ var FileGridComponent = /** @class */ (function () {
     };
     FileGridComponent.prototype.view = function (node) {
         if (node.type.startsWith('image')) {
-            _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_8__["ImageViewerComponent"].images.next(lodash__WEBPACK_IMPORTED_MODULE_0__["map"](lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](this.sorted(this.currentNode), function (n) { return n.type.startsWith('image'); }), 'path'));
-            _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_8__["ImageViewerComponent"].show.next(true);
-            _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_8__["ImageViewerComponent"].setCurrent.next(node.path);
+            _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_7__["ImageViewerComponent"].images.next(lodash__WEBPACK_IMPORTED_MODULE_4__["map"](lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](this.sorted(this.currentNode), function (n) { return n.type.startsWith('image'); }), 'path'));
+            _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_7__["ImageViewerComponent"].show.next(true);
+            _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_7__["ImageViewerComponent"].setCurrent.next(node.path);
         }
         else if (node.type.startsWith('video')) {
             this.bridge.playVideo(node).subscribe();
@@ -9612,11 +9617,19 @@ var FileGridComponent = /** @class */ (function () {
         var _this = this;
         var msg = this.translate.instant('Are you sure that you want to delete this item?');
         if (confirm(msg)) {
-            var baseName_1 = function (s) { return lodash__WEBPACK_IMPORTED_MODULE_0__["last"](s.split('/')); };
+            var baseName = function (s) { return lodash__WEBPACK_IMPORTED_MODULE_4__["last"](s.split('/')); };
             this.selection.forEach(function (path) {
                 _this.bridge.remove(path, false).subscribe(function () {
-                    var msg2 = _this.translate.instant('Removed %s').replace('%s', baseName_1(path));
-                    _this.toast.open(msg2, null, { duration: 2000 });
+                    _bridge_service__WEBPACK_IMPORTED_MODULE_6__["BridgeService"].statusChange.next({
+                        type: 'removeStart',
+                        path: path
+                    });
+                    setTimeout(function () {
+                        _bridge_service__WEBPACK_IMPORTED_MODULE_6__["BridgeService"].statusChange.next({
+                            type: 'removeEnd',
+                            path: path
+                        });
+                    }, 5000);
                 });
             });
         }
@@ -9625,10 +9638,10 @@ var FileGridComponent = /** @class */ (function () {
         var _this = this;
         var data = {
             title: this.translate.instant('Rename'),
-            value: lodash__WEBPACK_IMPORTED_MODULE_0__["last"](node.path.split('/')),
+            value: lodash__WEBPACK_IMPORTED_MODULE_4__["last"](node.path.split('/')),
             type: 'text'
         };
-        this.dialog.open(_input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_7__["InputDialogComponent"], { data: data })
+        this.dialog.open(_input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_8__["InputDialogComponent"], { data: data })
             .afterClosed()
             .subscribe(function (name) {
             var path = _this.bridge.appendPath(_this.currentPath, name);
@@ -9645,11 +9658,11 @@ var FileGridComponent = /** @class */ (function () {
         this.cursor = this.wrapAround(this.cursor - 1, this.currentNode.children.length);
         if (this.shift) {
             var item = this.sorted(this.currentNode)[this.cursor].path;
-            if (lodash__WEBPACK_IMPORTED_MODULE_0__["includes"](this.selection, item)) {
-                this.selection = lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](this.selection, function (i) { return i !== oldItem; });
+            if (lodash__WEBPACK_IMPORTED_MODULE_4__["includes"](this.selection, item)) {
+                this.selection = lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](this.selection, function (i) { return i !== oldItem; });
             }
             else {
-                this.selection = lodash__WEBPACK_IMPORTED_MODULE_0__["concat"](this.selection, item);
+                this.selection = lodash__WEBPACK_IMPORTED_MODULE_4__["concat"](this.selection, item);
             }
         }
         else {
@@ -9666,11 +9679,11 @@ var FileGridComponent = /** @class */ (function () {
         this.cursor = this.wrapAround(this.cursor + 1, this.currentNode.children.length);
         if (this.shift) {
             var item = this.sorted(this.currentNode)[this.cursor].path;
-            if (lodash__WEBPACK_IMPORTED_MODULE_0__["includes"](this.selection, item)) {
-                this.selection = lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](this.selection, function (i) { return i !== oldItem; });
+            if (lodash__WEBPACK_IMPORTED_MODULE_4__["includes"](this.selection, item)) {
+                this.selection = lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](this.selection, function (i) { return i !== oldItem; });
             }
             else {
-                this.selection = lodash__WEBPACK_IMPORTED_MODULE_0__["concat"](this.selection, item);
+                this.selection = lodash__WEBPACK_IMPORTED_MODULE_4__["concat"](this.selection, item);
             }
         }
         else {
@@ -9699,29 +9712,29 @@ var FileGridComponent = /** @class */ (function () {
     FileGridComponent.prototype.clickOn = function (node) {
         var _this = this;
         var oldCursor = this.cursor;
-        this.cursor = lodash__WEBPACK_IMPORTED_MODULE_0__["findIndex"](this.sorted(this.currentNode), { path: node.path });
+        this.cursor = lodash__WEBPACK_IMPORTED_MODULE_4__["findIndex"](this.sorted(this.currentNode), { path: node.path });
         if (this.ctrl) {
             if (this.isSelected(node)) {
-                this.selection = lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](this.selection, function (n) { return n !== node.path; });
+                this.selection = lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](this.selection, function (n) { return n !== node.path; });
             }
             else {
-                this.selection = lodash__WEBPACK_IMPORTED_MODULE_0__["concat"](this.selection, this.sorted(this.currentNode)[this.cursor].path);
+                this.selection = lodash__WEBPACK_IMPORTED_MODULE_4__["concat"](this.selection, this.sorted(this.currentNode)[this.cursor].path);
             }
         }
         else if (this.shift) {
             var diff = oldCursor - this.cursor;
             if (diff < 0) {
                 this.cursor = oldCursor;
-                lodash__WEBPACK_IMPORTED_MODULE_0__["range"](-diff).forEach(function () { return _this.cursorRight(); });
+                lodash__WEBPACK_IMPORTED_MODULE_4__["range"](-diff).forEach(function () { return _this.cursorRight(); });
             }
             else {
                 this.cursor = oldCursor;
-                lodash__WEBPACK_IMPORTED_MODULE_0__["range"](diff).forEach(function () { return _this.cursorLeft(); });
+                lodash__WEBPACK_IMPORTED_MODULE_4__["range"](diff).forEach(function () { return _this.cursorLeft(); });
             }
         }
         else {
             if (this.isSelected(node)) {
-                this.selection = lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](this.selection, function (n) { return n === node.path; });
+                this.selection = lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](this.selection, function (n) { return n === node.path; });
             }
             else {
                 this.selection = [this.sorted(this.currentNode)[this.cursor].path];
@@ -9729,7 +9742,7 @@ var FileGridComponent = /** @class */ (function () {
         }
     };
     FileGridComponent.prototype.isSelected = function (node) {
-        return lodash__WEBPACK_IMPORTED_MODULE_0__["includes"](this.selection, node.path);
+        return lodash__WEBPACK_IMPORTED_MODULE_4__["includes"](this.selection, node.path);
     };
     FileGridComponent.prototype.wrapAround = function (v, m) {
         return (v % m + m) % m;
@@ -9741,40 +9754,40 @@ var FileGridComponent = /** @class */ (function () {
         }
         var node = this.rootNode;
         while (node.path !== this.currentPath) {
-            node = lodash__WEBPACK_IMPORTED_MODULE_0__["first"](lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](node.children, function (child) { return _this.currentPath.startsWith(child.path); }));
+            node = lodash__WEBPACK_IMPORTED_MODULE_4__["first"](lodash__WEBPACK_IMPORTED_MODULE_4__["filter"](node.children, function (child) { return _this.currentPath.startsWith(child.path); }));
             if (node == null) {
-                this.path = lodash__WEBPACK_IMPORTED_MODULE_0__["slice"](this.currentPath.split('/'), 0, -1).join('/') || '/';
+                this.path = lodash__WEBPACK_IMPORTED_MODULE_4__["slice"](this.currentPath.split('/'), 0, -1).join('/') || '/';
                 return;
             }
         }
         this.currentNode = node;
     };
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
     ], FileGridComponent.prototype, "display", void 0);
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], FileGridComponent.prototype, "path", null);
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
     ], FileGridComponent.prototype, "pathChange", void 0);
     FileGridComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-file-grid',
             template: __webpack_require__(/*! ./file-grid.component.html */ "./src/app/file-grid/file-grid.component.html"),
             styles: [__webpack_require__(/*! ./file-grid.component.scss */ "./src/app/file-grid/file-grid.component.scss")]
         }),
-        __metadata("design:paramtypes", [_bridge_service__WEBPACK_IMPORTED_MODULE_2__["BridgeService"],
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"],
-            _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__["DomSanitizer"],
-            _translation_translation_service__WEBPACK_IMPORTED_MODULE_5__["TranslateService"],
-            _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatSnackBar"],
-            angular2_hotkeys__WEBPACK_IMPORTED_MODULE_6__["HotkeysService"],
-            _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatDialog"]])
+        __metadata("design:paramtypes", [_bridge_service__WEBPACK_IMPORTED_MODULE_6__["BridgeService"],
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgZone"],
+            _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["DomSanitizer"],
+            _translation_translation_service__WEBPACK_IMPORTED_MODULE_9__["TranslateService"],
+            _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSnackBar"],
+            angular2_hotkeys__WEBPACK_IMPORTED_MODULE_3__["HotkeysService"],
+            _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatDialog"]])
     ], FileGridComponent);
     return FileGridComponent;
 }());
@@ -9878,14 +9891,14 @@ module.exports = ".tree-invisible {\n  display: none; }\n\nul {\n  padding-left:
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileNodeTreeItemComponent", function() { return FileNodeTreeItemComponent; });
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _bridge_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../bridge.service */ "./src/app/bridge.service.ts");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-/* harmony import */ var _translation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../translation */ "./src/app/translation/index.ts");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _bridge_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../bridge.service */ "./src/app/bridge.service.ts");
 /* harmony import */ var _input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../input-dialog/input-dialog.component */ "./src/app/input-dialog/input-dialog.component.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _translation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../translation */ "./src/app/translation/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9917,7 +9930,7 @@ var FileNodeTreeItemComponent = /** @class */ (function () {
             path: '/',
             type: 'inode/directory'
         };
-        this.pathChange = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.pathChange = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
     }
     Object.defineProperty(FileNodeTreeItemComponent.prototype, "path", {
         get: function () {
@@ -9937,27 +9950,27 @@ var FileNodeTreeItemComponent = /** @class */ (function () {
         return this.node && this.node.children && this.node.children.length !== 0 || false;
     };
     FileNodeTreeItemComponent.prototype.sorted = function (node) {
-        return lodash__WEBPACK_IMPORTED_MODULE_0__["sortBy"](node, ['type', 'name']);
+        return lodash__WEBPACK_IMPORTED_MODULE_2__["sortBy"](node, ['type', 'name']);
     };
     FileNodeTreeItemComponent.prototype.openMenu = function (event, viewChild) {
         event.preventDefault();
         viewChild.openMenu();
     };
     FileNodeTreeItemComponent.prototype.decrypt = function () {
-        var basePath = lodash__WEBPACK_IMPORTED_MODULE_0__["slice"](this.node.path.split('/'), 0, -1).join('/');
+        var basePath = lodash__WEBPACK_IMPORTED_MODULE_2__["slice"](this.node.path.split('/'), 0, -1).join('/');
         this.bridge.decrypt([this.node.path], basePath).subscribe();
     };
     FileNodeTreeItemComponent.prototype.rename = function () {
         var _this = this;
         var data = {
             title: this.translate.instant('Rename'),
-            value: lodash__WEBPACK_IMPORTED_MODULE_0__["last"](this.node.path.split('/')),
+            value: lodash__WEBPACK_IMPORTED_MODULE_2__["last"](this.node.path.split('/')),
             type: 'text'
         };
         this.dialog.open(_input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_5__["InputDialogComponent"], { data: data })
             .afterClosed()
             .subscribe(function (name) {
-            var basePath = lodash__WEBPACK_IMPORTED_MODULE_0__["slice"](_this.node.path.split('/'), 0, -1).join('/');
+            var basePath = lodash__WEBPACK_IMPORTED_MODULE_2__["slice"](_this.node.path.split('/'), 0, -1).join('/');
             var newPath = _this.bridge.appendPath(basePath, name);
             if (newPath.endsWith('/')) {
                 var msg = _this.translate.instant('Invalid filename');
@@ -9968,7 +9981,7 @@ var FileNodeTreeItemComponent = /** @class */ (function () {
                 return;
             }
             var updatePath = _this.currentPath.startsWith(_this.node.path);
-            _this.bridge.move(_this.node.path, newPath).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["delay"])(500)).subscribe(function () {
+            _this.bridge.move(_this.node.path, newPath).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["delay"])(500)).subscribe(function () {
                 if (updatePath) {
                     _this.zone.run(function () { return _this.setPath(newPath); });
                 }
@@ -9977,45 +9990,50 @@ var FileNodeTreeItemComponent = /** @class */ (function () {
     };
     FileNodeTreeItemComponent.prototype.remove = function () {
         var _this = this;
-        var msg = this.translate.instant('Are you sure that you want to delete this item?');
-        if (confirm(msg)) {
+        var cmsg = this.translate.instant('Are you sure that you want to delete this item?');
+        if (confirm(cmsg)) {
             if (this.currentPath === this.node.path) {
-                var basePath = lodash__WEBPACK_IMPORTED_MODULE_0__["slice"](this.node.path.split('/'), 0, -1).join('/');
+                var basePath = lodash__WEBPACK_IMPORTED_MODULE_2__["slice"](this.node.path.split('/'), 0, -1).join('/');
                 this.setPath(basePath);
             }
             this.bridge.remove(this.node.path, false).subscribe(function () {
-                _this.zone.run(function () {
-                    var baseName = lodash__WEBPACK_IMPORTED_MODULE_0__["last"](_this.node.path.split('/'));
-                    var msg2 = _this.translate.instant('Removed %s').replace('%s', baseName);
-                    _this.toast.open(msg2, null, { duration: 2000 });
+                _bridge_service__WEBPACK_IMPORTED_MODULE_4__["BridgeService"].statusChange.next({
+                    type: 'removeStart',
+                    path: _this.node.path
                 });
+                setTimeout(function () {
+                    _bridge_service__WEBPACK_IMPORTED_MODULE_4__["BridgeService"].statusChange.next({
+                        type: 'removeEnd',
+                        path: _this.node.path
+                    });
+                }, 5000);
             });
         }
     };
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
-        __metadata("design:type", _bridge_service__WEBPACK_IMPORTED_MODULE_2__["FileNode"])
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _bridge_service__WEBPACK_IMPORTED_MODULE_4__["FileNode"])
     ], FileNodeTreeItemComponent.prototype, "node", void 0);
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], FileNodeTreeItemComponent.prototype, "path", null);
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
     ], FileNodeTreeItemComponent.prototype, "pathChange", void 0);
     FileNodeTreeItemComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-file-node-tree-item',
             template: __webpack_require__(/*! ./file-node-tree-item.component.html */ "./src/app/file-node-tree-item/file-node-tree-item.component.html"),
             styles: [__webpack_require__(/*! ./file-node-tree-item.component.scss */ "./src/app/file-node-tree-item/file-node-tree-item.component.scss")]
         }),
-        __metadata("design:paramtypes", [_bridge_service__WEBPACK_IMPORTED_MODULE_2__["BridgeService"],
-            _translation__WEBPACK_IMPORTED_MODULE_4__["TranslateService"],
-            _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"],
-            _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialog"],
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]])
+        __metadata("design:paramtypes", [_bridge_service__WEBPACK_IMPORTED_MODULE_4__["BridgeService"],
+            _translation__WEBPACK_IMPORTED_MODULE_6__["TranslateService"],
+            _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSnackBar"],
+            _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatDialog"],
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgZone"]])
     ], FileNodeTreeItemComponent);
     return FileNodeTreeItemComponent;
 }());
@@ -10058,11 +10076,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileToolbarComponent", function() { return FileToolbarComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-/* harmony import */ var _input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../input-dialog/input-dialog.component */ "./src/app/input-dialog/input-dialog.component.ts");
-/* harmony import */ var _translation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../translation */ "./src/app/translation/index.ts");
-/* harmony import */ var _bridge_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../bridge.service */ "./src/app/bridge.service.ts");
-/* harmony import */ var angular2_hotkeys__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! angular2-hotkeys */ "./node_modules/angular2-hotkeys/index.js");
-/* harmony import */ var angular2_hotkeys__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(angular2_hotkeys__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var angular2_hotkeys__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angular2-hotkeys */ "./node_modules/angular2-hotkeys/index.js");
+/* harmony import */ var angular2_hotkeys__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(angular2_hotkeys__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _bridge_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../bridge.service */ "./src/app/bridge.service.ts");
+/* harmony import */ var _input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../input-dialog/input-dialog.component */ "./src/app/input-dialog/input-dialog.component.ts");
+/* harmony import */ var _translation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../translation */ "./src/app/translation/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10089,11 +10107,11 @@ var FileToolbarComponent = /** @class */ (function () {
         this.pathChange = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.displayChange = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.infoOpenChange = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_5__["Hotkey"]('meta+i', function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_2__["Hotkey"]('meta+i', function (event) {
             _this.infoOpen = !_this.infoOpen;
             return false;
         }, null, function () { return _this.translate.instant('Toggle information panel.'); }));
-        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_5__["Hotkey"]('meta+g', function (event) {
+        this.hotkeys.add(new angular2_hotkeys__WEBPACK_IMPORTED_MODULE_2__["Hotkey"]('meta+g', function (event) {
             _this.toggleDisplay();
             return false;
         }, null, function () { return _this.translate.instant('Toggle grid/list.'); }));
@@ -10144,7 +10162,7 @@ var FileToolbarComponent = /** @class */ (function () {
             value: '',
             type: 'text'
         };
-        this.dialog.open(_input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_2__["InputDialogComponent"], { data: data })
+        this.dialog.open(_input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_4__["InputDialogComponent"], { data: data })
             .afterClosed()
             .subscribe(function (name) {
             var path = _this.bridge.appendPath(_this.currentPath, name);
@@ -10163,7 +10181,7 @@ var FileToolbarComponent = /** @class */ (function () {
             value: '',
             type: 'text'
         };
-        this.dialog.open(_input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_2__["InputDialogComponent"], { data: data })
+        this.dialog.open(_input_dialog_input_dialog_component__WEBPACK_IMPORTED_MODULE_4__["InputDialogComponent"], { data: data })
             .afterClosed()
             .subscribe(function (name) {
             var path = _this.bridge.appendPath(_this.currentPath, name);
@@ -10215,10 +10233,10 @@ var FileToolbarComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./file-toolbar.component.scss */ "./src/app/file-toolbar/file-toolbar.component.scss")]
         }),
         __metadata("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_1__["MatDialog"],
-            _translation__WEBPACK_IMPORTED_MODULE_3__["TranslateService"],
-            _bridge_service__WEBPACK_IMPORTED_MODULE_4__["BridgeService"],
+            _translation__WEBPACK_IMPORTED_MODULE_5__["TranslateService"],
+            _bridge_service__WEBPACK_IMPORTED_MODULE_3__["BridgeService"],
             _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSnackBar"],
-            angular2_hotkeys__WEBPACK_IMPORTED_MODULE_5__["HotkeysService"]])
+            angular2_hotkeys__WEBPACK_IMPORTED_MODULE_2__["HotkeysService"]])
     ], FileToolbarComponent);
     return FileToolbarComponent;
 }());
@@ -10723,6 +10741,110 @@ var SidenavComponent = /** @class */ (function () {
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]])
     ], SidenavComponent);
     return SidenavComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/status-list/status-list.component.html":
+/*!********************************************************!*\
+  !*** ./src/app/status-list/status-list.component.html ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<mat-card class=\"mat-elevation-z8\">\n  <mat-list>\n    <mat-list-item *ngFor=\"let item of items\">\n      <mat-icon matListIcon>{{ iconFor(item) }}</mat-icon>\n      {{ baseName(item.path) }}\n    </mat-list-item>\n  </mat-list>\n</mat-card>\n"
+
+/***/ }),
+
+/***/ "./src/app/status-list/status-list.component.scss":
+/*!********************************************************!*\
+  !*** ./src/app/status-list/status-list.component.scss ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ":host {\n  position: absolute;\n  right: 1rem;\n  bottom: 1rem;\n  width: 500px;\n  height: 200px;\n  z-index: 9;\n  padding: 1rem;\n  display: none;\n  overflow: scroll; }\n\n:host(.show) {\n  display: block !important; }\n\nmat-card {\n  width: 90%;\n  height: 85%;\n  overflow: scroll; }\n\nmat-list {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9BbGFuL0RldmVsb3Blci9Wb2lkL1N0b3JlU2NyZWVuL3NyYy9hcHAvc3RhdHVzLWxpc3Qvc3RhdHVzLWxpc3QuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxtQkFBa0I7RUFDbEIsWUFBVztFQUNYLGFBQVk7RUFDWixhQUFZO0VBQ1osY0FBYTtFQUNiLFdBQVU7RUFDVixjQUFhO0VBQ2IsY0FBYTtFQUNiLGlCQUFnQixFQUNqQjs7QUFFRDtFQUNFLDBCQUF5QixFQUMxQjs7QUFFRDtFQUNFLFdBQVU7RUFDVixZQUFXO0VBQ1gsaUJBQWdCLEVBQ2pCOztBQUVEO0VBQ0UsaUJBQWdCO0VBQ2hCLG9CQUFtQjtFQUNuQix3QkFBdUIsRUFDeEIiLCJmaWxlIjoic3JjL2FwcC9zdGF0dXMtbGlzdC9zdGF0dXMtbGlzdC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIjpob3N0IHtcbiAgcG9zaXRpb246IGFic29sdXRlO1xuICByaWdodDogMXJlbTtcbiAgYm90dG9tOiAxcmVtO1xuICB3aWR0aDogNTAwcHg7XG4gIGhlaWdodDogMjAwcHg7XG4gIHotaW5kZXg6IDk7XG4gIHBhZGRpbmc6IDFyZW07XG4gIGRpc3BsYXk6IG5vbmU7XG4gIG92ZXJmbG93OiBzY3JvbGw7XG59XG5cbjpob3N0KC5zaG93KSB7XG4gIGRpc3BsYXk6IGJsb2NrICFpbXBvcnRhbnQ7XG59XG5cbm1hdC1jYXJkIHtcbiAgd2lkdGg6IDkwJTtcbiAgaGVpZ2h0OiA4NSU7XG4gIG92ZXJmbG93OiBzY3JvbGw7XG59XG5cbm1hdC1saXN0IHtcbiAgb3ZlcmZsb3c6IGhpZGRlbjtcbiAgd2hpdGUtc3BhY2U6IG5vd3JhcDtcbiAgdGV4dC1vdmVyZmxvdzogZWxsaXBzaXM7XG59XG4iXX0= */"
+
+/***/ }),
+
+/***/ "./src/app/status-list/status-list.component.ts":
+/*!******************************************************!*\
+  !*** ./src/app/status-list/status-list.component.ts ***!
+  \******************************************************/
+/*! exports provided: StatusListComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StatusListComponent", function() { return StatusListComponent; });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _bridge_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../bridge.service */ "./src/app/bridge.service.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var StatusListComponent = /** @class */ (function () {
+    function StatusListComponent(zone) {
+        var _this = this;
+        this.zone = zone;
+        this.items = [];
+        this.show = false;
+        _bridge_service__WEBPACK_IMPORTED_MODULE_2__["BridgeService"].statusChange.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(function (i) { return i != null && i.type.endsWith('Start'); })).subscribe(function (item) {
+            _this.zone.run(function () {
+                _this.show = true;
+                var samePath = lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](_this.items, function (i) { return i.path === item.path; });
+                if (lodash__WEBPACK_IMPORTED_MODULE_0__["isEmpty"](samePath)) {
+                    _this.items = lodash__WEBPACK_IMPORTED_MODULE_0__["concat"](_this.items, item);
+                }
+                else {
+                    _this.items = lodash__WEBPACK_IMPORTED_MODULE_0__["concat"](item, lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](_this.items, function (i) { return i.path !== item.path; }));
+                }
+            });
+        });
+        _bridge_service__WEBPACK_IMPORTED_MODULE_2__["BridgeService"].statusChange.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(function (i) { return i != null && i.type.endsWith('End'); })).subscribe(function (item) {
+            _this.zone.run(function () {
+                _this.items = lodash__WEBPACK_IMPORTED_MODULE_0__["filter"](_this.items, function (i) { return i.path !== item.path; });
+                _this.show = _this.items.length !== 0;
+            });
+        });
+    }
+    StatusListComponent.prototype.baseName = function (path) {
+        return lodash__WEBPACK_IMPORTED_MODULE_0__["last"](path.split('/'));
+    };
+    StatusListComponent.prototype.iconFor = function (node) {
+        return {
+            addStart: 'add',
+            decryptStart: 'launch',
+            removeStart: 'delete'
+        }[node.type];
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostBinding"])('class.show'),
+        __metadata("design:type", Object)
+    ], StatusListComponent.prototype, "show", void 0);
+    StatusListComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-status-list',
+            template: __webpack_require__(/*! ./status-list.component.html */ "./src/app/status-list/status-list.component.html"),
+            styles: [__webpack_require__(/*! ./status-list.component.scss */ "./src/app/status-list/status-list.component.scss")]
+        }),
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]])
+    ], StatusListComponent);
+    return StatusListComponent;
 }());
 
 

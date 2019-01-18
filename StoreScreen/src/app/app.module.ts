@@ -24,7 +24,8 @@ import {
   MatMenuModule,
   MatButtonToggleModule,
   MatChipsModule,
-  MatDialogModule
+  MatDialogModule,
+  MatListModule
 } from '@angular/material';
 
 import { PathIndicatorComponent } from './path-indicator/path-indicator.component';
@@ -35,6 +36,7 @@ import { FileNodeTreeItemComponent } from './file-node-tree-item/file-node-tree-
 import { InputDialogComponent } from './input-dialog/input-dialog.component';
 import { HotkeysCheatsheetComponent } from './hotkeys-cheatsheet/hotkeys-cheatsheet.component';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
+import { StatusListComponent } from './status-list/status-list.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import { ImageViewerComponent } from './image-viewer/image-viewer.component';
     FileNodeTreeItemComponent,
     InputDialogComponent,
     HotkeysCheatsheetComponent,
-    ImageViewerComponent
+    ImageViewerComponent,
+    StatusListComponent
   ],
   imports: [
     BrowserModule,
@@ -69,6 +72,7 @@ import { ImageViewerComponent } from './image-viewer/image-viewer.component';
     MatMenuModule,
     MatChipsModule,
     MatDialogModule,
+    MatListModule,
     HotkeyModule.forRoot()
   ],
   providers: [

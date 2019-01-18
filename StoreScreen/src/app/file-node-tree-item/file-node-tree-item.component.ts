@@ -1,11 +1,11 @@
+import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
+import { MatDialog, MatMenuTrigger, MatSnackBar } from '@angular/material';
 import * as _ from 'lodash';
-
-import { Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
-import { FileNode, BridgeService } from '../bridge.service';
-import { MatMenuTrigger, MatSnackBar, MatDialog } from '@angular/material';
-import { TranslateService } from '../translation';
-import { InputDialogData, InputDialogComponent } from '../input-dialog/input-dialog.component';
 import { delay } from 'rxjs/operators';
+import { BridgeService, FileNode } from '../bridge.service';
+import { InputDialogComponent, InputDialogData } from '../input-dialog/input-dialog.component';
+import { TranslateService } from '../translation';
+
 
 @Component({
   selector: 'app-file-node-tree-item',
@@ -100,19 +100,24 @@ export class FileNodeTreeItemComponent {
   }
 
   remove() {
-    const msg = this.translate.instant('Are you sure that you want to delete this item?');
-    if (confirm(msg)) {
+    const cmsg = this.translate.instant('Are you sure that you want to delete this item?');
+    if (confirm(cmsg)) {
       if (this.currentPath === this.node.path) {
         const basePath = _.slice(this.node.path.split('/'), 0, -1).join('/');
         this.setPath(basePath);
       }
 
       this.bridge.remove(this.node.path, false).subscribe(() => {
-        this.zone.run(() => {
-          const baseName = _.last(this.node.path.split('/'));
-          const msg2 = this.translate.instant('Removed %s').replace('%s', baseName);
-          this.toast.open(msg2, null, { duration: 2000 });
+        BridgeService.statusChange.next({
+          type: 'removeStart',
+          path: this.node.path
         });
+        setTimeout(() => {
+          BridgeService.statusChange.next({
+            type: 'removeEnd',
+            path: this.node.path
+          });
+        }, 5000);
       });
     }
   }

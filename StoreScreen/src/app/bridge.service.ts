@@ -1,12 +1,11 @@
-import { Injectable, NgZone } from '@angular/core';
-import { bindCallback, BehaviorSubject } from 'rxjs';
-import { Observable, forkJoin, of } from 'rxjs';
-import { map, debounceTime, flatMap } from 'rxjs/operators';
-
-import * as sf from 'sanitize-filename';
+import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { MatSnackBar } from '@angular/material';
+import { BehaviorSubject, bindCallback, forkJoin, Observable, of } from 'rxjs';
+import { debounceTime, flatMap, map } from 'rxjs/operators';
+import * as sf from 'sanitize-filename';
+import { StatusItem } from './status-list/status-list.component';
 import { TranslateService } from './translation';
+
 
 declare class Bridge {
   routeSignalSignal: any;
@@ -65,12 +64,11 @@ export class FileNode {
 export class BridgeService {
   static fileTreeSubject: BehaviorSubject<FileNode> = null;
   static keyPressedSubject: BehaviorSubject<string> = null;
+  static statusChange: BehaviorSubject<StatusItem> = null;
   treeUpdateDebounce = new BehaviorSubject<void>(null);
 
   constructor(
-    private toast: MatSnackBar,
-    private translate: TranslateService,
-    private zone: NgZone
+    private translate: TranslateService
   ) {
     if (BridgeService.fileTreeSubject == null) {
       BridgeService.fileTreeSubject = new BehaviorSubject(this.rootNode());
@@ -80,37 +78,40 @@ export class BridgeService {
       BridgeService.keyPressedSubject = new BehaviorSubject(null);
     }
 
+    if (BridgeService.statusChange == null) {
+      BridgeService.statusChange = new BehaviorSubject(null);
+    }
+
     this.treeUpdateDebounce.pipe(debounceTime(1000)).subscribe(() => {
       this.generateTree().subscribe();
     });
 
     bridge.startAddFile.connect((fsPath: string, __: string) => {
-      this.zone.run(() => {
-        const msg1 = this.translate.instant('Adding %s').replace('%s', fsPath);
-        this.toast.open(msg1, null, { duration: 2000 });
+      BridgeService.statusChange.next({
+        type: 'addStart',
+        path: fsPath
       });
     });
 
     bridge.endAddFile.connect((fsPath: string, __: string) => {
       this.treeUpdateDebounce.next(null);
-
-      this.zone.run(() => {
-        const msg1 = this.translate.instant('Added %s').replace('%s', fsPath);
-        this.toast.open(msg1, null, { duration: 2000 });
+      BridgeService.statusChange.next({
+        type: 'addEnd',
+        path: fsPath
       });
     });
 
     bridge.startDecryptFile.connect((fsPath: string) => {
-      this.zone.run(() => {
-        const msg1 = this.translate.instant('Decrypting %s').replace('%s', fsPath);
-        this.toast.open(msg1, null, { duration: 2000 });
+      BridgeService.statusChange.next({
+        type: 'decryptStart',
+        path: fsPath
       });
     });
 
     bridge.endDecryptFile.connect((fsPath: string) => {
-      this.zone.run(() => {
-        const msg1 = this.translate.instant('Decrypted %s').replace('%s', fsPath);
-        this.toast.open(msg1, null, { duration: 2000 });
+      BridgeService.statusChange.next({
+        type: 'decryptEnd',
+        path: fsPath
       });
     });
 
@@ -152,17 +153,16 @@ export class BridgeService {
 
       fs.forEach(f => {
         const fileName = _.last(f.split('/'));
-        this.zone.run(() => {
-          const msg1 = this.translate.instant('Adding %s').replace('%s', f);
-          this.toast.open(msg1, null, { duration: 2000 });
+        BridgeService.statusChange.next({
+          type: 'addStart',
+          path: f
         });
 
         addFile(f, this.appendPath(path, fileName)).subscribe(() => {
           this.generateTree().subscribe();
-
-          this.zone.run(() => {
-            const msg2 = this.translate.instant('Added %s').replace('%s', f);
-            this.toast.open(msg2, null, { duration: 2000 });
+          BridgeService.statusChange.next({
+            type: 'addStart',
+            path: f
           });
         });
       });
@@ -181,6 +181,10 @@ export class BridgeService {
       listFilesInFolder(folder).subscribe(fs => {
         fs.forEach(f => {
           const storePath = f.replace(folderPath, path).replace('//', '/');
+          BridgeService.statusChange.next({
+            type: 'addStart',
+            path: f
+          });
           bridge.asyncAddFile(f, storePath);
         });
       });

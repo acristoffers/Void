@@ -1,0 +1,8 @@
+<mat-card class="mat-elevation-z8">
+  <mat-list>
+    <mat-list-item *ngFor="let item of items">
+      <mat-icon matListIcon>{{ iconFor(item) }}</mat-icon>
+      {{ baseName(item.path) }}
+    </mat-list-item>
+  </mat-list>
+</mat-card>

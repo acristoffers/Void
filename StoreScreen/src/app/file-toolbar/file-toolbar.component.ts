@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+import { BridgeService } from '../bridge.service';
 import { InputDialogComponent, InputDialogData } from '../input-dialog/input-dialog.component';
 import { TranslateService } from '../translation';
-import { BridgeService } from '../bridge.service';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Component({
   selector: 'app-file-toolbar',

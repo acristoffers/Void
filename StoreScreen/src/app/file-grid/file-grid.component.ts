@@ -1,14 +1,14 @@
-import * as _ from 'lodash';
-
-import { Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
-import { FileNode, BridgeService } from '../bridge.service';
+import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
+import { MatDialog, MatMenuTrigger, MatSnackBar } from '@angular/material';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { MatMenuTrigger, MatSnackBar, MatDialog } from '@angular/material';
-import { TranslateService } from '../translation/translation.service';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
-import { InputDialogData, InputDialogComponent } from '../input-dialog/input-dialog.component';
-import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+import * as _ from 'lodash';
 import { filter } from 'rxjs/operators';
+import { BridgeService, FileNode } from '../bridge.service';
+import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { InputDialogComponent, InputDialogData } from '../input-dialog/input-dialog.component';
+import { TranslateService } from '../translation/translation.service';
+
 
 // tslint:disable:max-line-length
 
@@ -246,8 +246,16 @@ export class FileGridComponent {
       const baseName = (s: string) => _.last(s.split('/'));
       this.selection.forEach(path => {
         this.bridge.remove(path, false).subscribe(() => {
-          const msg2 = this.translate.instant('Removed %s').replace('%s', baseName(path));
-          this.toast.open(msg2, null, { duration: 2000 });
+          BridgeService.statusChange.next({
+            type: 'removeStart',
+            path: path
+          });
+          setTimeout(() => {
+            BridgeService.statusChange.next({
+              type: 'removeEnd',
+              path: path
+            });
+          }, 5000);
         });
       });
     }
