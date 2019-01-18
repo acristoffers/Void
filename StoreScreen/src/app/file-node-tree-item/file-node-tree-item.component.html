@@ -16,13 +16,21 @@
 
 <mat-menu #rootMenu="matMenu" [overlapTrigger]="false">
   <ng-template matMenuContent let-element="element">
-    <button mat-menu-item>
-      <mat-icon>edit</mat-icon>
-      <span>Rename</span>
+    <button mat-menu-item (click)="decrypt()">
+      <mat-icon>launch</mat-icon>
+      <span>{{ 'Decrypt' | translate }}</span>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="setPath(element.path)">
+      <mat-icon>folder_open</mat-icon>
+      <span>{{ 'Open' | translate }}</span>
+    </button>
+    <button mat-menu-item (click)="rename()">
+      <mat-icon>edit</mat-icon>
+      <span>{{ 'Rename' | translate }}</span>
+    </button>
+    <button mat-menu-item (click)="remove()">
       <mat-icon>delete</mat-icon>
-      <span>Delete</span>
+      <span>{{ 'Delete' | translate }}</span>
     </button>
   </ng-template>
 </mat-menu>

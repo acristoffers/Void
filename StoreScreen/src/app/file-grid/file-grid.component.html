@@ -1,5 +1,5 @@
 <div [ngClass]="'wrapper-' + display">
-  <mat-card *ngFor="let node of sorted(currentNode)" (click)="clickOn(node)" (dblclick)="open(node)" (contextmenu)="openMenu($event, menuTrigger)"
+  <mat-card *ngFor="let node of sorted(currentNode)" (click)="clickOn(node)" (dblclick)="open(node)" (contextmenu)="openMenu($event, menuTrigger, node)"
     [ngClass]="classFor(node)" [class.selected]="isSelected(node)">
     <mat-icon *ngIf="!node.type.startsWith('image')">{{iconFor(node)}}</mat-icon>
     <span *ngIf="node.type.startsWith('image')" class="image-wrapper">
@@ -17,7 +17,7 @@
       <span>{{ 'Decrypt' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="view(element)" *ngIf="element.type.startsWith('image')">
+    <button mat-menu-item (click)="view(element)" *ngIf="element.type.startsWith('image') || element.type.startsWith('video')">
       <mat-icon>image</mat-icon>
       <span>{{ 'View' | translate }}</span>
     </button>

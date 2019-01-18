@@ -1,7 +1,7 @@
+import * as _ from 'lodash';
+
 import { Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { FileNode, BridgeService } from '../bridge.service';
-
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-sidenav',

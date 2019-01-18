@@ -78,7 +78,7 @@ struct StoreFSPrivate
 };
 
 quint64 StoreFSPrivate::fileIdCounter = 0;
-quint64 StoreFSPrivate::dirIdCounter  = ( static_cast<quint64> (1) ) << 63;
+quint64 StoreFSPrivate::dirIdCounter  = (static_cast<quint64> (1) ) << 63;
 
 /**
  *  \brief Initializes the empty StoreFS object.
@@ -164,7 +164,7 @@ void StoreFS::load(const QByteArray &data)
     error = Success;
 
     _p->fileIdCounter = 0;
-    _p->dirIdCounter  = ( static_cast<quint64> (1) ) << 63;
+    _p->dirIdCounter  = (static_cast<quint64> (1) ) << 63;
 
     _p->root     = std::make_shared<StoreFSDir> ();
     _p->root->id = _p->dirIdCounter++;
@@ -216,7 +216,7 @@ void StoreFS::load(const QByteArray &data)
         QStringList list = file->path.split("/");
         file->name = list.last();
         list.removeLast();
-        file->parent = makePath( list.join("/") );
+        file->parent = makePath(list.join("/") );
         file->parent->files.append(file);
     }
 }
@@ -235,7 +235,7 @@ StoreFSDirPtr StoreFS::dir(QString path) const
     }
 
     if ( path.endsWith("/") ) {
-        path.remove( QRegularExpression( QStringLiteral("[/]+$") ) );
+        path.remove(QRegularExpression(QStringLiteral("[/]+$") ) );
     }
 
     if ( _p->pathIdMap.contains(path) && _p->idDirMap.contains(_p->pathIdMap[path]) ) {
@@ -316,7 +316,7 @@ QStringList StoreFS::allDirs() const
 {
     QStringList paths;
 
-    auto        ids = _p->idDirMap.keys();
+    auto ids = _p->idDirMap.keys();
 
     for ( auto id : ids ) {
         paths << _p->idPathMap[id];
@@ -352,7 +352,7 @@ QStringList StoreFS::allFiles() const
 {
     QStringList paths;
 
-    auto        ids = _p->idFileMap.keys();
+    auto ids = _p->idFileMap.keys();
 
     for ( auto id : ids ) {
         paths << _p->idPathMap[id];
@@ -370,7 +370,7 @@ QStringList StoreFS::allFiles() const
  */
 QList<StoreFSDirPtr> StoreFS::subdirs(QString path)
 {
-    error  = Success;
+    error = Success;
     auto d = dir(path);
 
     if ( d == nullptr ) {
@@ -390,7 +390,7 @@ QList<StoreFSDirPtr> StoreFS::subdirs(QString path)
  */
 QList<StoreFSFilePtr> StoreFS::subfiles(QString path)
 {
-    error  = Success;
+    error = Success;
     auto d = dir(path);
 
     if ( d == nullptr ) {
@@ -539,7 +539,7 @@ StoreFSDirPtr StoreFS::makePath(QString path)
         return _p->root;
     }
 
-    QStringList   parts  = path.split( QStringLiteral("/") );
+    QStringList   parts  = path.split(QStringLiteral("/") );
     StoreFSDirPtr folder = _p->root;
 
     parts.removeFirst();
@@ -580,7 +580,7 @@ void StoreFS::removeDir(const QString path)
     QList<quint64> ids = entryBeginsWith(dir->path + "/");
     qSort(ids);
     for ( quint64 id : ids ) {
-        if ( id > ( ( static_cast<quint64> (1) ) << 63 ) ) {
+        if ( id > ( (static_cast<quint64> (1) ) << 63 ) ) {
             dir = this->dir(id);
             _p->idPathMap.remove(id);
             _p->idDirMap.remove(id);
@@ -617,7 +617,7 @@ void StoreFS::moveDir(const QString oldPath, const QString newPath)
 
     QList<quint64> ids = entryBeginsWith(d->path + "/");
     for ( quint64 id : ids ) {
-        if ( id < ( ( static_cast<quint64> (1) ) << 63 ) ) {
+        if ( id < ( (static_cast<quint64> (1) ) << 63 ) ) {
             QString oldFilePath = _p->idPathMap[id];
             QString newFilePath = oldFilePath;
             newFilePath.replace(oldPath, newPath);
@@ -655,12 +655,12 @@ StoreFSFilePtr StoreFS::addFile(QString path, QByteArray data)
         return nullptr;
     }
 
-    QStringList pathList = path.split( QStringLiteral("/") );
+    QStringList pathList = path.split(QStringLiteral("/") );
     QString     name     = pathList.last();
 
     pathList.removeLast();
 
-    QString        parentPath = pathList.join( QStringLiteral("/") );
+    QString        parentPath = pathList.join(QStringLiteral("/") );
     StoreFSDirPtr  parent     = makePath(parentPath);
     StoreFSFilePtr file(new StoreFSFile);
 
@@ -681,7 +681,7 @@ StoreFSFilePtr StoreFS::addFile(QString path, QByteArray data)
     file->name   = name;
     file->path   = path;
     file->parent = parent;
-    file->size   = static_cast<quint64> ( data.size() );
+    file->size   = static_cast<quint64> (data.size() );
     file->key    = QByteArray::fromStdString(key);
     file->iv     = QByteArray::fromStdString(iv);
     file->salt   = QByteArray::fromStdString(salt);
@@ -702,11 +702,11 @@ StoreFSFilePtr StoreFS::addFile(QString path, QByteArray data)
         wholeFileDigest  = Crypto::digest(wholeFileDigest);
         part             = c.encrypt(part);
 
-        QFile partFile( _p->storePath + "/" + QString::fromStdString(name) );
+        QFile partFile(_p->storePath + "/" + QString::fromStdString(name) );
         if ( partFile.open(QFile::WriteOnly) ) {
             file->cryptoParts[i] = QString::fromStdString(name);
 
-            if ( partFile.write( QByteArray::fromStdString(part) ) == -1 ) {
+            if ( partFile.write(QByteArray::fromStdString(part) ) == -1 ) {
                 error = CantWriteToFile;
                 break;
             }
@@ -747,12 +747,12 @@ StoreFSFilePtr StoreFS::addFile(QString filePath, QString path)
         return nullptr;
     }
 
-    QStringList pathList = path.split( QStringLiteral("/") );
+    QStringList pathList = path.split(QStringLiteral("/") );
     QString     name     = pathList.last();
 
     pathList.removeLast();
 
-    QString        parentPath = pathList.join( QStringLiteral("/") );
+    QString        parentPath = pathList.join(QStringLiteral("/") );
     StoreFSDirPtr  parent     = makePath(parentPath);
     StoreFSFilePtr file(new StoreFSFile);
 
@@ -779,7 +779,7 @@ StoreFSFilePtr StoreFS::addFile(QString filePath, QString path)
     file->name   = name;
     file->path   = path;
     file->parent = parent;
-    file->size   = static_cast<quint64> ( fileIn.size() );
+    file->size   = static_cast<quint64> (fileIn.size() );
     file->key    = QByteArray::fromStdString(key);
     file->iv     = QByteArray::fromStdString(iv);
     file->salt   = QByteArray::fromStdString(salt);
@@ -800,11 +800,11 @@ StoreFSFilePtr StoreFS::addFile(QString filePath, QString path)
         wholeFileDigest  = Crypto::digest(wholeFileDigest);
         part             = c.encrypt(part);
 
-        QFile partFile( _p->storePath + "/" + QString::fromStdString(name) );
+        QFile partFile(_p->storePath + "/" + QString::fromStdString(name) );
         if ( partFile.open(QFile::WriteOnly) ) {
             file->cryptoParts[i] = QString::fromStdString(name);
 
-            if ( partFile.write( QByteArray::fromStdString(part) ) == -1 ) {
+            if ( partFile.write(QByteArray::fromStdString(part) ) == -1 ) {
                 error = CantWriteToFile;
                 break;
             }
@@ -838,8 +838,7 @@ QByteArray StoreFS::decryptFile(QString path)
 {
     error = Success;
 
-    QByteArray data;
-
+    QByteArray     data;
     StoreFSFilePtr file = this->file(path);
 
     if ( file == nullptr ) {
@@ -855,7 +854,7 @@ QByteArray StoreFS::decryptFile(QString path)
         return data;
     }
 
-    Crypto c( file->key.toStdString(), file->iv.toStdString() );
+    Crypto c(file->key.toStdString(), file->iv.toStdString() );
 
     if ( c.error != Crypto::Success ) {
         error = CantCreateCryptoObject;
@@ -864,7 +863,7 @@ QByteArray StoreFS::decryptFile(QString path)
 
     std::string wholeFileDigest;
 
-    for ( unsigned int i = 0; i < static_cast<unsigned int> ( file->cryptoParts.size() ); i++ ) {
+    for ( unsigned int i = 0; i < static_cast<unsigned int> (file->cryptoParts.size() ); i++ ) {
         QFile part(_p->storePath + "/" + file->cryptoParts[i]);
         if ( !part.open(QIODevice::ReadOnly) ) {
             error = CantOpenFile;
@@ -929,7 +928,7 @@ void StoreFS::decryptFile(QString storePath, QString path)
         return;
     }
 
-    Crypto c( file->key.toStdString(), file->iv.toStdString() );
+    Crypto c(file->key.toStdString(), file->iv.toStdString() );
 
     if ( c.error != Crypto::Success ) {
         error = CantCreateCryptoObject;
@@ -947,7 +946,7 @@ void StoreFS::decryptFile(QString storePath, QString path)
 
     std::string wholeFileDigest;
 
-    for ( unsigned int i = 0; i < static_cast<unsigned int> ( file->cryptoParts.size() ); i++ ) {
+    for ( unsigned int i = 0; i < static_cast<unsigned int> (file->cryptoParts.size() ); i++ ) {
         QFile part(_p->storePath + "/" + file->cryptoParts[i]);
         if ( !part.open(QIODevice::ReadOnly) ) {
             error = CantOpenFile;
@@ -969,7 +968,7 @@ void StoreFS::decryptFile(QString storePath, QString path)
             return;
         }
 
-        if ( outFile.write( QByteArray::fromStdString(partData) ) == -1 ) {
+        if ( outFile.write(QByteArray::fromStdString(partData) ) == -1 ) {
             error = CantWriteToFile;
             return;
         }
@@ -1003,8 +1002,8 @@ void StoreFS::moveFile(const QString oldPath, const QString newPath)
         return;
     }
 
-    QString newName       = newPath.split( QStringLiteral("/") ).last();
-    QString newParentPath = newPath.mid( 0, newPath.lastIndexOf( QStringLiteral("/") ) );
+    QString newName       = newPath.split(QStringLiteral("/") ).last();
+    QString newParentPath = newPath.mid(0, newPath.lastIndexOf(QStringLiteral("/") ) );
 
     StoreFSDirPtr newParent = this->makePath(newParentPath);
 

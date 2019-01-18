@@ -1,9 +1,11 @@
+import * as _ from 'lodash';
+
 import { Component, HostBinding } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-
-import * as _ from 'lodash';
+import { BridgeService } from '../bridge.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-image-viewer',
@@ -30,20 +32,17 @@ export class ImageViewerComponent {
       this._cursor = 0;
     });
 
-    this.hotkeys.add(new Hotkey('left', (event: KeyboardEvent): boolean => {
+    BridgeService.keyPressedSubject.pipe(filter(key => key === 'left')).subscribe(__ => {
       this._cursor = _.sortBy([0, this._cursor - 1, this._images.length - 1])[1];
-      return false;
-    }));
+    });
 
-    this.hotkeys.add(new Hotkey('right', (event: KeyboardEvent): boolean => {
+    BridgeService.keyPressedSubject.pipe(filter(key => key === 'right')).subscribe(__ => {
       this._cursor = _.sortBy([0, this._cursor + 1, this._images.length - 1])[1];
-      return false;
-    }));
+    });
 
-    this.hotkeys.add(new Hotkey('esc', (event: KeyboardEvent): boolean => {
+    BridgeService.keyPressedSubject.pipe(filter(key => key === 'esc')).subscribe(__ => {
       this._show = false;
-      return false;
-    }));
+    });
   }
 
   urlForCurrent(): SafeUrl {

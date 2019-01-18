@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { FileNode } from '../bridge.service';
-
 import * as _ from 'lodash';
+
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FileNode } from '../bridge.service';
 
 @Component({
   selector: 'app-path-indicator',

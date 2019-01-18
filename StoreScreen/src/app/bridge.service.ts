@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { bindCallback, BehaviorSubject } from 'rxjs';
 import { Observable, forkJoin, of } from 'rxjs';
-import { map, debounceTime } from 'rxjs/operators';
+import { map, debounceTime, flatMap } from 'rxjs/operators';
 
 import * as sf from 'sanitize-filename';
 import * as _ from 'lodash';
@@ -64,6 +64,7 @@ export class FileNode {
 })
 export class BridgeService {
   static fileTreeSubject: BehaviorSubject<FileNode> = null;
+  static keyPressedSubject: BehaviorSubject<string> = null;
   treeUpdateDebounce = new BehaviorSubject<void>(null);
 
   constructor(
@@ -75,11 +76,15 @@ export class BridgeService {
       BridgeService.fileTreeSubject = new BehaviorSubject(this.rootNode());
     }
 
+    if (BridgeService.keyPressedSubject == null) {
+      BridgeService.keyPressedSubject = new BehaviorSubject(null);
+    }
+
     this.treeUpdateDebounce.pipe(debounceTime(1000)).subscribe(() => {
-      this.generateTree();
+      this.generateTree().subscribe();
     });
 
-    bridge.startAddFile.connect((fsPath, __) => {
+    bridge.startAddFile.connect((fsPath: string, __: string) => {
       this.zone.run(() => {
         const msg1 = this.translate.instant('Adding %s').replace('%s', fsPath);
         this.toast.open(msg1, null, { duration: 2000 });
@@ -95,21 +100,21 @@ export class BridgeService {
       });
     });
 
-    bridge.startDecryptFile.connect((fsPath) => {
+    bridge.startDecryptFile.connect((fsPath: string) => {
       this.zone.run(() => {
         const msg1 = this.translate.instant('Decrypting %s').replace('%s', fsPath);
         this.toast.open(msg1, null, { duration: 2000 });
       });
     });
 
-    bridge.endDecryptFile.connect((fsPath) => {
+    bridge.endDecryptFile.connect((fsPath: string) => {
       this.zone.run(() => {
         const msg1 = this.translate.instant('Decrypted %s').replace('%s', fsPath);
         this.toast.open(msg1, null, { duration: 2000 });
       });
     });
 
-    this.generateTree();
+    this.generateTree().subscribe();
   }
 
   fileTreeObservable(): Observable<FileNode> {
@@ -132,12 +137,12 @@ export class BridgeService {
 
   createFile(path: string): Observable<void> {
     const addFileFromData = bindCallback(store.addFileFromData);
-    return addFileFromData(path, 'placeholder').pipe(map(() => this.generateTree()));
+    return addFileFromData(path, 'placeholder').pipe(flatMap(() => this.generateTree()));
   }
 
   createDir(path: string): Observable<void> {
     const makePath = bindCallback(store.makePath);
-    return makePath(path).pipe(map(() => this.generateTree()));
+    return makePath(path).pipe(flatMap(() => this.generateTree()));
   }
 
   addFile(path: string) {
@@ -153,7 +158,7 @@ export class BridgeService {
         });
 
         addFile(f, this.appendPath(path, fileName)).subscribe(() => {
-          this.generateTree();
+          this.generateTree().subscribe();
 
           this.zone.run(() => {
             const msg2 = this.translate.instant('Added %s').replace('%s', f);
@@ -186,7 +191,7 @@ export class BridgeService {
     const msg = this.translate.instant('Are you sure that you want to delete this item?');
     if (!ask || confirm(msg)) {
       const remove = bindCallback(store.remove);
-      return remove(path).pipe(map(() => this.generateTree()));
+      return remove(path).pipe(flatMap(() => this.generateTree()));
     } else {
       return of();
     }
@@ -194,7 +199,7 @@ export class BridgeService {
 
   move(from: string, to: string): Observable<void> {
     const move = bindCallback(store.move);
-    return move(from, to).pipe(map(() => this.generateTree()));
+    return move(from, to).pipe(flatMap(() => this.generateTree()));
   }
 
   decrypt(path: string[], currentPath: string) {
@@ -210,6 +215,13 @@ export class BridgeService {
     return `${path}/${this.sanitizeFileName(name)}`.replace('//', '/');
   }
 
+  playVideo(node: FileNode) {
+    if (node.type.startsWith('video')) {
+      const playVideo = bindCallback(bridge.playVideo);
+      return playVideo(node.path);
+    }
+  }
+
   private rootNode(): FileNode {
     return {
       children: [],
@@ -219,15 +231,15 @@ export class BridgeService {
     };
   }
 
-  private generateTree() {
+  private generateTree(): Observable<void> {
     const listAllEntries = bindCallback(store.listAllEntries);
-    listAllEntries().subscribe(fs => {
+    return listAllEntries().pipe(flatMap(fs => {
       const tree: FileNode = this.rootNode();
 
       // this is the case of an empty store. The sole element is '/'.
       if (fs.length === 1) {
         BridgeService.fileTreeSubject.next(tree);
-        return;
+        return of();
       }
 
       const observables: Observable<void>[] = [];
@@ -279,9 +291,9 @@ export class BridgeService {
         })(f, dir);
       });
 
-      forkJoin(...observables).subscribe(() => {
+      return forkJoin(...observables).pipe(map(() => {
         BridgeService.fileTreeSubject.next(tree);
-      });
-    });
+      }));
+    }));
   }
 }

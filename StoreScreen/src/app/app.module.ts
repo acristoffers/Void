@@ -26,6 +26,7 @@ import {
   MatChipsModule,
   MatDialogModule
 } from '@angular/material';
+
 import { PathIndicatorComponent } from './path-indicator/path-indicator.component';
 import { FileToolbarComponent } from './file-toolbar/file-toolbar.component';
 import { FileGridComponent } from './file-grid/file-grid.component';

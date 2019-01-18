@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import * as _ from 'lodash';
+
+import { Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { FileNode, BridgeService } from '../bridge.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MatMenuTrigger, MatSnackBar, MatDialog } from '@angular/material';
@@ -7,6 +8,7 @@ import { TranslateService } from '../translation/translation.service';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { InputDialogData, InputDialogComponent } from '../input-dialog/input-dialog.component';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { filter } from 'rxjs/operators';
 
 // tslint:disable:max-line-length
 
@@ -74,7 +76,17 @@ export class FileGridComponent {
       });
     });
 
-    this.hotkeys.add(new Hotkey('esc', (event: KeyboardEvent): boolean => {
+    BridgeService.keyPressedSubject.pipe(filter(key => key === 'left')).subscribe(__ => {
+      this.shift = false;
+      this.cursorLeft();
+    });
+
+    BridgeService.keyPressedSubject.pipe(filter(key => key === 'right')).subscribe(__ => {
+      this.shift = false;
+      this.cursorRight();
+    });
+
+    BridgeService.keyPressedSubject.pipe(filter(key => key === 'esc')).subscribe(__ => {
       this.shift = false;
       this.cursor = 0;
       if (this.currentNode.children.length > 0) {
@@ -82,29 +94,21 @@ export class FileGridComponent {
       } else {
         this.selection = [];
       }
-      return false;
-    }));
+    });
 
     this.hotkeys.add(new Hotkey(['backspace', 'delete'], (event: KeyboardEvent): boolean => {
       this.remove();
       return false;
     }));
 
+    this.hotkeys.add(new Hotkey('enter', (event: KeyboardEvent): boolean => {
+      this.open(_.first(_.filter(this.currentNode.children, i => i.path === _.first(this.selection))));
+      return false;
+    }));
+
     this.hotkeys.add(new Hotkey('meta+a', (event: KeyboardEvent): boolean => {
       this.shift = false;
       this.selection = _.map(this.currentNode.children, 'path');
-      return false;
-    }));
-
-    this.hotkeys.add(new Hotkey('left', (event: KeyboardEvent): boolean => {
-      this.shift = false;
-      this.cursorLeft();
-      return false;
-    }));
-
-    this.hotkeys.add(new Hotkey('right', (event: KeyboardEvent): boolean => {
-      this.shift = false;
-      this.cursorRight();
       return false;
     }));
 
@@ -200,7 +204,11 @@ export class FileGridComponent {
     return className;
   }
 
-  openMenu(event: MouseEvent, viewChild: MatMenuTrigger) {
+  openMenu(event: MouseEvent, viewChild: MatMenuTrigger, node: FileNode) {
+    if (!_.includes(this.selection, node.path)) {
+      this.clickOn(node);
+    }
+
     event.preventDefault();
     viewChild.openMenu();
   }
@@ -208,7 +216,7 @@ export class FileGridComponent {
   open(node: FileNode) {
     if (node.type.startsWith('inode')) {
       this.setPath(node.path);
-    } else if (node.type.startsWith('image')) {
+    } else if (node.type.startsWith('image') || node.type.startsWith('video')) {
       this.view(node);
     } else if (node.type.startsWith('text')) {
       this.edit(node);
@@ -220,9 +228,13 @@ export class FileGridComponent {
   }
 
   view(node: FileNode) {
-    ImageViewerComponent.images.next(_.map(_.filter(this.sorted(this.currentNode), n => n.type.startsWith('image')), 'path'));
-    ImageViewerComponent.show.next(true);
-    ImageViewerComponent.setCurrent.next(node.path);
+    if (node.type.startsWith('image')) {
+      ImageViewerComponent.images.next(_.map(_.filter(this.sorted(this.currentNode), n => n.type.startsWith('image')), 'path'));
+      ImageViewerComponent.show.next(true);
+      ImageViewerComponent.setCurrent.next(node.path);
+    } else if (node.type.startsWith('video')) {
+      this.bridge.playVideo(node).subscribe();
+    }
   }
 
   edit(node: FileNode) {
@@ -363,6 +375,10 @@ export class FileGridComponent {
     let node = this.rootNode;
     while (node.path !== this.currentPath) {
       node = _.first(_.filter(node.children, (child: FileNode) => this.currentPath.startsWith(child.path)));
+      if (node == null) {
+        this.path = _.slice(this.currentPath.split('/'), 0, -1).join('/') || '/';
+        return;
+      }
     }
 
     this.currentNode = node;

@@ -1,10 +1,10 @@
+import * as _ from 'lodash';
+
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { TranslateService } from '../translation';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BridgeService } from '../bridge.service';
-
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-toolbar',

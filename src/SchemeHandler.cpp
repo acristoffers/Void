@@ -47,10 +47,16 @@ void SchemeHandler::requestStarted(QWebEngineUrlRequestJob *job)
 {
     Runner *runner = new Runner([job, this]() {
         QString path = job->requestUrl().path();
-        QString scheme = job->requestUrl().scheme();
-        QString mime = _p->store->fileMetadata(path, "mimetype");
+
+        if ( path.isEmpty() ) {
+            job->fail(QWebEngineUrlRequestJob::RequestFailed);
+            return;
+        }
+
+        QString scheme  = job->requestUrl().scheme();
+        QString mime    = _p->store->fileMetadata(path, "mimetype");
         QBuffer *buffer = new QBuffer;
-        QByteArray data( _p->store->decryptFile(path) );
+        QByteArray data(_p->store->decryptFile(path) );
 
         buffer->open(QIODevice::ReadWrite);
         connect(job, &QObject::destroyed, buffer, &QObject::deleteLater);
@@ -60,7 +66,7 @@ void SchemeHandler::requestStarted(QWebEngineUrlRequestJob *job)
             return;
         } else if ( scheme == "thumb" ) {
             QImage image = QImage::fromData(data);
-            image = image.scaledToWidth(200, Qt::SmoothTransformation);
+            image        = image.scaledToWidth(200, Qt::SmoothTransformation);
             image.save(buffer, "PNG");
         } else {
             buffer->write(data);
