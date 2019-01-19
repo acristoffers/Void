@@ -41,18 +41,18 @@ struct StoreScreenBridgePrivate
 StoreScreenBridge::StoreScreenBridge(const QString &path, const QString &password, const bool create, StoreScreen *parent) : QObject()
 {
     _p.reset(new StoreScreenBridgePrivate);
-    _p->store.reset( new Store(path, password, create) );
+    _p->store.reset(new Store(path, password, create) );
 
     error      = _p->store->error;
     _p->parent = parent;
 
     if ( error == Store::Success ) {
-        _p->parent->channel()->registerObject( QStringLiteral("store"), _p->store.get() );
+        _p->parent->channel()->registerObject(QStringLiteral("store"), _p->store.get() );
     } else {
         return;
     }
 
-    _p->videoPlayer.reset( new VideoPlayer(_p->store) );
+    _p->videoPlayer.reset(new VideoPlayer(_p->store) );
 
     connect(this, &StoreScreenBridge::routeSignalSignal, this, &StoreScreenBridge::routeSignalSlot, Qt::QueuedConnection);
 }
@@ -75,11 +75,11 @@ QString StoreScreenBridge::lang() const
 {
     QSettings settings;
 
-    if ( !settings.contains( QStringLiteral("lang") ) ) {
-        settings.setValue( QStringLiteral("lang"), QStringLiteral("en") );
+    if ( !settings.contains(QStringLiteral("lang") ) ) {
+        settings.setValue(QStringLiteral("lang"), QStringLiteral("en") );
     }
 
-    return settings.value( QStringLiteral("lang") ).toString();
+    return settings.value(QStringLiteral("lang") ).toString();
 }
 
 void StoreScreenBridge::asyncAddFile(const QString fsPath, const QString storePath)
@@ -101,7 +101,7 @@ void StoreScreenBridge::asyncAddFile(const QString fsPath, const QString storePa
 
 void StoreScreenBridge::decrypt(const QStringList paths, const QString currentPath)
 {
-    QString target_path = QFileDialog::getExistingDirectory( nullptr, QStringLiteral("Save to"), QDir::homePath() );
+    QString target_path = QFileDialog::getExistingDirectory(nullptr, QStringLiteral("Save to"), QDir::homePath() );
 
     if ( target_path.isEmpty() ) {
         return;
@@ -111,7 +111,7 @@ void StoreScreenBridge::decrypt(const QStringList paths, const QString currentPa
     for ( QString path : paths ) {
         for ( QString file : _p->store->searchStartsWith(path, 1) ) {
             QString target_file_path = file;
-            target_file_path = target_path + "/" + target_file_path.remove( 0, currentPath.size() );
+            target_file_path = target_path + "/" + target_file_path.remove(0, currentPath.size() );
             fileList[file]   = target_file_path.replace(QRegularExpression("/+"), "/");
         }
     }
@@ -133,12 +133,12 @@ void StoreScreenBridge::decrypt(const QStringList paths, const QString currentPa
 
 QStringList StoreScreenBridge::getFile() const
 {
-    return QFileDialog::getOpenFileNames( nullptr, QStringLiteral("Load Store"), QDir::homePath() );
+    return QFileDialog::getOpenFileNames(nullptr, QStringLiteral("Load Store"), QDir::homePath() );
 }
 
 QString StoreScreenBridge::getFolder() const
 {
-    return QFileDialog::getExistingDirectory( nullptr, QStringLiteral("Load Store"), QDir::homePath() );
+    return QFileDialog::getExistingDirectory(nullptr, QStringLiteral("Load Store"), QDir::homePath() );
 }
 
 QStringList StoreScreenBridge::listFilesInFolder(const QString folder) const
@@ -149,15 +149,17 @@ QStringList StoreScreenBridge::listFilesInFolder(const QString folder) const
     ds << folder;
 
     while ( !ds.empty() ) {
-        QDir d( ds.first() );
+        QDir d(ds.first() );
         ds.removeFirst();
 
-        for ( auto  e : d.entryList(QDir::Files | QDir::Readable) ) {
+        for ( auto e : d.entryList(QDir::Files | QDir::Readable) ) {
             fs << d.filePath(e);
         }
 
-        for ( auto  e : d.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable) ) {
-            ds << d.filePath(e);
+        for ( auto e : d.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable) ) {
+            if ( !QFileInfo(e).isSymLink() ) {
+                ds << d.filePath(e);
+            }
         }
     }
 
@@ -188,12 +190,12 @@ QString StoreScreenBridge::setting(const QString key) const
 void StoreScreenBridge::routeSignalSlot(const QString signal, const QVariantList args)
 {
     if ( signal == "startAddFile" ) {
-        emit startAddFile( args[0].toString(), args[1].toString() );
+        emit startAddFile(args[0].toString(), args[1].toString() );
     } else if ( signal == "endAddFile" ) {
-        emit endAddFile( args[0].toString(), args[1].toString() );
+        emit endAddFile(args[0].toString(), args[1].toString() );
     } else if ( signal == "startDecryptFile" ) {
-        emit startDecryptFile( args[0].toString() );
+        emit startDecryptFile(args[0].toString() );
     } else if ( signal == "endDecryptFile" ) {
-        emit endDecryptFile( args[0].toString() );
+        emit endDecryptFile(args[0].toString() );
     }
 }

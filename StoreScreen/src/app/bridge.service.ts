@@ -182,12 +182,24 @@ export class BridgeService {
       listFilesInFolder(folder).subscribe(fs => {
         fs.forEach(f => {
           const storePath = f.replace(folderPath, path).replace('//', '/');
-          BridgeService.statusChange.next({
-            type: 'addStart',
-            path: f
-          });
           bridge.asyncAddFile(f, storePath);
         });
+
+        // next is quite slow, so it avoids freezing the screen.
+        function g(xs: string[]) {
+          if (!xs) {
+            return;
+          }
+
+          BridgeService.statusChange.next({
+            type: 'addStart',
+            path: _.head(xs)
+          });
+
+          setTimeout(() => g(_.tail(xs)), 1);
+        }
+
+        g(fs);
       });
     });
   }

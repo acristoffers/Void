@@ -25,7 +25,7 @@ export class StatusListComponent {
         this.show = true;
         const samePath = _.filter(this.items, i => i.path === item.path);
         if (_.isEmpty(samePath)) {
-          this.items = _.concat(this.items, item);
+          this.items = _.concat(item, this.items);
         } else {
           this.items = _.concat(item, _.filter(this.items, i => i.path !== item.path));
         }
