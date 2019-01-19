@@ -66,6 +66,7 @@ export class BridgeService {
   static fileTreeSubject: BehaviorSubject<FileNode> = null;
   static keyPressedSubject: BehaviorSubject<string> = null;
   static statusChange: BehaviorSubject<StatusItem> = null;
+  static fileInfo: BehaviorSubject<FileNode> = null;
   treeUpdateDebounce = new BehaviorSubject<void>(null);
 
   constructor(
@@ -81,6 +82,10 @@ export class BridgeService {
 
     if (BridgeService.statusChange == null) {
       BridgeService.statusChange = new BehaviorSubject(null);
+    }
+
+    if (BridgeService.fileInfo == null) {
+      BridgeService.fileInfo = new BehaviorSubject(null);
     }
 
     this.treeUpdateDebounce.pipe(debounceTime(1000)).subscribe(() => {
@@ -135,6 +140,11 @@ export class BridgeService {
   fileMetadata(path: string, key: string): Observable<string> {
     const fileMetadata = bindCallback(store.fileMetadata);
     return fileMetadata(path, key);
+  }
+
+  setFileMetadata(path: string, key: string, value: string): Observable<void> {
+    const setFileMetadata = bindCallback(store.setFileMetadata);
+    return setFileMetadata(path, key, value);
   }
 
   createFile(path: string): Observable<void> {
@@ -257,6 +267,11 @@ export class BridgeService {
       const settings = bindCallback(bridge.setting);
       return settings(key);
     }
+  }
+
+  fileSize(path: string): Observable<number> {
+    const fileSize = bindCallback(store.fileSize);
+    return fileSize(path);
   }
 
   private rootNode(): FileNode {

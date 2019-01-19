@@ -61,3 +61,20 @@
     fill: white;
   }
 }
+
+:host ::ng-deep mat-card.drop {
+  background-color: map-get($app-primary, default);
+  color: white;
+
+  mat-icon {
+    color: white;
+  }
+
+  mat-icon svg {
+    fill: white;
+  }
+}
+
+[draggable] * {
+  pointer-events: none;
+}

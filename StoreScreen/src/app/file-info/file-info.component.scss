@@ -1,3 +1,44 @@
 :host {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  text-align: left;
+}
+
+img {
+  height: auto;
+  width: 100%;
+}
+
+mat-divider {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#info {
+  display: table;
+
+  div {
+    display: table-row;
+    margin-top: 0.5rem;
+
+    .key {
+      display: table-cell;
+      color: #5f6368;
+      text-align: right;
+    }
+
+    .value {
+      display: table-cell;
+      padding-left: 1rem;
+      text-align: left;
+    }
+  }
+}
+
+mat-form-field {
+  width: 100%;
 }

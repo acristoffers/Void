@@ -36,7 +36,8 @@ import {
   MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDividerModule
 } from '@angular/material';
 
 @NgModule({
@@ -76,6 +77,7 @@ import {
     MatDialogModule,
     MatListModule,
     MatSelectModule,
+    MatDividerModule,
     HotkeyModule.forRoot(),
     AceEditorModule
   ],

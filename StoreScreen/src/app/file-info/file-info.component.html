@@ -1,3 +1,41 @@
-<p>
-  file-info works!
-</p>
+<button mat-flat-button [disableRipple]="true">
+  <mat-icon>{{ icon() }}</mat-icon>
+  {{ fileName }}
+</button>
+
+<mat-divider *ngIf="fileType.startsWith('image')"></mat-divider>
+<img [src]="urlFor()" *ngIf="fileType.startsWith('image')">
+<mat-divider></mat-divider>
+
+<div id="info">
+  <div>
+    <span class="key">Mime</span>
+    <span class="value">{{ fileType }}</span>
+  </div>
+
+  <div>
+    <span class="key">{{ 'Size' | translate }}</span>
+    <span class="value">{{ fileSize }}</span>
+  </div>
+</div>
+
+<mat-divider *ngIf="fileType !== 'inode/directory'"></mat-divider>
+
+<div *ngIf="fileType !== 'inode/directory'">
+  <mat-form-field>
+    <mat-chip-list #tagList>
+      <mat-chip *ngFor="let tag of fileTags" [removable]="true" (removed)="removeTag(tag)">
+        {{ tag }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input [placeholder]="'Tags' | translate" [matChipInputFor]="tagList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)">
+    </mat-chip-list>
+  </mat-form-field>
+</div>
+
+<div *ngIf="fileType !== 'inode/directory'">
+  <mat-form-field>
+    <textarea matInput [placeholder]="'Comments' | translate" [(ngModel)]="fileComments" (blur)="saveComments()"></textarea>
+  </mat-form-field>
+</div>

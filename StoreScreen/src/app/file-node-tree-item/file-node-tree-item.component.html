@@ -5,8 +5,9 @@
       {{isExpanded ? 'expand_more' : 'chevron_right'}}
     </mat-icon>
   </button>
-  <button mat-flat-button class="clipped" (click)="setPath(node.path)" (contextmenu)="openMenu($event, menuTrigger)"
-    [color]="node.path == currentPath ? 'primary' : ''">{{node.name}}</button>
+  <button mat-flat-button class="clipped" (drop)="drop($event)" (dragover)="allowDrop($event)" (dragenter)="dragEnter($event)"
+    (dragleave)="dragLeave($event)" (click)="setPath(node.path)" (contextmenu)="openMenu($event, menuTrigger)" [color]="dragCounter > 0 ?
+  'accent' : node.path === currentPath ? 'primary' : ''">{{node.name}}</button>
   <span [matMenuTriggerFor]="rootMenu" [matMenuTriggerData]="{element: node}" #menuTrigger="matMenuTrigger"></span>
 </div>
 

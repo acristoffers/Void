@@ -62,7 +62,7 @@ struct StorePrivate
     std::unique_ptr<StoreFile> storeFile;   /*!< StoreFile object of this Store. */
     std::unique_ptr<StoreFS>   storeFS;     /*!< StoreFS object of this Store. */
 
-    void              save();
+    void save();
     Store::StoreError storeFSErrorToStoreError(StoreFS::StoreFSError);
 };
 
@@ -78,7 +78,7 @@ struct StorePrivate
 Store::Store(const QString path, const QString password, const bool create) : QObject()
 {
     _p.reset(new StorePrivate);
-    _p->storeFS.reset( new StoreFS(path) );
+    _p->storeFS.reset(new StoreFS(path) );
     _p->path = path;
 
     error = StoreError::Success;
@@ -90,7 +90,7 @@ Store::Store(const QString path, const QString password, const bool create) : QO
         std::string salt = Crypto::generateRandom(16);
         std::string iv   = Crypto::generateRandom(16);
 
-        _p->storeCrypto.reset( new Crypto(pswd, salt, iv) );
+        _p->storeCrypto.reset(new Crypto(pswd, salt, iv) );
         if ( _p->storeCrypto->error != Crypto::Success ) {
             error       = CantCreateCryptoObject;
             cryptoError = _p->storeCrypto->error;
@@ -99,13 +99,13 @@ Store::Store(const QString path, const QString password, const bool create) : QO
 
         QDir::home().mkpath(path);
 
-        _p->storeFile.reset( new StoreFile(path + "/Store.void") );
+        _p->storeFile.reset(new StoreFile(path + "/Store.void") );
         _p->storeFile->setSalt(salt);
         _p->storeFile->setIV(iv);
-        _p->storeFile->setCryptoParams( CryptoParams() );
+        _p->storeFile->setCryptoParams(CryptoParams() );
         _p->save();
     } else if ( storeExists ) {
-        _p->storeFile.reset( new StoreFile(path + "/Store.void") );
+        _p->storeFile.reset(new StoreFile(path + "/Store.void") );
 
         if ( _p->storeFile->error != StoreFile::Success ) {
             error = CantOpenStoreFile;
@@ -117,7 +117,7 @@ Store::Store(const QString path, const QString password, const bool create) : QO
         std::string  iv           = _p->storeFile->IV();
         CryptoParams cryptoParams = _p->storeFile->cryptoParams();
 
-        _p->storeCrypto.reset( new Crypto(pswd, salt, iv, cryptoParams) );
+        _p->storeCrypto.reset(new Crypto(pswd, salt, iv, cryptoParams) );
         if ( _p->storeCrypto->error != Crypto::Success ) {
             error       = CantCreateCryptoObject;
             cryptoError = _p->storeCrypto->error;
@@ -125,7 +125,7 @@ Store::Store(const QString path, const QString password, const bool create) : QO
         }
 
         std::string data = _p->storeFile->data().toStdString();
-        _p->storeFile->setData( QByteArray() );
+        _p->storeFile->setData(QByteArray() );
 
         data = _p->storeCrypto->decrypt(data);
 
@@ -135,7 +135,7 @@ Store::Store(const QString path, const QString password, const bool create) : QO
             return;
         }
 
-        data = qUncompress( reinterpret_cast<const unsigned char *> ( data.data() ), static_cast<int> ( data.size() ) ).toStdString();
+        data = qUncompress(reinterpret_cast<const unsigned char *> (data.data() ), static_cast<int> (data.size() ) ).toStdString();
         QByteArray bdata = QByteArray::fromStdString(data);
         data.clear();
         _p->storeFS->load(bdata);
@@ -381,6 +381,7 @@ QStringList Store::listSubdirectories(QString path) const
     QStringList list;
 
     QList<StoreFSDirPtr> ds = _p->storeFS->subdirs(path);
+
     for ( StoreFSDirPtr d : ds ) {
         list << d->path;
     }
@@ -403,6 +404,7 @@ QStringList Store::listFiles(QString path) const
     QStringList list;
 
     QList<StoreFSFilePtr> fs = _p->storeFS->subfiles(path);
+
     for ( StoreFSFilePtr f : fs ) {
         list << f->path;
     }
@@ -442,6 +444,7 @@ QStringList Store::searchStartsWith(QString filter, quint8 type) const
     QStringList entries;
 
     QList<quint64> ids = _p->storeFS->entryBeginsWith(filter);
+
     for ( quint64 id : ids ) {
         switch ( type ) {
             case 0:
@@ -490,6 +493,7 @@ QStringList Store::searchEndsWith(QString filter, quint8 type) const
     QStringList entries;
 
     QList<quint64> ids = _p->storeFS->entryEndsWith(filter);
+
     for ( quint64 id : ids ) {
         switch ( type ) {
             case 0:
@@ -538,6 +542,7 @@ QStringList Store::searchContains(QString filter, quint8 type) const
     QStringList entries;
 
     QList<quint64> ids = _p->storeFS->entryContains(filter);
+
     for ( quint64 id : ids ) {
         switch ( type ) {
             case 0:
@@ -586,6 +591,7 @@ QStringList Store::searchRegex(QString filter, quint8 type) const
     QStringList entries;
 
     QList<quint64> ids = _p->storeFS->entryMatchRegExp(filter);
+
     for ( quint64 id : ids ) {
         switch ( type ) {
             case 0:
@@ -680,6 +686,8 @@ void Store::setFileMetadata(const QString path, const QString key, const QByteAr
         } else {
             file->metadata[key] = data;
         }
+
+        _p->save();
     } else {
         error = NoSuchFile;
     }
@@ -729,7 +737,7 @@ void StorePrivate::save()
     serialized = storeCrypto->encrypt(serialized);
 
     if ( storeCrypto->error == Crypto::Success ) {
-        storeFile->setData( QByteArray::fromStdString(serialized) );
+        storeFile->setData(QByteArray::fromStdString(serialized) );
     }
 }
 

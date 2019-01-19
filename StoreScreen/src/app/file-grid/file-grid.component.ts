@@ -21,10 +21,23 @@ export class FileGridComponent {
   currentPath: string;
   rootNode: FileNode;
   currentNode: FileNode;
-  selection: string[] = [];
+  _selection: string[] = [];
   cursor = 0;
   shift = false;
   ctrl = false;
+  dropPath = '';
+
+  get selection(): string[] {
+    return this._selection;
+  }
+
+  set selection(ps: string[]) {
+    this._selection = ps;
+
+    if (this.currentNode != null) {
+      BridgeService.fileInfo.next(_.first(_.filter(this.currentNode.children, c => c.path === _.first(ps))));
+    }
+  }
 
   @Input() display = 'grid';
 
@@ -379,6 +392,53 @@ export class FileGridComponent {
 
   isText(node: FileNode): boolean {
     return node.type.startsWith('text') || TextEditorComponent.modeForMime(node.type) !== 'text_plain';
+  }
+
+  drag(event: DragEvent, node: FileNode) {
+    if (!_.includes(this.selection, node.path)) {
+      this.selection = [node.path];
+    }
+
+    event.dataTransfer.setData('paths', JSON.stringify(this.selection));
+    this.selection.forEach(s => event.dataTransfer.setData(s, ''));
+  }
+
+  drop(event: DragEvent, node: FileNode) {
+    if (node.type === 'inode/directory') {
+      event.stopPropagation();
+      event.preventDefault();
+      this.dropPath = '';
+
+      const fs: string[] = JSON.parse(event.dataTransfer.getData('paths') || '[]');
+      if (!_.isEmpty(fs) && !_.includes(fs, node.path)) {
+        fs.forEach(f => {
+          const baseName = _.slice(f.split('/'), 0, -1).join('/') || '/';
+          const to = f.replace(baseName, node.path);
+          if (f !== to) {
+            this.bridge.move(f, to).subscribe();
+          }
+        });
+      }
+    }
+  }
+
+  allowDrop(event: DragEvent, node: FileNode): boolean {
+    if (node.type === 'inode/directory' && !_.includes(this.selection, node.path)) {
+      event.preventDefault();
+      return true;
+    }
+
+    return false;
+  }
+
+  dragEnter(event: DragEvent, node: FileNode) {
+    if (node.type === 'inode/directory' && !_.includes(this.selection, node.path)) {
+      this.dropPath = node.path;
+    }
+  }
+
+  dragLeave(event: DragEvent, node: FileNode) {
+    this.dropPath = '';
   }
 
   private wrapAround(v: number, m: number): number {

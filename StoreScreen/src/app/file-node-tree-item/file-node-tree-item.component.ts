@@ -15,6 +15,7 @@ import { TranslateService } from '../translation';
 export class FileNodeTreeItemComponent {
   isExpanded = false;
   currentPath = '/';
+  dragCounter = 0;
 
   @Input() node: FileNode = {
     children: [],
@@ -120,5 +121,41 @@ export class FileNodeTreeItemComponent {
         }, 5000);
       });
     }
+  }
+
+  drop(event: DragEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.dragCounter = 0;
+
+    const fs: string[] = JSON.parse(event.dataTransfer.getData('paths') || '[]');
+    if (!_.isEmpty(fs) && !_.includes(fs, this.node.path)) {
+      fs.forEach(f => {
+        const baseName = _.slice(f.split('/'), 0, -1).join('/') || '/';
+        const to = f.replace(baseName, this.node.path);
+        if (f !== to) {
+          this.bridge.move(f, to).subscribe();
+        }
+      });
+    }
+  }
+
+  allowDrop(event: DragEvent): boolean {
+    if (!event.dataTransfer.types.includes(this.node.path.toLowerCase())) {
+      event.preventDefault();
+      return true;
+    }
+
+    return false;
+  }
+
+  dragEnter(event: DragEvent) {
+    if (!event.dataTransfer.types.includes(this.node.path.toLowerCase())) {
+      this.dragCounter++;
+    }
+  }
+
+  dragLeave(__: DragEvent) {
+    this.dragCounter = _.max([this.dragCounter - 1, 0]);
   }
 }
