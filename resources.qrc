@@ -3,17 +3,12 @@
         <file alias="icon.png">res/icon.png</file>
         <file alias="icon.svg">res/icon.svg</file>
         <file>html/StoreScreen/favicon.ico</file>
-        <file>html/StoreScreen/polyfills.js.map</file>
         <file>html/StoreScreen/index.html</file>
-        <file>html/StoreScreen/runtime.js</file>
-        <file>html/StoreScreen/main.js.map</file>
-        <file>html/StoreScreen/polyfills.js</file>
-        <file>html/StoreScreen/styles.js.map</file>
-        <file>html/StoreScreen/vendor.js</file>
-        <file>html/StoreScreen/main.js</file>
-        <file>html/StoreScreen/runtime.js.map</file>
-        <file>html/StoreScreen/styles.js</file>
-        <file>html/StoreScreen/vendor.js.map</file>
+        <file>html/StoreScreen/3rdpartylicenses.txt</file>
+        <file>html/StoreScreen/polyfills.12e4ef547300b148b9ca.js</file>
+        <file>html/StoreScreen/styles.1894a1f9dd908517e88f.css</file>
+        <file>html/StoreScreen/runtime.b57bf819d5bdce77f1c7.js</file>
+        <file>html/StoreScreen/main.81485b83478b93353f9b.js</file>
         <file>html/StoreScreen/assets/imgs/fr.svg</file>
         <file>html/StoreScreen/assets/imgs/en.svg</file>
         <file>html/StoreScreen/assets/imgs/icon.svg</file>
@@ -32,17 +27,12 @@
         <file>html/StoreScreen/assets/fonts/roboto-bold.ttf</file>
         <file>html/StoreScreen/assets/fonts/material_icons.ttf</file>
         <file>html/WelcomeScreen/favicon.ico</file>
-        <file>html/WelcomeScreen/polyfills.js.map</file>
         <file>html/WelcomeScreen/index.html</file>
-        <file>html/WelcomeScreen/runtime.js</file>
-        <file>html/WelcomeScreen/main.js.map</file>
-        <file>html/WelcomeScreen/polyfills.js</file>
-        <file>html/WelcomeScreen/styles.js.map</file>
-        <file>html/WelcomeScreen/vendor.js</file>
-        <file>html/WelcomeScreen/main.js</file>
-        <file>html/WelcomeScreen/runtime.js.map</file>
-        <file>html/WelcomeScreen/styles.js</file>
-        <file>html/WelcomeScreen/vendor.js.map</file>
+        <file>html/WelcomeScreen/runtime.ec2944dd8b20ec099bf3.js</file>
+        <file>html/WelcomeScreen/3rdpartylicenses.txt</file>
+        <file>html/WelcomeScreen/main.1ca3600ba9254de66f54.js</file>
+        <file>html/WelcomeScreen/styles.407718e89db93aec684d.css</file>
+        <file>html/WelcomeScreen/polyfills.4a68e5b4d8bcc303b21f.js</file>
         <file>html/WelcomeScreen/assets/imgs/fr.svg</file>
         <file>html/WelcomeScreen/assets/imgs/en.svg</file>
         <file>html/WelcomeScreen/assets/imgs/icon.svg</file>
