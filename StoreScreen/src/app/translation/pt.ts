@@ -62,5 +62,7 @@ export const LANG_PT_TRANS = {
     'Rename': 'Renomear',
     'Remove': 'Remover',
     'Decrypting %s': 'Descriptografando %s',
-    'Decrypted %s': '%s descriptografado'
+    'Decrypted %s': '%s descriptografado',
+    'Size': 'Tamanho',
+    'Comments': 'Comentários'
 };

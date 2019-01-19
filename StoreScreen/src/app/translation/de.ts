@@ -62,5 +62,7 @@ export const LANG_DE_TRANS = {
     'Rename': 'Umbenennen',
     'Remove': 'Löschen',
     'Decrypting %s': '%s wird entschlüsselt',
-    'Decrypted %s': '%s entschlüsselt'
+    'Decrypted %s': '%s entschlüsselt',
+    'Size': 'Größe',
+    'Comments': 'Kommentare'
 };
