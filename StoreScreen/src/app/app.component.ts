@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+import './ace-imports';
 import { BridgeService } from './bridge.service';
-import { TranslateService } from './translation/translation.service';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { TranslateService } from './translation';
 
 @Component({
   selector: 'app-root',

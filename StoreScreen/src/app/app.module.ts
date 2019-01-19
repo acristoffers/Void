@@ -1,42 +1,43 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslatePipe } from './translation/translation.pipe';
-import { TRANSLATION_PROVIDERS } from './translation/translation';
-import { TranslateService } from './translation/translation.service';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ToolbarComponent } from './toolbar/toolbar.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HotkeyModule } from 'angular2-hotkeys';
-
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSnackBarModule,
-  MatToolbarModule,
-  MatSidenavModule,
-  MatIconModule,
-  MatMenuModule,
-  MatButtonToggleModule,
-  MatChipsModule,
-  MatDialogModule,
-  MatListModule
-} from '@angular/material';
-
-import { PathIndicatorComponent } from './path-indicator/path-indicator.component';
-import { FileToolbarComponent } from './file-toolbar/file-toolbar.component';
+import { AppComponent } from './app.component';
 import { FileGridComponent } from './file-grid/file-grid.component';
 import { FileInfoComponent } from './file-info/file-info.component';
 import { FileNodeTreeItemComponent } from './file-node-tree-item/file-node-tree-item.component';
-import { InputDialogComponent } from './input-dialog/input-dialog.component';
+import { FileToolbarComponent } from './file-toolbar/file-toolbar.component';
 import { HotkeysCheatsheetComponent } from './hotkeys-cheatsheet/hotkeys-cheatsheet.component';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
+import { InputDialogComponent } from './input-dialog/input-dialog.component';
+import { PathIndicatorComponent } from './path-indicator/path-indicator.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
 import { StatusListComponent } from './status-list/status-list.component';
+import { TextEditorComponent } from './text-editor/text-editor.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { TRANSLATION_PROVIDERS } from './translation/translation';
+import { TranslatePipe } from './translation/translation.pipe';
+import { TranslateService } from './translation/translation.service';
+import { AceEditorModule } from 'ng2-ace-editor';
+
+import {
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatChipsModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatSidenavModule,
+  MatSnackBarModule,
+  MatToolbarModule,
+  MatSelectModule
+} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { StatusListComponent } from './status-list/status-list.component';
     InputDialogComponent,
     HotkeysCheatsheetComponent,
     ImageViewerComponent,
-    StatusListComponent
+    StatusListComponent,
+    TextEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -73,13 +75,15 @@ import { StatusListComponent } from './status-list/status-list.component';
     MatChipsModule,
     MatDialogModule,
     MatListModule,
-    HotkeyModule.forRoot()
+    MatSelectModule,
+    HotkeyModule.forRoot(),
+    AceEditorModule
   ],
   providers: [
     TRANSLATION_PROVIDERS,
     TranslateService
   ],
-  entryComponents: [InputDialogComponent],
+  entryComponents: [InputDialogComponent, TextEditorComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

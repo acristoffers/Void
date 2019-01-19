@@ -190,3 +190,5 @@ Release/
 # Editors temporary files
 *~
 *.autosave
+
+dist/

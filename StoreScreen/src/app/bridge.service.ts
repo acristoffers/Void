@@ -30,6 +30,7 @@ declare class Store {
   addFileFromData(storePath: string, data: string, callback: () => void): void;
   addFile(filePath: string, storePath: string, callback: () => void): void;
   decryptFile(storePath: string, path: string, callback: () => void): void;
+  decryptFile(storePath: string, callback: (path: string) => void): void;
   move(oldPath: string, newPath: string, callback: () => void): void;
   remove(path: string, callback: () => void): void;
   makePath(path: string, callback: () => void): void;
@@ -161,7 +162,7 @@ export class BridgeService {
         addFile(f, this.appendPath(path, fileName)).subscribe(() => {
           this.generateTree().subscribe();
           BridgeService.statusChange.next({
-            type: 'addStart',
+            type: 'addEnd',
             path: f
           });
         });
@@ -211,6 +212,16 @@ export class BridgeService {
     return decrypt(path, currentPath);
   }
 
+  decryptFile(path: string): Observable<string> {
+    const decryptFile = bindCallback(store.decryptFile);
+    return decryptFile(path);
+  }
+
+  saveFile(path: string, data: string) {
+    const addFile = bindCallback(store.addFileFromData);
+    return addFile(path, data).pipe(flatMap(() => this.generateTree()));
+  }
+
   sanitizeFileName(name: string): string {
     return sf(name);
   }
@@ -223,6 +234,16 @@ export class BridgeService {
     if (node.type.startsWith('video')) {
       const playVideo = bindCallback(bridge.playVideo);
       return playVideo(node.path);
+    }
+  }
+
+  setting(key: string, value?: any): Observable<any | void> {
+    if (value) {
+      const settings = bindCallback(bridge.saveSetting);
+      return settings(key, value);
+    } else {
+      const settings = bindCallback(bridge.setting);
+      return settings(key);
     }
   }
 

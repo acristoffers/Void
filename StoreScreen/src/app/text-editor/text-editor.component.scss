@@ -1,0 +1,10 @@
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+}
+
+ace-editor {
+  flex: 1;
+  width: 800px;
+  height: 600px;
+}

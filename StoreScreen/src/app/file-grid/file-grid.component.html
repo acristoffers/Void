@@ -27,7 +27,7 @@
       <span>{{ 'Open' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="edit(element)" *ngIf="element.type.startsWith('text')">
+    <button mat-menu-item (click)="edit(element)" *ngIf="isText(element)">
       <mat-icon>code</mat-icon>
       <span>{{ 'Edit' | translate }}</span>
     </button>

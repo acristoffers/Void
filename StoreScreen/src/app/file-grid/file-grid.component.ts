@@ -7,8 +7,8 @@ import { filter } from 'rxjs/operators';
 import { BridgeService, FileNode } from '../bridge.service';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { InputDialogComponent, InputDialogData } from '../input-dialog/input-dialog.component';
+import { TextEditorComponent, TextEditorData } from '../text-editor/text-editor.component';
 import { TranslateService } from '../translation/translation.service';
-
 
 // tslint:disable:max-line-length
 
@@ -185,7 +185,7 @@ export class FileGridComponent {
       return 'movie';
     } else if (mimetype.startsWith('audio')) {
       return 'audiotrack';
-    } else if (mimetype.startsWith('text')) {
+    } else if (this.isText(node)) {
       return 'edit';
     } else {
       return 'insert_drive_file';
@@ -218,7 +218,7 @@ export class FileGridComponent {
       this.setPath(node.path);
     } else if (node.type.startsWith('image') || node.type.startsWith('video')) {
       this.view(node);
-    } else if (node.type.startsWith('text')) {
+    } else if (this.isText(node)) {
       this.edit(node);
     }
   }
@@ -238,6 +238,12 @@ export class FileGridComponent {
   }
 
   edit(node: FileNode) {
+    const data: TextEditorData = {
+      filePath: node.path,
+      mimetype: node.type
+    };
+
+    this.dialog.open(TextEditorComponent, { data: data });
   }
 
   remove() {
@@ -369,6 +375,10 @@ export class FileGridComponent {
 
   isSelected(node: FileNode): boolean {
     return _.includes(this.selection, node.path);
+  }
+
+  isText(node: FileNode): boolean {
+    return node.type.startsWith('text') || TextEditorComponent.modeForMime(node.type) !== 'text_plain';
   }
 
   private wrapAround(v: number, m: number): number {
