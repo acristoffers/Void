@@ -85,6 +85,7 @@ export class TextEditorComponent {
     });
 
     this.language = TextEditorComponent.modeForMime(this.mimetype);
+    this.language = _.includes(this.languages, this.language) ? this.language : 'text';
     this.bridge.decryptFile(this.path).subscribe(d => this.fileContent = d);
   }
 
