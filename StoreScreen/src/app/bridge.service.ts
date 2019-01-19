@@ -187,7 +187,7 @@ export class BridgeService {
 
         // next is quite slow, so it avoids freezing the screen.
         function g(xs: string[]) {
-          if (!xs) {
+          if (_.isEmpty(xs)) {
             return;
           }
 
