@@ -12,6 +12,12 @@ transfered to the player.
 You can also add tags and comments to the files, and search will lookup file
 path, tags and comments.
 
+Encryption is carried out by NSS/NSPR using AES_GCM_256, SHA512, PKCS5_PBKDF2,
+HMAC_SHA512 with a cost of 250000. The store itself has a key derived from your
+password and each file has its own random key too. In disk all encrypted files
+get a salted-hash name, 128 digits long. Large files (50MB) are divided into
+smaller parts.
+
 Remember: an application is just as secure as the system it runs on. If your
 operating system can not be trusted, there's nothing that can be done to keep
 you safe.
