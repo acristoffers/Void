@@ -12,7 +12,7 @@ transfered to the player.
 You can also add tags and comments to the files, and search will lookup file
 path, tags and comments.
 
-Remember: a application is just as secure as the system it runs on. If your
+Remember: an application is just as secure as the system it runs on. If your
 operating system can not be trusted, there's nothing that can be done to keep
 you safe.
 
