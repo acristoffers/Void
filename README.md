@@ -4,10 +4,10 @@ Void is an encrypted store. You can encrypt/decrypt files from/to the store. It
 supports viewing images and editing text inside the application, without having
 to decrypt to disk.
 
-Videos are also be played from memory, but due to a bug/limitation in Qt you
-will have to type your password if you're on a Mac to allow the creation and use
-of a temporary certificate. With this, a server is created and the video is
-securely transfered to the player.
+Videos are also played from memory, but due to a bug/limitation in Qt you will
+have to type your password if you're on a Mac to allow the creation and use of a
+temporary certificate. With this, a server is created and the video is securely
+transfered to the player.
 
 You can also add tags and comments to the files, and search will lookup file
 path, tags and comments.
