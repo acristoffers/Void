@@ -37,7 +37,8 @@ import {
   MatSnackBarModule,
   MatToolbarModule,
   MatSelectModule,
-  MatDividerModule
+  MatDividerModule,
+  MatRadioModule
 } from '@angular/material';
 import { SearchDialogComponent } from './search-dialog/search-dialog.component';
 
@@ -80,6 +81,7 @@ import { SearchDialogComponent } from './search-dialog/search-dialog.component';
     MatListModule,
     MatSelectModule,
     MatDividerModule,
+    MatRadioModule,
     HotkeyModule.forRoot(),
     AceEditorModule
   ],

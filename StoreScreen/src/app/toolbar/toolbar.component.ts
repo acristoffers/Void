@@ -6,6 +6,7 @@ import { TranslateService } from '../translation';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BridgeService } from '../bridge.service';
 import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Component({
   selector: 'app-toolbar',
@@ -38,9 +39,15 @@ export class ToolbarComponent {
     private sanitizer: DomSanitizer,
     private translate: TranslateService,
     private bridge: BridgeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private hotkeys: HotkeysService
   ) {
     this.registerImages();
+
+    this.hotkeys.add(new Hotkey('meta+f', (event: KeyboardEvent): boolean => {
+      this.search();
+      return false;
+    }));
   }
 
   registerImages(): void {

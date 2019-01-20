@@ -1,8 +1,8 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
 import * as _ from 'lodash';
-import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
 import { Subscription, zip } from 'rxjs';
 import { BridgeService, FileNode } from '../bridge.service';
-import { MatDialogRef } from '@angular/material';
 
 interface SearchItem {
   path: string;
@@ -19,13 +19,23 @@ interface SearchItem {
 export class SearchDialogComponent implements OnInit, OnDestroy {
   private treeSubscription: Subscription = null;
   searchTerm = '';
+  _searchType = 'all';
   entries: SearchItem[] = [];
   filteredEntries: SearchItem[] = [];
 
+  get searchType(): string {
+    return this._searchType;
+  }
+
+  set searchType(type: string) {
+    this._searchType = type;
+    this.search();
+  }
+
   constructor(
     private dialogRef: MatDialogRef<SearchDialogComponent>,
-    private bridge: BridgeService,
-    private zone: NgZone) {
+    private bridge: BridgeService
+  ) {
   }
 
   ngOnInit() {
@@ -65,17 +75,26 @@ export class SearchDialogComponent implements OnInit, OnDestroy {
   }
 
   search() {
-    const term = this.searchTerm.toLowerCase();
-    this.filteredEntries = _.filter(this.entries, e => {
-      const path = _.includes(e.path.toLowerCase(), term);
-      const tags = _.filter(e.tags, t => _.includes(t.toLowerCase(), term)).length !== 0;
-      const coms = _.includes(e.comments.toLowerCase(), term);
-      return path || tags || coms;
+    const terms = this.searchTerm.toLowerCase().split(/[ ]+/);
+
+    const matches = _.map(terms, term => {
+      return _.filter(this.entries, e => {
+        const path = _.includes(e.path.toLowerCase(), term);
+        const tags = _.filter(e.tags, t => t.toLowerCase() === term).length !== 0;
+        const coms = _.includes(e.comments.toLowerCase(), term);
+        return path || tags || coms;
+      });
     });
+
+    const method = {
+      all: _.intersectionBy,
+      any: _.unionBy
+    }[this.searchType];
+
+    this.filteredEntries = method(...[...matches, 'path']);
   }
 
   open(item: SearchItem) {
-    // const path = item.mime === 'inode/directory' ? item.path : _.slice(item.path.split('/'), 0, -1).join('/');
     this.dialogRef.close(item.path);
   }
 }

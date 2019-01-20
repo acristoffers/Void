@@ -4,6 +4,11 @@
     <input matInput (keyup.enter)="search()" [(ngModel)]="searchTerm" placeholder="{{ 'Search' | translate }}">
   </mat-form-field>
 
+  <mat-radio-group [(ngModel)]="searchType">
+    <mat-radio-button value="all">All</mat-radio-button>
+    <mat-radio-button value="any">Any</mat-radio-button>
+  </mat-radio-group>
+
   <mat-action-list>
     <button mat-list-item (click)="open(entry)" *ngFor="let entry of filteredEntries">{{ entry.path }}</button>
   </mat-action-list>

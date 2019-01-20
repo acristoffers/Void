@@ -33,11 +33,11 @@
         <file>html/StoreScreen/assets/fonts/material_icons.ttf</file>
         <file>html/WelcomeScreen/favicon.ico</file>
         <file>html/WelcomeScreen/index.html</file>
-        <file>html/WelcomeScreen/runtime.ec2944dd8b20ec099bf3.js</file>
+        <file>html/WelcomeScreen/polyfills.fc5e00915dcd6dabda7f.js</file>
         <file>html/WelcomeScreen/3rdpartylicenses.txt</file>
-        <file>html/WelcomeScreen/main.1ca3600ba9254de66f54.js</file>
+        <file>html/WelcomeScreen/runtime.b57bf819d5bdce77f1c7.js</file>
+        <file>html/WelcomeScreen/main.017a016b5a61d1e3239c.js</file>
         <file>html/WelcomeScreen/styles.407718e89db93aec684d.css</file>
-        <file>html/WelcomeScreen/polyfills.4a68e5b4d8bcc303b21f.js</file>
         <file>html/WelcomeScreen/assets/imgs/fr.svg</file>
         <file>html/WelcomeScreen/assets/imgs/en.svg</file>
         <file>html/WelcomeScreen/assets/imgs/icon.svg</file>
