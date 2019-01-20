@@ -102,7 +102,8 @@ export class TextEditorComponent {
 
     const normalize = (s: string) => s.toLowerCase()
       .replace('text/', '')
-      .replace('application/', '')
+      .replace('application/', '') // otherwise IO matches
+      .replace('audio/', '') // otherwise IO matches
       .replace(/[_\/\\\.]/g, '-');
 
     const languages = _.sortBy(_.filter(TextEditorComponent.Languages, l => !_.includes(['d', 'r', 'c_cpp'], l)));
