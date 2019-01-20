@@ -64,5 +64,6 @@ export const LANG_DE_TRANS = {
     'Decrypting %s': '%s wird entschlüsselt',
     'Decrypted %s': '%s entschlüsselt',
     'Size': 'Größe',
-    'Comments': 'Kommentare'
+    'Comments': 'Kommentare',
+    'Search': 'Suchen'
 };

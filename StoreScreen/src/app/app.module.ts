@@ -39,6 +39,7 @@ import {
   MatSelectModule,
   MatDividerModule
 } from '@angular/material';
+import { SearchDialogComponent } from './search-dialog/search-dialog.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {
     HotkeysCheatsheetComponent,
     ImageViewerComponent,
     StatusListComponent,
-    TextEditorComponent
+    TextEditorComponent,
+    SearchDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +87,11 @@ import {
     TRANSLATION_PROVIDERS,
     TranslateService
   ],
-  entryComponents: [InputDialogComponent, TextEditorComponent],
+  entryComponents: [
+    InputDialogComponent,
+    TextEditorComponent,
+    SearchDialogComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,10 +1,11 @@
 import * as _ from 'lodash';
 
-import { Component } from '@angular/core';
-import { MatIconRegistry } from '@angular/material';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { MatIconRegistry, MatDialog } from '@angular/material';
 import { TranslateService } from '../translation';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BridgeService } from '../bridge.service';
+import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
 
 @Component({
   selector: 'app-toolbar',
@@ -17,11 +18,27 @@ export class ToolbarComponent {
   frFlagUrl = 'assets/imgs/fr.svg';
   ptFlagUrl = 'assets/imgs/pt.svg';
 
+  currentPath: string;
+
+  @Input()
+  get path() {
+    return this.currentPath;
+  }
+
+  @Output()
+  pathChange = new EventEmitter();
+
+  set path(p: string) {
+    this.currentPath = p;
+    this.pathChange.emit(p);
+  }
+
   constructor(
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
     private translate: TranslateService,
-    private bridge: BridgeService
+    private bridge: BridgeService,
+    private dialog: MatDialog
   ) {
     this.registerImages();
   }
@@ -44,5 +61,13 @@ export class ToolbarComponent {
   setLanguage(lang: string): void {
     this.translate.use(lang);
     this.bridge.setLang(lang);
+  }
+
+  search() {
+    this.dialog.open(SearchDialogComponent).afterClosed().subscribe((path: string) => {
+      if (path != null) {
+        this.path = path;
+      }
+    });
   }
 }

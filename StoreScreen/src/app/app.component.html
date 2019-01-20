@@ -1,4 +1,4 @@
-<app-toolbar></app-toolbar>
+<app-toolbar [(path)]="currentPath"></app-toolbar>
 <mat-sidenav-container>
   <mat-sidenav [disableClose]="true" mode="side" opened>
     <app-sidenav [(path)]="currentPath"></app-sidenav>

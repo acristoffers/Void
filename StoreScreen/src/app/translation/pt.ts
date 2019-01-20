@@ -64,5 +64,6 @@ export const LANG_PT_TRANS = {
     'Decrypting %s': 'Descriptografando %s',
     'Decrypted %s': '%s descriptografado',
     'Size': 'Tamanho',
-    'Comments': 'Comentários'
+    'Comments': 'Comentários',
+    'Search': 'Buscar'
 };

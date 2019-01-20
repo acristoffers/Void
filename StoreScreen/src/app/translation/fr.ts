@@ -64,5 +64,6 @@ export const LANG_FR_TRANS = {
     'Decrypting %s': 'En cours de déchiffrer %s',
     'Decrypted %s': '%s déchiffré',
     'Size': 'Taille',
-    'Comments': 'Commentaires'
+    'Comments': 'Commentaires',
+    'Search': 'Chercher'
 };

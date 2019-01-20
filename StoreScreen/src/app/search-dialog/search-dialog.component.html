@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>{{ 'Search' | translate }}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput (keyup.enter)="search()" [(ngModel)]="searchTerm" placeholder="{{ 'Search' | translate }}">
+  </mat-form-field>
+
+  <mat-action-list>
+    <button mat-list-item (click)="open(entry)" *ngFor="let entry of filteredEntries">{{ entry.path }}</button>
+  </mat-action-list>
+</div>

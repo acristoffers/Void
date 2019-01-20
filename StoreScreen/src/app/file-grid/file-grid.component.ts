@@ -459,6 +459,17 @@ export class FileGridComponent {
       }
     }
 
-    this.currentNode = node;
+    if (node.type === 'inode/directory') {
+      this.currentNode = node;
+    } else {
+      setTimeout(() => {
+        const path = this.path;
+        this.path = _.slice(this.path.split('/'), 0, -1).join('/');
+        setTimeout(() => {
+          this.selection = [path];
+          this.cursor = _.findIndex(this.sorted(this.currentNode), { path: path });
+        }, 1);
+      }, 1);
+    }
   }
 }
