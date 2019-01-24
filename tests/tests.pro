@@ -19,13 +19,14 @@ OBJECTS_DIR = ../object
 MOC_DIR     = ../moc
 
 mac {
-    INCLUDEPATH += ../src /usr/local/opt/nss/include/nss /usr/local/opt/nspr/include/nspr /usr/local/include
+    INCLUDEPATH += $$PWD/../src /usr/local/opt/nss/include/nss /usr/local/opt/nspr/include/nspr /usr/local/include
     LIBS        += -L/usr/local/opt/nss/lib -L/usr/local/opt/nspr/lib -L/usr/local/lib -lnss3 -lnspr4
 }
 
 linux {
-    INCLUDEPATH += . /usr/include/nss3 /usr/include/nspr4 /usr/include/openssl $$PWD/../src
-    LIBS        += -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 -lpthread -ldl -lcrypto -lz
+    INCLUDEPATH += $$PWD/../src
+    CONFIG += link_pkgconfig
+    PKGCONFIG += nss openssl
 }
 
 unix {

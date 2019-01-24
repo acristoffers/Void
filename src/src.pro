@@ -26,8 +26,8 @@ mac {
 }
 
 linux {
-    INCLUDEPATH += . /usr/include/nss3 /usr/include/nspr4 /usr/include/openssl 
-    LIBS        += -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 -lpthread -ldl -lcrypto -lz
+    CONFIG += link_pkgconfig
+    PKGCONFIG += nss openssl
 }
 
 HEADERS += \
