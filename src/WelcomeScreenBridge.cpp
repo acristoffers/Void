@@ -129,5 +129,7 @@ QString WelcomeScreenBridge::StoreError2QString(Store::StoreError error)
 
         case Store::FileAlreadyExists:
             return QStringLiteral("FileAlreadyExists");
+        default:
+            return "ShutUpCompiler";
     }
 }

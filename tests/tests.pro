@@ -1,6 +1,6 @@
 VERSION = 1.0.0
 
-QT     += core testlib qml
+QT     += core testlib qml testlib
 QT     -= gui
 CONFIG += c++11 precompile_header testcase sdk_no_version_check
 
@@ -18,8 +18,15 @@ ICON     = ../res/icon.icns
 OBJECTS_DIR = ../object
 MOC_DIR     = ../moc
 
-INCLUDEPATH += ../src /usr/local/opt/nss/include/nss /usr/local/opt/nspr/include/nspr /usr/local/include
-LIBS        += -L/usr/local/opt/nss/lib -L/usr/local/opt/nspr/lib -L/usr/local/lib -lnss3 -lnspr4
+mac {
+    INCLUDEPATH += ../src /usr/local/opt/nss/include/nss /usr/local/opt/nspr/include/nspr /usr/local/include
+    LIBS        += -L/usr/local/opt/nss/lib -L/usr/local/opt/nspr/lib -L/usr/local/lib -lnss3 -lnspr4
+}
+
+linux {
+    INCLUDEPATH += . /usr/include/nss3 /usr/include/nspr4 /usr/include/openssl $$PWD/../src
+    LIBS        += -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 -lpthread -ldl -lcrypto -lz
+}
 
 unix {
     LIBS += $$OBJECTS_DIR/Crypto.o \
