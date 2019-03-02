@@ -2,7 +2,7 @@ VERSION = 1.0.0
 
 QT     += core testlib qml testlib
 QT     -= gui
-CONFIG += c++11 precompile_header testcase sdk_no_version_check
+CONFIG += c++17 precompile_header testcase sdk_no_version_check
 
 TEMPLATE = app
 TARGET   = VoidTests

@@ -1,7 +1,7 @@
 VERSION = 1.0.0
 
 QT     += core svg webenginewidgets webchannel multimedia multimediawidgets testlib
-CONFIG += c++11 precompile_header sdk_no_version_check
+CONFIG += c++17 precompile_header sdk_no_version_check
 
 TEMPLATE = app
 TARGET   = Void
