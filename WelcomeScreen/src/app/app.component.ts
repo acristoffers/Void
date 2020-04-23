@@ -1,6 +1,6 @@
-import { Component, OnInit, NgZone, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { TranslateService } from './translation/translation.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 declare class Bridge {
@@ -31,18 +31,18 @@ export class AppComponent implements OnInit {
     private zone: NgZone,
     private hotkeys: HotkeysService
   ) {
-    this.hotkeys.add(new Hotkey(['meta+o', 'ctrl+o'], (event: KeyboardEvent): boolean => {
+    this.hotkeys.add(new Hotkey(['meta+o', 'ctrl+o'], (_: KeyboardEvent): boolean => {
       this.select();
       return false;
     }));
 
-    this.hotkeys.add(new Hotkey(['meta+n', 'ctrl+n'], (event: KeyboardEvent): boolean => {
+    this.hotkeys.add(new Hotkey(['meta+n', 'ctrl+n'], (_: KeyboardEvent): boolean => {
       this.create();
       return false;
     }));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     bridge.lang(lang => {
       this.zone.run(() => {
         this.translate.use(lang || 'en');
@@ -50,12 +50,12 @@ export class AppComponent implements OnInit {
     });
   }
 
-  setLanguage(lang: string) {
+  setLanguage(lang: string): void {
     bridge.setLang(lang);
     this.translate.use(lang);
   }
 
-  create() {
+  create(): void {
     bridge.getNew(path => {
       this.zone.run(() => {
         this.storePath = path;
@@ -64,7 +64,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  open() {
+  open(): void {
     if (this.password.trim().length < 4) {
       const msg = this.translate.instant('Password should have at least 4 characters.');
       this.toast.open(msg, null, { duration: 2000 });
@@ -97,7 +97,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  select() {
+  select(): void {
     bridge.getExisting(path => {
       this.zone.run(() => {
         this.storePath = path;
@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  cancel() {
+  cancel(): void {
     this.storePath = false;
     this.password = '';
   }

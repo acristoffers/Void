@@ -578,7 +578,7 @@ void StoreFS::removeDir(const QString path)
     }
 
     QList<quint64> ids = entryBeginsWith(dir->path + "/");
-    qSort(ids);
+    std::sort(ids.begin(), ids.end() );
     for ( quint64 id : ids ) {
         if ( id > ( (static_cast<quint64> (1) ) << 63 ) ) {
             dir = this->dir(id);

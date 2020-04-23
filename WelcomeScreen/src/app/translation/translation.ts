@@ -35,7 +35,7 @@ export class Dictionary {
         [LANG_PT_NAME]: LANG_PT_TRANS
     };
 
-    get(language: string) {
+    get(language: string): { string: string } {
         return this.dictionary[language];
     }
 }

@@ -30,7 +30,7 @@ import { TranslateService } from './translation.service';
 export class TranslatePipe implements PipeTransform {
     constructor(private _translate: TranslateService) { }
 
-    transform(value: string, args: any[]): string {
+    transform(value: string, _: any[]): string {
         if (!value) {
             return;
         }
