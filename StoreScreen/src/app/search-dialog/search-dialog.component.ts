@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import { Subscription, zip } from 'rxjs';
 import { BridgeService, FileNode } from '../bridge.service';

@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file alias="icon.png">res/icon.png</file>
         <file alias="icon.svg">res/icon.svg</file>
-        <file>html/.DS_Store</file>
         <file>html/StoreScreen/favicon.ico</file>
         <file>html/StoreScreen/polyfills.js.map</file>
         <file>html/StoreScreen/index.html</file>
@@ -12,6 +11,8 @@
         <file>html/StoreScreen/styles.js.map</file>
         <file>html/StoreScreen/vendor.js</file>
         <file>html/StoreScreen/main.js</file>
+        <file>html/StoreScreen/polyfills-es5.js.map</file>
+        <file>html/StoreScreen/polyfills-es5.js</file>
         <file>html/StoreScreen/runtime.js.map</file>
         <file>html/StoreScreen/styles.js</file>
         <file>html/StoreScreen/vendor.js.map</file>
@@ -41,6 +42,8 @@
         <file>html/WelcomeScreen/styles.js.map</file>
         <file>html/WelcomeScreen/vendor.js</file>
         <file>html/WelcomeScreen/main.js</file>
+        <file>html/WelcomeScreen/polyfills-es5.js.map</file>
+        <file>html/WelcomeScreen/polyfills-es5.js</file>
         <file>html/WelcomeScreen/runtime.js.map</file>
         <file>html/WelcomeScreen/styles.js</file>
         <file>html/WelcomeScreen/vendor.js.map</file>

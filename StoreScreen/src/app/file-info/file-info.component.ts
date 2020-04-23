@@ -1,11 +1,11 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, NgZone } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { filter } from 'rxjs/operators';
 import { BridgeService } from '../bridge.service';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-file-info',

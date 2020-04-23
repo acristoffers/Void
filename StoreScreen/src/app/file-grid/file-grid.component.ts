@@ -1,15 +1,16 @@
 import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
-import { MatDialog, MatMenuTrigger, MatSnackBar } from '@angular/material';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { filter } from 'rxjs/operators';
 import { BridgeService, FileNode } from '../bridge.service';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { InputDialogComponent, InputDialogData } from '../input-dialog/input-dialog.component';
 import { TextEditorComponent, TextEditorData } from '../text-editor/text-editor.component';
 import { TranslateService } from '../translation/translation.service';
-
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 // tslint:disable:max-line-length
 
 @Component({

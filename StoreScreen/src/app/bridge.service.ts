@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { BehaviorSubject, bindCallback, forkJoin, Observable, of } from 'rxjs';
 import { debounceTime, flatMap, map } from 'rxjs/operators';
-import * as sf from 'sanitize-filename';
+import sf from 'sanitize-filename';
 import { StatusItem } from './status-list/status-list.component';
 import { TranslateService } from './translation';
-
 
 declare class Bridge {
   routeSignalSignal: any;
@@ -343,9 +342,9 @@ export class BridgeService {
         })(f, dir);
       });
 
-      return forkJoin(...observables).pipe(map(() => {
+      return forkJoin(observables).pipe(map(() => {
         BridgeService.fileTreeSubject.next(tree);
       }));
-    }));
+    })) as Observable<void>;
   }
 }

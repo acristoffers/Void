@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
-import { MatDialog, MatMenuTrigger, MatSnackBar } from '@angular/material';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { delay } from 'rxjs/operators';
 import { BridgeService, FileNode } from '../bridge.service';
 import { InputDialogComponent, InputDialogData } from '../input-dialog/input-dialog.component';
 import { TranslateService } from '../translation';
-
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-file-node-tree-item',

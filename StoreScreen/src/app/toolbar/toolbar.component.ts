@@ -1,12 +1,13 @@
 import * as _ from 'lodash';
 
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { MatIconRegistry, MatDialog } from '@angular/material';
 import { TranslateService } from '../translation';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BridgeService } from '../bridge.service';
 import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-toolbar',

@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { BridgeService } from '../bridge.service';
 import { InputDialogComponent, InputDialogData } from '../input-dialog/input-dialog.component';
 import { TranslateService } from '../translation';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-file-toolbar',

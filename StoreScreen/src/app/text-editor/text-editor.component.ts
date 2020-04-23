@@ -1,5 +1,5 @@
 import { Component, Inject, NgZone } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import { flatMap } from 'rxjs/operators';
 import { BridgeService } from '../bridge.service';
