@@ -30,6 +30,8 @@ linux {
     PKGCONFIG += nss openssl
 }
 
+DEFINES += NSS_PKCS11_2_0_COMPAT
+
 HEADERS += \
     Crypto.h \
     Store.h \
