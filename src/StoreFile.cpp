@@ -2,10 +2,10 @@
  *  Copyright (c) 2015 Álan Crístoffer
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
+ *  of this software and associated documentation files (the "Software"), to
+ *  deal in the Software without restriction, including without limitation the
+ *  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ *  sell copies of the Software, and to permit persons to whom the Software is
  *  furnished to do so, subject to the following conditions:
  *
  *  The above copyright notice and this permission notice shall be included in
@@ -15,9 +15,9 @@
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ *  IN THE SOFTWARE.
  */
 
 #include "StoreFile.h"
@@ -198,14 +198,14 @@ void StoreFilePrivate::save()
         QByteArray qsalt = QByteArray::fromStdString(salt);
         QByteArray qiv   = QByteArray::fromStdString(iv);
         stream << version
-               << qsalt
-               << qiv
-               << static_cast<quint8> (cryptoParams.digest)
-               << static_cast<quint8> (cryptoParams.encryption)
-               << static_cast<quint8> (cryptoParams.keyDerivationFunction)
-               << static_cast<quint8> (cryptoParams.keyDerivationHash)
-               << cryptoParams.keyDerivationCost
-               << data;
+            << qsalt
+            << qiv
+            << static_cast<quint8> (cryptoParams.digest)
+            << static_cast<quint8> (cryptoParams.encryption)
+            << static_cast<quint8> (cryptoParams.keyDerivationFunction)
+            << static_cast<quint8> (cryptoParams.keyDerivationHash)
+            << cryptoParams.keyDerivationCost
+            << data;
     }
 
     storeFile->flush();
@@ -227,14 +227,14 @@ void StoreFilePrivate::load()
     quint8     digest, encryption, keyDerivationFunction, keyDerivationHash;
 
     stream >> version
-    >> qsalt
-    >> qiv
-    >> digest
-    >> encryption
-    >> keyDerivationFunction
-    >> keyDerivationHash
-    >> cryptoParams.keyDerivationCost
-    >> data;
+        >> qsalt
+        >> qiv
+        >> digest
+        >> encryption
+        >> keyDerivationFunction
+        >> keyDerivationHash
+        >> cryptoParams.keyDerivationCost
+        >> data;
 
     cryptoParams.digest                = static_cast<DigestType> (digest);
     cryptoParams.encryption            = static_cast<EncType> (encryption);

@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 touch html
 rm -r html

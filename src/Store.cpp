@@ -2,10 +2,10 @@
  *  Copyright (c) 2015 Álan Crístoffer
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
+ *  of this software and associated documentation files (the "Software"), to
+ *  deal in the Software without restriction, including without limitation the
+ *  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ *  sell copies of the Software, and to permit persons to whom the Software is
  *  furnished to do so, subject to the following conditions:
  *
  *  The above copyright notice and this permission notice shall be included in
@@ -15,9 +15,9 @@
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ *  IN THE SOFTWARE.
  */
 
 #include "Store.h"
@@ -41,14 +41,13 @@
  *  A Store is a folder containing a Store.void file, which contains
  *  metadata, and a bunch of 128 bytes long "randomly" named files.
  *
- *  The Store.void file is a structured file. It contains information about the files
- *  encrypted in the store such as it's real name, mimetype and which encrypted
- *  files compose the file and in which order. It's encrypted as well.
+ *  The Store.void file is a structured file. It contains information about the
+ *  files encrypted in the store such as it's real name, mimetype and which
+ *  encrypted files compose the file and in which order. It's encrypted as well.
  *
- *  The files are encrypted into parts of 50MB (power of 2), in order to
- *  obscure it's real size. The names are a SHA512 sum of the unencrypted
- *  file's content and a random salt (per file), making it pretty much random
- *  itself.
+ *  The files are encrypted into parts of 50MB (power of 2), in order to obscure
+ *  it's real size. The names are a SHA512 sum of the unencrypted file's content
+ *  and a random salt (per file), making it pretty much random itself.
  *
  */
 
@@ -78,20 +77,20 @@ struct StorePrivate
 Store::Store(const QString path, const QString password, const bool create) : QObject()
 {
     _p.reset(new StorePrivate);
-    _p->storeFS.reset(new StoreFS(path) );
+    _p->storeFS.reset(new StoreFS(path));
     _p->path = path;
 
     error = StoreError::Success;
 
     bool storeExists = QFile::exists(path + "/Store.void");
 
-    if ( !storeExists && create ) {
+    if (!storeExists && create) {
         std::string pswd = password.toUtf8().toStdString();
         std::string salt = Crypto::generateRandom(16);
         std::string iv   = Crypto::generateRandom(16);
 
-        _p->storeCrypto.reset(new Crypto(pswd, salt, iv) );
-        if ( _p->storeCrypto->error != Crypto::Success ) {
+        _p->storeCrypto.reset(new Crypto(pswd, salt, iv));
+        if (_p->storeCrypto->error != Crypto::Success) {
             error       = CantCreateCryptoObject;
             cryptoError = _p->storeCrypto->error;
             return;
@@ -99,15 +98,15 @@ Store::Store(const QString path, const QString password, const bool create) : QO
 
         QDir::home().mkpath(path);
 
-        _p->storeFile.reset(new StoreFile(path + "/Store.void") );
+        _p->storeFile.reset(new StoreFile(path + "/Store.void"));
         _p->storeFile->setSalt(salt);
         _p->storeFile->setIV(iv);
-        _p->storeFile->setCryptoParams(CryptoParams() );
+        _p->storeFile->setCryptoParams(CryptoParams());
         _p->save();
-    } else if ( storeExists ) {
-        _p->storeFile.reset(new StoreFile(path + "/Store.void") );
+    } else if (storeExists) {
+        _p->storeFile.reset(new StoreFile(path + "/Store.void"));
 
-        if ( _p->storeFile->error != StoreFile::Success ) {
+        if (_p->storeFile->error != StoreFile::Success) {
             error = CantOpenStoreFile;
             return;
         }
@@ -117,25 +116,25 @@ Store::Store(const QString path, const QString password, const bool create) : QO
         std::string  iv           = _p->storeFile->IV();
         CryptoParams cryptoParams = _p->storeFile->cryptoParams();
 
-        _p->storeCrypto.reset(new Crypto(pswd, salt, iv, cryptoParams) );
-        if ( _p->storeCrypto->error != Crypto::Success ) {
+        _p->storeCrypto.reset(new Crypto(pswd, salt, iv, cryptoParams));
+        if (_p->storeCrypto->error != Crypto::Success) {
             error       = CantCreateCryptoObject;
             cryptoError = _p->storeCrypto->error;
             return;
         }
 
         std::string data = _p->storeFile->data().toStdString();
-        _p->storeFile->setData(QByteArray() );
+        _p->storeFile->setData(QByteArray());
 
         data = _p->storeCrypto->decrypt(data);
 
-        if ( _p->storeCrypto->error != Crypto::Success ) {
+        if (_p->storeCrypto->error != Crypto::Success) {
             error       = CantCreateCryptoObject;
             cryptoError = _p->storeCrypto->error;
             return;
         }
 
-        data = qUncompress(reinterpret_cast<const unsigned char *> (data.data() ), static_cast<int> (data.size() ) ).toStdString();
+        data = qUncompress(reinterpret_cast<const unsigned char*>(data.data()), static_cast<int>(data.size())).toStdString();
         QByteArray bdata = QByteArray::fromStdString(data);
         data.clear();
         _p->storeFS->load(bdata);
@@ -164,7 +163,7 @@ void Store::addFileFromData(const QString storePath, const QByteArray data)
 {
     _p->storeFS->addFile(storePath, data);
 
-    if ( _p->storeFS->error == StoreFS::Success ) {
+    if (_p->storeFS->error == StoreFS::Success) {
         QMimeDatabase mimedb;
         QMimeType     mimetype = mimedb.mimeTypeForData(data);
         _p->storeFS->file(storePath)->metadata[QStringLiteral("mimetype")] = mimetype.name().toUtf8();
@@ -194,7 +193,7 @@ void Store::addFile(const QString filePath, const QString storePath)
 {
     _p->storeFS->addFile(filePath, storePath);
 
-    if ( _p->storeFS->error == StoreFS::Success ) {
+    if (_p->storeFS->error == StoreFS::Success) {
         QMimeDatabase mimedb;
         QMimeType     mimetype = mimedb.mimeTypeForFile(filePath);
         _p->storeFS->file(storePath)->metadata[QStringLiteral("mimetype")] = mimetype.name().toUtf8();
@@ -264,18 +263,18 @@ void Store::decryptFile(const QString storePath, const QString path)
  */
 void Store::move(const QString oldPath, const QString newPath)
 {
-    if ( _p->storeFS->file(oldPath) ) {
+    if (_p->storeFS->file(oldPath)) {
         _p->storeFS->moveFile(oldPath, newPath);
 
-        if ( _p->storeFS->error == StoreFS::Success ) {
+        if (_p->storeFS->error == StoreFS::Success) {
             _p->save();
         }
 
         error = _p->storeFSErrorToStoreError(_p->storeFS->error);
-    } else if ( _p->storeFS->dir(oldPath) ) {
+    } else if (_p->storeFS->dir(oldPath)) {
         _p->storeFS->moveDir(oldPath, newPath);
 
-        if ( _p->storeFS->error == StoreFS::Success ) {
+        if (_p->storeFS->error == StoreFS::Success) {
             _p->save();
         }
 
@@ -299,18 +298,18 @@ void Store::move(const QString oldPath, const QString newPath)
  */
 void Store::remove(const QString path)
 {
-    if ( _p->storeFS->file(path) ) {
+    if (_p->storeFS->file(path)) {
         _p->storeFS->removeFile(path);
 
-        if ( _p->storeFS->error == StoreFS::Success ) {
+        if (_p->storeFS->error == StoreFS::Success) {
             _p->save();
         }
 
         error = _p->storeFSErrorToStoreError(_p->storeFS->error);
-    } else if ( _p->storeFS->dir(path) ) {
+    } else if (_p->storeFS->dir(path)) {
         _p->storeFS->removeDir(path);
 
-        if ( _p->storeFS->error == StoreFS::Success ) {
+        if (_p->storeFS->error == StoreFS::Success) {
             _p->save();
         }
 
@@ -382,7 +381,7 @@ QStringList Store::listSubdirectories(QString path) const
 
     QList<StoreFSDirPtr> ds = _p->storeFS->subdirs(path);
 
-    for ( StoreFSDirPtr d : ds ) {
+    for (StoreFSDirPtr d : ds) {
         list << d->path;
     }
 
@@ -405,7 +404,7 @@ QStringList Store::listFiles(QString path) const
 
     QList<StoreFSFilePtr> fs = _p->storeFS->subfiles(path);
 
-    for ( StoreFSFilePtr f : fs ) {
+    for (StoreFSFilePtr f : fs) {
         list << f->path;
     }
 
@@ -428,7 +427,8 @@ QStringList Store::listEntries(QString path) const
 }
 
 /**
- *  \brief List files and directories whose path starts with \c filter. "/" is never included.
+ *  \brief List files and directories whose path starts with \c filter. "/" is
+ *  never included.
  *
  *  \arg \c filter String to be matched.
  *  \arg \c type 0 for all, 1 for files only, 2 for directories only.
@@ -445,8 +445,8 @@ QStringList Store::searchStartsWith(QString filter, quint8 type) const
 
     QList<quint64> ids = _p->storeFS->entryBeginsWith(filter);
 
-    for ( quint64 id : ids ) {
-        switch ( type ) {
+    for (quint64 id : ids) {
+        switch (type) {
             case 0:
                 entries << _p->storeFS->path(id);
                 break;
@@ -454,7 +454,7 @@ QStringList Store::searchStartsWith(QString filter, quint8 type) const
             case 1:
             {
                 StoreFSFilePtr f = _p->storeFS->file(id);
-                if ( f != nullptr ) {
+                if (f != nullptr) {
                     entries << f->path;
                 }
                 break;
@@ -463,7 +463,7 @@ QStringList Store::searchStartsWith(QString filter, quint8 type) const
             case 2:
             {
                 StoreFSDirPtr d = _p->storeFS->dir(id);
-                if ( d != nullptr ) {
+                if (d != nullptr) {
                     entries << d->path;
                 }
                 break;
@@ -477,7 +477,8 @@ QStringList Store::searchStartsWith(QString filter, quint8 type) const
 }
 
 /**
- *  \brief List files and directories whose path ends with \c filter. "/" is never included.
+ *  \brief List files and directories whose path ends with \c filter. "/" is
+ *  never included.
  *
  *  \arg \c filter String to be matched.
  *  \arg \c type 0 for all, 1 for files only, 2 for directories only.
@@ -494,8 +495,8 @@ QStringList Store::searchEndsWith(QString filter, quint8 type) const
 
     QList<quint64> ids = _p->storeFS->entryEndsWith(filter);
 
-    for ( quint64 id : ids ) {
-        switch ( type ) {
+    for (quint64 id : ids) {
+        switch (type) {
             case 0:
                 entries << _p->storeFS->path(id);
                 break;
@@ -503,7 +504,7 @@ QStringList Store::searchEndsWith(QString filter, quint8 type) const
             case 1:
             {
                 StoreFSFilePtr f = _p->storeFS->file(id);
-                if ( f != nullptr ) {
+                if (f != nullptr) {
                     entries << f->path;
                 }
                 break;
@@ -512,7 +513,7 @@ QStringList Store::searchEndsWith(QString filter, quint8 type) const
             case 2:
             {
                 StoreFSDirPtr d = _p->storeFS->dir(id);
-                if ( d != nullptr ) {
+                if (d != nullptr) {
                     entries << d->path;
                 }
                 break;
@@ -526,7 +527,8 @@ QStringList Store::searchEndsWith(QString filter, quint8 type) const
 }
 
 /**
- *  \brief List files and directories whose path contains with \c filter. "/" is never included.
+ *  \brief List files and directories whose path contains with \c filter. "/" is
+ *  never included.
  *
  *  \arg \c filter String to be matched.
  *  \arg \c type 0 for all, 1 for files only, 2 for directories only.
@@ -543,8 +545,8 @@ QStringList Store::searchContains(QString filter, quint8 type) const
 
     QList<quint64> ids = _p->storeFS->entryContains(filter);
 
-    for ( quint64 id : ids ) {
-        switch ( type ) {
+    for (quint64 id : ids) {
+        switch (type) {
             case 0:
                 entries << _p->storeFS->path(id);
                 break;
@@ -552,7 +554,7 @@ QStringList Store::searchContains(QString filter, quint8 type) const
             case 1:
             {
                 StoreFSFilePtr f = _p->storeFS->file(id);
-                if ( f != nullptr ) {
+                if (f != nullptr) {
                     entries << f->path;
                 }
                 break;
@@ -561,7 +563,7 @@ QStringList Store::searchContains(QString filter, quint8 type) const
             case 2:
             {
                 StoreFSDirPtr d = _p->storeFS->dir(id);
-                if ( d != nullptr ) {
+                if (d != nullptr) {
                     entries << d->path;
                 }
                 break;
@@ -575,7 +577,8 @@ QStringList Store::searchContains(QString filter, quint8 type) const
 }
 
 /**
- *  \brief List files and directories whose path matches the regex \c filter. "/" is never included.
+ *  \brief List files and directories whose path matches the regex \c filter.
+ *  "/" is never included.
  *
  *  \arg \c filter String to be matched.
  *  \arg \c type 0 for all, 1 for files only, 2 for directories only.
@@ -592,8 +595,8 @@ QStringList Store::searchRegex(QString filter, quint8 type) const
 
     QList<quint64> ids = _p->storeFS->entryMatchRegExp(filter);
 
-    for ( quint64 id : ids ) {
-        switch ( type ) {
+    for (quint64 id : ids) {
+        switch (type) {
             case 0:
                 entries << _p->storeFS->path(id);
                 break;
@@ -601,7 +604,7 @@ QStringList Store::searchRegex(QString filter, quint8 type) const
             case 1:
             {
                 StoreFSFilePtr f = _p->storeFS->file(id);
-                if ( f != nullptr ) {
+                if (f != nullptr) {
                     entries << f->path;
                 }
                 break;
@@ -610,7 +613,7 @@ QStringList Store::searchRegex(QString filter, quint8 type) const
             case 2:
             {
                 StoreFSDirPtr d = _p->storeFS->dir(id);
-                if ( d != nullptr ) {
+                if (d != nullptr) {
                     entries << d->path;
                 }
                 break;
@@ -626,7 +629,8 @@ QStringList Store::searchRegex(QString filter, quint8 type) const
 /**
  *  \brief Returns metadata associated with this file.
  *
- *  The metadata system is meant to be used to save extra information about the file.
+ *  The metadata system is meant to be used to save extra information about the
+ *  file.
  *  By default the following fields are defined:
  *
  *  mimetype: mimetype of the file as returned by QMimeType#name.
@@ -646,8 +650,8 @@ QByteArray Store::fileMetadata(const QString path, const QString key)
 
     StoreFSFilePtr file = _p->storeFS->file(path);
 
-    if ( file != nullptr ) {
-        if ( file->metadata.contains(key) ) {
+    if (file != nullptr) {
+        if (file->metadata.contains(key)) {
             return file->metadata[key];
         }
     } else {
@@ -660,8 +664,8 @@ QByteArray Store::fileMetadata(const QString path, const QString key)
 /**
  *  \brief Sets metadata associated with this file.
  *
- *  The metadata system is meant to be used to save extra information about the file.
- *  Setting to an empty data will remove the key from the list.
+ *  The metadata system is meant to be used to save extra information about the
+ *  file.  Setting to an empty data will remove the key from the list.
  *  By default the following fields are defined:
  *
  *  mimetype: mimetype of the file as returned by QMimeType#name.
@@ -680,8 +684,8 @@ void Store::setFileMetadata(const QString path, const QString key, const QByteAr
 
     StoreFSFilePtr file = _p->storeFS->file(path);
 
-    if ( file != nullptr ) {
-        if ( data.isEmpty() ) {
+    if (file != nullptr) {
+        if (data.isEmpty()) {
             file->metadata.remove(key);
         } else {
             file->metadata[key] = data;
@@ -707,7 +711,7 @@ quint64 Store::fileSize(const QString path)
     error = Success;
     StoreFSFilePtr file = _p->storeFS->file(path);
 
-    if ( file != nullptr ) {
+    if (file != nullptr) {
         return file->size;
     }
 
@@ -736,8 +740,8 @@ void StorePrivate::save()
 
     serialized = storeCrypto->encrypt(serialized);
 
-    if ( storeCrypto->error == Crypto::Success ) {
-        storeFile->setData(QByteArray::fromStdString(serialized) );
+    if (storeCrypto->error == Crypto::Success) {
+        storeFile->setData(QByteArray::fromStdString(serialized));
     }
 }
 
@@ -750,7 +754,7 @@ void StorePrivate::save()
  */
 Store::StoreError StorePrivate::storeFSErrorToStoreError(StoreFS::StoreFSError fserror)
 {
-    switch ( fserror ) {
+    switch (fserror) {
         case StoreFS::CantOpenFile:
             return Store::CantOpenFile;
 
