@@ -45,37 +45,33 @@ SchemeHandler::~SchemeHandler() = default;
 
 void SchemeHandler::requestStarted(QWebEngineUrlRequestJob *job)
 {
-    Runner *runner = new Runner([job, this]() {
-        QString path = job->requestUrl().path();
+    QString path = job->requestUrl().path();
 
-        if ( path.isEmpty() ) {
-            job->fail(QWebEngineUrlRequestJob::RequestFailed);
-            return;
-        }
+    if ( path.isEmpty() ) {
+        job->fail(QWebEngineUrlRequestJob::RequestFailed);
+        return;
+    }
 
-        QString scheme  = job->requestUrl().scheme();
-        QString mime    = _p->store->fileMetadata(path, "mimetype");
-        QBuffer *buffer = new QBuffer;
-        QByteArray data(_p->store->decryptFile(path) );
+    QString scheme  = job->requestUrl().scheme();
+    QString mime    = _p->store->fileMetadata(path, "mimetype");
+    QBuffer *buffer = new QBuffer;
+    QByteArray data(_p->store->decryptFile(path) );
 
-        buffer->open(QIODevice::ReadWrite);
-        connect(job, &QObject::destroyed, buffer, &QObject::deleteLater);
+    buffer->open(QIODevice::ReadWrite);
+    connect(job, &QObject::destroyed, buffer, &QObject::deleteLater);
 
-        if ( _p->store->error != Store::Success ) {
-            job->fail(QWebEngineUrlRequestJob::RequestFailed);
-            return;
-        } else if ( scheme == "thumb" ) {
-            QImage image = QImage::fromData(data);
-            image        = image.scaledToWidth(200, Qt::SmoothTransformation);
-            image.save(buffer, "PNG");
-        } else {
-            buffer->write(data);
-        }
+    if ( _p->store->error != Store::Success ) {
+        job->fail(QWebEngineUrlRequestJob::RequestFailed);
+        return;
+    } else if ( scheme == "thumb" ) {
+        QImage image = QImage::fromData(data);
+        image        = image.scaledToWidth(200, Qt::SmoothTransformation);
+        image.save(buffer, "PNG");
+    } else {
+        buffer->write(data);
+    }
 
-        buffer->seek(0);
+    buffer->seek(0);
 
-        job->reply(scheme == "thumb" ? "image/png" : mime.toUtf8(), buffer);
-    });
-
-    QThreadPool::globalInstance()->start(runner);
+    job->reply(scheme == "thumb" ? "image/png" : mime.toUtf8(), buffer);
 }
