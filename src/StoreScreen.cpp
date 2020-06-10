@@ -55,8 +55,8 @@ StoreScreen::StoreScreen(const QString &path, const QString &password, const boo
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(windowFlags() & ~Qt::WindowFullscreenButtonHint);
 
-    QWebEngineProfile::defaultProfile()->installUrlSchemeHandler(QStringLiteral("decrypt").toUtf8(), new SchemeHandler(_p->bridge->store() ) );
-    QWebEngineProfile::defaultProfile()->installUrlSchemeHandler(QStringLiteral("thumb").toUtf8(), new SchemeHandler(_p->bridge->store() ) );
+    QWebEngineProfile::defaultProfile()->installUrlSchemeHandler("decrypt", new SchemeHandler(_p->bridge->store() ) );
+    QWebEngineProfile::defaultProfile()->installUrlSchemeHandler("thumb", new SchemeHandler(_p->bridge->store() ) );
     QWebEngineProfile::defaultProfile()->setHttpCacheMaximumSize(1);
     QWebEngineProfile::defaultProfile()->setHttpCacheType(QWebEngineProfile::NoCache);
 

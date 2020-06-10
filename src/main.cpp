@@ -23,12 +23,22 @@
 #include <QApplication>
 #include <QIcon>
 #include <QWebEngineSettings>
+#include <QWebEngineUrlScheme>
 
 #include "WelcomeScreen.h"
 #include "VideoPlayer.h"
 
 int main(int argc, char **argv)
 {
+    QWebEngineUrlScheme decryptScheme("decrypt");
+    QWebEngineUrlScheme thumbScheme("thumb");
+    decryptScheme.setSyntax(QWebEngineUrlScheme::Syntax::Path);
+    decryptScheme.setFlags(QWebEngineUrlScheme::Flag::LocalScheme);
+    thumbScheme.setSyntax(QWebEngineUrlScheme::Syntax::Path);
+    thumbScheme.setFlags(QWebEngineUrlScheme::Flag::LocalScheme);
+    QWebEngineUrlScheme::registerScheme(decryptScheme);
+    QWebEngineUrlScheme::registerScheme(thumbScheme);
+
     QApplication app(argc, argv);
 
     app.setWindowIcon(QIcon(QStringLiteral("qrc:/icon.png")));
@@ -39,7 +49,6 @@ int main(int argc, char **argv)
     app.setOrganizationName(QStringLiteral("Alan Cristoffer"));
 
     auto fse = QWebEngineSettings::FullScreenSupportEnabled;
-
     QWebEngineSettings::globalSettings()->setAttribute(fse, false);
 
     // Deletes itself on close
