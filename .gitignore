@@ -193,3 +193,7 @@ Release/
 
 dist/
 html/
+
+.clangd
+qt_include
+compile_commands.json

@@ -25,6 +25,7 @@
 
 #include <memory>
 #include <string>
+#include <stdint.h>
 
 /*! \file */
 

@@ -34,7 +34,7 @@
 
 /**
  *  \class Crypto
- *  \brief Wraps Mozillas NSS and eases the encryption process.
+ *  \brief Wraps Mozilla's NSS and eases the encryption process.
  *
  *  This class uses only standard c++ types and is meant to be a wrapper to NSS.
  *  It's not meant to offer every functionality of NSS, only those needed by the
