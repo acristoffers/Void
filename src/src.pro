@@ -1,10 +1,13 @@
 VERSION = 1.0.0
 
 QT     += core svg webenginewidgets webchannel multimedia multimediawidgets testlib
-CONFIG += c++17 precompile_header sdk_no_version_check
+CONFIG += c++17 sdk_no_version_check
 
 TEMPLATE = app
 TARGET   = Void
+
+target.path = $$PREFIX/bin
+INSTALLS += target
 
 QMAKE_CXXFLAGS_RELEASE -= -O2
 QMAKE_CXXFLAGS_RELEASE += -O3
@@ -18,17 +21,13 @@ OBJECTS_DIR = ../object
 MOC_DIR     = ../moc
 
 mac {
-    INCLUDEPATH += . /usr/local/opt/nss/include/nss /usr/local/opt/nspr/include/nspr /usr/local/opt/openssl/include /usr/local/include
-    LIBS        += -L/usr/local/opt/nss/lib -L/usr/local/opt/nspr/lib -L/usr/local/opt/openssl/lib -L/usr/local/lib -lnss3 -lnspr4 -lssl -lcrypto -lz
     HEADERS += MacOSKeychainManagement.h
     OBJECTIVE_SOURCES += MacOSKeychainManagement.mm
     LIBS += -framework Foundation -framework Security
 }
 
-linux {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += nss openssl
-}
+CONFIG += link_pkgconfig
+PKGCONFIG += nss openssl
 
 DEFINES += NSS_PKCS11_2_0_COMPAT
 
@@ -61,7 +60,7 @@ SOURCES += \
     VideoPlayer.cpp \
     VideoPlayerWidget.cpp
 
-PRECOMPILED_HEADER = precompiled.h
+# PRECOMPILED_HEADER = precompiled.h
 
 QMAKE_RESOURCE_FLAGS += --compress 9 --threshold 1
 RESOURCES += ../resources.qrc

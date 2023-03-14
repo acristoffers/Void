@@ -140,7 +140,6 @@ import 'ace-builds/src-noconflict/mode-gherkin';
 import 'ace-builds/src-noconflict/mode-perl';
 import 'ace-builds/src-noconflict/mode-verilog';
 import 'ace-builds/src-noconflict/mode-gitignore';
-import 'ace-builds/src-noconflict/mode-perl6';
 import 'ace-builds/src-noconflict/mode-vhdl';
 import 'ace-builds/src-noconflict/mode-glsl';
 import 'ace-builds/src-noconflict/mode-pgsql';

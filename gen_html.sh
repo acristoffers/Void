@@ -5,12 +5,14 @@ rm -r html
 mkdir html
 
 pushd WelcomeScreen
-yarn ng build $1
+yarn install
+yarn run ng build $1
 popd
 cp -r WelcomeScreen/dist/WelcomeScreen html/WelcomeScreen
 
 pushd StoreScreen
-yarn ng build $1
+yarn install
+yarn run ng build $1
 popd
 cp -r StoreScreen/dist/StoreScreen html/StoreScreen
 

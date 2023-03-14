@@ -18,16 +18,9 @@ ICON     = ../res/icon.icns
 OBJECTS_DIR = ../object
 MOC_DIR     = ../moc
 
-mac {
-    INCLUDEPATH += $$PWD/../src /usr/local/opt/nss/include/nss /usr/local/opt/nspr/include/nspr /usr/local/include
-    LIBS        += -L/usr/local/opt/nss/lib -L/usr/local/opt/nspr/lib -L/usr/local/lib -lnss3 -lnspr4
-}
-
-linux {
-    INCLUDEPATH += $$PWD/../src
-    CONFIG += link_pkgconfig
-    PKGCONFIG += nss openssl
-}
+INCLUDEPATH += $$PWD/../src
+CONFIG += link_pkgconfig
+PKGCONFIG += nss openssl
 
 unix {
     LIBS += $$OBJECTS_DIR/Crypto.o \

@@ -32,7 +32,6 @@
 #include <QSslSocket>
 #include <QVideoWidget>
 
-#define OPENSSL_NO_DEPRECATED
 namespace OpenSSL
 {
 #include <openssl/bn.h>
@@ -78,7 +77,7 @@ VideoPlayer::VideoPlayer(std::shared_ptr<Store> store) : QTcpServer()
 
     Runner *runner = new Runner([this]() {
         QList<QSslCipher> ciphers;
-        for ( auto cipher : QSslSocket::supportedCiphers() ) {
+        for ( auto cipher : QSslConfiguration::supportedCiphers() ) {
             if ( cipher.name().contains("RSA") && cipher.name().contains("ECDHE") && cipher.name().contains("AES") ) {
                 ciphers << cipher;
             }
