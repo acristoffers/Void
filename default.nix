@@ -19,7 +19,7 @@ pkgs.stdenv.mkDerivation rec {
     libsForQt5.qt5.qtwebengine
     nspr
     nss
-    openssl
+    openssl_1_1
     zlib
     icu
   ];

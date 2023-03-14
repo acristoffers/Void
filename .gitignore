@@ -192,7 +192,6 @@ Release/
 *.autosave
 
 dist/
-html/
 
 .clangd
 qt_include
